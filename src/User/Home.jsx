@@ -1,0 +1,657 @@
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import './Home.css'
+
+const ProductSlider = ({ images }) => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  return (
+    <Slider {...settings}>
+      {Array.isArray(images) && images.length > 0 ? (
+        images.map((pic, index) => (
+          <div className="h-1/2 bg-white" key={index}>
+            <img
+              src={pic}
+              alt={`product-${index}`}
+              className="h-full w-full object-contain object-center aspect-square lg:h-full lg:w-full"
+            />
+          </div>
+        ))
+      ) : (
+        <p className="text-center mt-10">image loading...</p>
+      )}
+    </Slider>
+  );
+};
+
+
+const Home = () => {
+
+  const [products,setProducts] = useState([''])
+  const [showProducts,setShowProducts] = useState(false)
+  const [mobileProducts,setMobileProducts] = useState([''])
+  const [laptopProducts,setLaptopProducts] = useState([''])
+  const [headsetProducts,setHeadsetProducts] = useState([''])
+  const [menProducts,setMenProducts] = useState([''])
+  const [womenProducts,setWomenProducts] = useState([''])
+  const [showMobileProducts,setShowMobileProducts] = useState(false)
+  const [showLaptopProducts,setShowLaptopProducts] = useState(false)
+  const [showHeadsetProducts,setShowHeadsetProducts] = useState(false)
+  const [showMenProducts,setShowMenProducts] = useState(false)
+  const [showWomenProducts,setShowWomenProducts] = useState(false)
+  const [isMobileLoading, setIsMobileLoading] = useState(false);
+  const [isLaptopLoading, setIsLaptopLoading] = useState(false);
+  const [isHeadsetLoading, setIsHeadsetLoading] = useState(false);
+  const [isMenLoading, setIsMenLoading] = useState(false);
+  const [isWomenLoading, setIsWomenLoading] = useState(false);
+  const navigate = useNavigate()
+
+  let token = localStorage.getItem('token')
+  let userId = localStorage.getItem('userId')
+
+
+  let showMobiles = () => {
+    setIsMobileLoading(true);
+      setShowLaptopProducts(false);
+      setShowHeadsetProducts(false);
+      setShowMenProducts(false);
+      setShowWomenProducts(false);
+      setShowProducts(false)
+    const timer = setTimeout(() => {
+      setIsMobileLoading(false);
+      setShowMobileProducts(true);
+      console.log('mobiles');
+    }, 100);
+    return () => clearTimeout(timer);
+  };
+
+  let showLaptops = () => {
+    setIsLaptopLoading(true);
+      setShowMobileProducts(false);
+      setShowHeadsetProducts(false);
+      setShowMenProducts(false);
+      setShowWomenProducts(false);
+      setShowProducts(false)
+    const timer = setTimeout(() => {
+      setShowLaptopProducts(true);
+      setIsLaptopLoading(false);
+      console.log('laptops');
+    }, 100);
+    return () => clearTimeout(timer);
+  };
+
+  let showHeadsets = () => {
+    setIsHeadsetLoading(true);
+      setShowLaptopProducts(false);
+      setShowMobileProducts(false);
+      setShowMenProducts(false);
+      setShowWomenProducts(false);
+      setShowProducts(false)
+    const timer = setTimeout(() => {
+      setShowHeadsetProducts(true);
+      setIsHeadsetLoading(false);
+      console.log('laptops');
+    }, 100);
+    return () => clearTimeout(timer);
+  };
+
+  let showMen = () => {
+    setIsMenLoading(true);
+      setShowLaptopProducts(false);
+      setShowMobileProducts(false);
+      setShowHeadsetProducts(false);
+      setShowWomenProducts(false);
+      setShowProducts(false)
+    const timer = setTimeout(() => {
+      setIsMenLoading(false);
+      setShowMenProducts(true);
+      console.log('laptops');
+    }, 100);
+    return () => clearTimeout(timer);
+  };
+
+  let showWomen = () => {
+    setIsWomenLoading(true);
+    setShowLaptopProducts(false);
+      setShowMobileProducts(false);
+      setShowHeadsetProducts(false);
+      setShowMenProducts(false);
+      setShowProducts(false)
+    const timer = setTimeout(() => {
+      setIsWomenLoading(false);
+      setShowWomenProducts(true);
+      console.log('laptops');
+    }, 100);
+    return () => clearTimeout(timer);
+  };
+
+
+
+  useEffect(()=>{
+
+    try{
+      setShowProducts(true)
+
+      
+      if(userId === '659a975490f6b3e4142f9d45'){
+        navigate('/homeadmin')
+      }
+      
+
+      let fetchMobileProducts= async ()=>{
+        
+        let response = await axios.get(`http://localhost:8000/products/mobiles/find`,{
+          headers: {
+              Authorization: token
+            },
+      })
+        console.log('mobileProducts response: ',response);
+        setMobileProducts(response.data)
+        setProducts(response.data)
+        
+      }
+      fetchMobileProducts()
+
+      let fetchLaptopProducts= async ()=>{
+        
+        let response = await axios.get(`http://localhost:8000/products/laptops/find`,{
+          headers: {
+              Authorization: token
+            },
+      })
+        console.log('laptopProducts response: ',response);
+        setLaptopProducts(response.data)
+        setProducts(response.data)
+        
+      }
+      fetchLaptopProducts()
+
+      let fetchHeadsetProducts= async ()=>{
+        
+        let response = await axios.get(`http://localhost:8000/products/headsets/find`,{
+          headers: {
+              Authorization: token
+            },
+      })
+        console.log('headsetProducts response: ',response);
+        setHeadsetProducts(response.data)
+        setProducts(response.data)
+    
+      }
+      fetchHeadsetProducts()
+
+      let fetchMenProducts= async ()=>{
+        
+        let response = await axios.get(`http://localhost:8000/products/men/find`,{
+          headers: {
+              Authorization: token
+            },
+      })
+        console.log('menProducts response: ',response);
+        setMenProducts(response.data)
+        setProducts(response.data)
+    
+      }
+      fetchMenProducts()
+
+      let fetchWomenProducts= async ()=>{
+        
+        let response = await axios.get(`http://localhost:8000/products/women/find`,{
+          headers: {
+              Authorization: token
+            },
+      })
+        console.log('womenProducts response: ',response);
+        setWomenProducts(response.data)
+        setProducts(response.data)
+        
+      }
+      fetchWomenProducts()
+
+      let productList = {womenProducts,menProducts,mobileProducts,laptopProducts,headsetProducts}
+      console.log('All Products: ',productList);
+
+
+    }catch(err){
+      console.log(err);
+    }finally {
+      setIsMobileLoading(false); 
+      setIsLaptopLoading(false); 
+      setIsHeadsetLoading(false); 
+      setIsMenLoading(false); 
+      setIsWomenLoading(false); 
+      console.log('load stop');
+    }
+    
+  },[])
+  return (
+    <div className="mt-32">
+
+    <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap justify-center gap-10 mt-10">
+    <div class="dropdown pt-4">
+  <button>Electronics</button>
+  <div class="dropdown-options text-center ">
+    <button className="w-40 mb-1 mt-2 button" onClick={showMobiles}>Mobile Phones</button><br />
+    <button className="w-40 mb-1 button" onClick={showLaptops}>Laptops</button><br />
+    <button className="w-40 mb-2 button" onClick={showHeadsets}>Headsets</button>
+  </div>
+</div>
+    <button className="list-none button" onClick={showMen}>Men</button>
+    <button className="list-none button" onClick={showWomen}>Women</button>
+    </div>
+
+
+
+    
+    {/* display all products */}
+    <div>
+     {showProducts ? (
+      <>
+      <h1 className='font-semibold text-center text-3xl mt-40'>Products</h1>
+        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {mobileProducts.length > 0 ? (
+            mobileProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-green-100">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                            Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            null
+          )}
+       
+          {laptopProducts.length > 0 ? (
+            laptopProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-green-100">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            null
+          )}
+
+
+{headsetProducts.length > 0 ? (
+            headsetProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-white">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            null
+          )}
+
+
+{menProducts.length > 0 ? (
+            menProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-white">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            null
+          )}
+
+
+{womenProducts.length > 0 ? (
+            womenProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-white">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            null
+          )}
+
+
+        </div>
+      </>
+    ) : null}
+    </div>
+
+    
+      
+
+
+      {/* display mobile products */}
+    <div>
+    {isMobileLoading ? (
+      <div className="loading-container m-auto text-center mt-60">
+        <p>Loading mobile products...</p>
+      </div>
+    ) : showMobileProducts ? (
+      <>
+      <h1 className='font-semibold text-center text-3xl mt-40'>Mobile Phones</h1>
+        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {mobileProducts.length > 0 ? (
+            mobileProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-green-100">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No mobile products found.</p>
+          )}
+        </div>
+      </>
+    ) : null}
+    </div>
+
+
+
+     {/* display laptop products */}
+     <div>
+    {isLaptopLoading ? (
+      <div className="loading-container m-auto text-center mt-60">
+        <p>Loading laptop products...</p>
+      </div>
+    ) : showLaptopProducts ? (
+      <>
+      <h1 className='font-semibold text-center text-3xl mt-40'>Laptops</h1>
+        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {laptopProducts.length > 0 ? (
+            laptopProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-green-100">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No laptop products found.</p>
+          )}
+        </div>
+      </>
+    ) : null}
+    </div>
+
+
+    {/* display headset products */}
+    <div>
+    {isHeadsetLoading ? (
+      <div className="loading-container m-auto text-center mt-60">
+        <p>Loading headset products...</p>
+      </div>
+    ) : showHeadsetProducts ? (
+      <>
+      <h1 className='font-semibold text-center text-3xl mt-40'>Headsets</h1>
+        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {headsetProducts.length > 0 ? (
+            headsetProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-white">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No headset products found.</p>
+          )}
+        </div>
+      </>
+    ) : null}
+    </div>
+
+
+
+    {/* display men products */}
+    <div>
+    {isMenLoading ? (
+      <div className="loading-container m-auto text-center mt-60">
+        <p>Loading men products...</p>
+      </div>
+    ) : showMenProducts ? (
+      <>
+      <h1 className='font-semibold text-center text-3xl mt-40'>Men</h1>
+        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {menProducts.length > 0 ? (
+            menProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-white">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No men products found.</p>
+          )}
+        </div>
+      </>
+    ) : null}
+    </div>
+
+
+
+    {/* display women products */}
+    <div>
+    {isWomenLoading ? (
+      <div className="loading-container m-auto text-center mt-60">
+        <p>Loading women products...</p>
+      </div>
+    ) : showWomenProducts ? (
+      <>
+      <h1 className='font-semibold text-center text-3xl mt-40'>Women</h1>
+        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {womenProducts.length > 0 ? (
+            womenProducts.map((item) => (
+              <div key={item._id}>
+                <div className="bg-green-200 mx-10">
+                  <div className="group relative bg-white">
+                    <ProductSlider images={item.images} />
+                    <div className="flex justify-between">
+                      <div className="m-auto mt-10 text-center">
+                        <div>
+                          <h3 className="text-sm text-gray-700">
+                            <span aria-hidden="true" className="absolute inset-0"></span>
+                            {item.productname}
+                          </h3>
+                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <div></div>
+                          <button className="mt-5 bg-green-500 text-sm text-white p-2 mb-5 px-10 rounded-xl">
+                          Add to Cart
+                          </button>
+                        </div>
+                      </div>
+                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No women products found.</p>
+          )}
+        </div>
+      </>
+    ) : null}
+    </div>
+
+
+    </div>
+  )
+}
+
+export default Home
