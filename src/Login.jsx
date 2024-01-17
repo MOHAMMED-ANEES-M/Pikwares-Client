@@ -72,7 +72,7 @@ const Login = () => {
     useEffect(()=>{
 
       if(token){
-        if(userId === '659a975490f6b3e4142f9d45'){
+        if(userId === 'a1b2c3'){
           navigate('/homeadmin')
           console.log('admin token');
         }else{

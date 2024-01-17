@@ -8,7 +8,7 @@ import './HomeAdmin.css'
 
 const ProductSlider = ({ images }) => {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
@@ -19,7 +19,7 @@ const ProductSlider = ({ images }) => {
     <Slider {...settings}>
       {Array.isArray(images) && images.length > 0 ? (
         images.map((pic, index) => (
-          <div className="h-1/2 bg-white" key={index}>
+          <div className="h-1/2 bg-white p-1" key={index}>
             <img
               src={pic}
               alt={`product-${index}`}
@@ -59,6 +59,7 @@ const HomeAdmin = () => {
   const navigate = useNavigate()
 
   let token = localStorage.getItem('token')
+
 
   let showMobiles = () => {
     setIsMobileLoading(true);
@@ -135,10 +136,63 @@ const HomeAdmin = () => {
     return () => clearTimeout(timer);
   };
 
-  let handleDelete= async (id)=>{
+  let handleMobileDelete= async (id,e)=>{
+    if (e) {
+      e.preventDefault(); 
+    }
     console.log(id);
-    console.log('handledelete');
+    console.log('handleMobiledelete');
     let response = await axios.delete(`http://localhost:8000/deleteMobiles/${id}`)
+    console.log(response);
+    setRefresh(!refresh)
+      setShowLaptopProducts(false);
+      setShowMobileProducts(true);
+      setShowHeadsetProducts(false);
+      setShowMenProducts(false);
+      setShowProducts(false)
+      setShowWomenProducts(false);
+  }
+
+  let handleLaptopDelete= async (id,e)=>{
+    if (e) {
+      e.preventDefault(); 
+    }
+    console.log(id);
+    console.log('handleLaptopdelete');
+    let response = await axios.delete(`http://localhost:8000/deleteLaptops/${id}`)
+    console.log(response);
+    setRefresh(!refresh)
+  }
+
+  let handleHeadsetDelete= async (id,e)=>{
+    if (e) {
+      e.preventDefault(); 
+    }
+    console.log(id);
+    console.log('handleHeadsetdelete');
+    let response = await axios.delete(`http://localhost:8000/deleteHeadsets/${id}`)
+    console.log(response);
+    setRefresh(!refresh)
+  }
+
+  let handleMenDelete= async (id,e)=>{
+    if (e) {
+      e.preventDefault(); 
+    }
+    console.log(id);
+    console.log('handleMendelete');
+    let response = await axios.delete(`http://localhost:8000/deleteMen/${id}`)
+    console.log(response);
+    setRefresh(!refresh)
+  }
+
+  let handleWomenDelete= async (id,e)=>{
+    if (e) {
+      e.preventDefault(); 
+    }
+    console.log(id);
+    console.log('handleWomendelete');
+    let response = await axios.delete(`http://localhost:8000/deleteWomen/${id}`)
     console.log(response);
     setRefresh(!refresh)
   }
@@ -148,11 +202,15 @@ const HomeAdmin = () => {
     
     try{
       console.log('load start');
-      setShowProducts(true)
+      
+      if(!refresh){
+        setShowProducts(true)
+      }
 
       if(!token){
         navigate('/login')
       }
+      
 
       let fetchMobileProducts= async ()=>{
         
@@ -245,18 +303,18 @@ const HomeAdmin = () => {
   return (
     <div className="mt-20">
 
-    <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap justify-center gap-10 mt-10">
+    <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap ps-5 sm:justify-center gap-3 sm:gap-10 mt-7 sm:mt-9">
     <div class="dropdown pt-4 relative">
   <button>Electronics</button>
   <div class="dropdown-options text-center ">
-    <button className="w-40 mb-1 mt-2 button" onClick={showMobiles}>Mobile Phones</button><br />
-    <button className="w-40 mb-1 button" onClick={showLaptops}>Laptops</button><br />
-    <button className="w-40 mb-2 button" onClick={showHeadsets}>Headsets</button>
+    <button className="w-40 mb-1 mt-2 buttondd" onClick={showMobiles}>Mobile Phones</button><br />
+    <button className="w-40 mb-1 buttondd" onClick={showLaptops}>Laptops</button><br />
+    <button className="w-40 mb-2 buttondd" onClick={showHeadsets}>Headsets</button>
   </div>
 </div>
     <button className="list-none button" onClick={showMen}>Men</button>
     <button className="list-none button" onClick={showWomen}>Women</button>
-    <Link to='/addproductadmin'><button className="absolute top-2 right-5 bg-green-500 text-white py-2 px-4 rounded-xl h-fit">Add Product</button></Link>
+    <Link to='/addproductadmin'><button className="absolute top-2 right-2 sm:right-5 bg-green-500 text-white py-1 sm:py-2 px-2 sm:px-4 rounded-xl h-fit">Add Product</button></Link>
     </div>
 
 
@@ -267,12 +325,13 @@ const HomeAdmin = () => {
      {showProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Products</h1>
-        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+
           {mobileProducts.length > 0 ? (
             mobileProducts.map((item) => (
-              <div className=" text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
-                  <div className="group relative bg-green-100">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
+                  <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
                       <div className="m-auto mt-10 text-center">
@@ -281,7 +340,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5 text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           
           
                         </div>
@@ -291,10 +350,10 @@ const HomeAdmin = () => {
                     
                   </div>
                 </div>
-                <button className="mt-5 text-center bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl cursor-pointer " onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer " onClick={(e) => handleMobileDelete(item._id,e)}>
                             Delete
                 </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             null
@@ -302,9 +361,9 @@ const HomeAdmin = () => {
        
           {laptopProducts.length > 0 ? (
             laptopProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
-                  <div className="group relative bg-green-100">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
+                  <div className="group relative bg-white ">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
                       <div className="m-auto mt-10 text-center">
@@ -313,7 +372,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -322,10 +381,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleLaptopDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             null
@@ -334,8 +393,8 @@ const HomeAdmin = () => {
 
 {headsetProducts.length > 0 ? (
             headsetProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
                   <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
@@ -345,7 +404,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -354,10 +413,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleHeadsetDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             null
@@ -366,8 +425,8 @@ const HomeAdmin = () => {
 
 {menProducts.length > 0 ? (
             menProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className="mx-5">
                   <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
@@ -377,7 +436,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -386,10 +445,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleMenDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             null
@@ -398,8 +457,8 @@ const HomeAdmin = () => {
 
 {womenProducts.length > 0 ? (
             womenProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className="mx-5">
                   <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
@@ -409,7 +468,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -418,10 +477,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleWomenDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             null
@@ -446,12 +505,12 @@ const HomeAdmin = () => {
     ) : showMobileProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Mobile Phones</h1>
-        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8" >
+      <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {mobileProducts.length > 0 ? (
             mobileProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
-                  <div className="group relative bg-green-100">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
+                  <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
                       <div className="m-auto mt-10 text-center">
@@ -460,7 +519,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -469,10 +528,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 cursor-pointer mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleMobileDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             <p>No mobile products found.</p>
@@ -493,12 +552,12 @@ const HomeAdmin = () => {
     ) : showLaptopProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Laptops</h1>
-        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8" >
+      <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {laptopProducts.length > 0 ? (
             laptopProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
-                  <div className="group relative bg-green-100">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
+                  <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
                       <div className="m-auto mt-10 text-center">
@@ -507,7 +566,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -516,10 +575,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleLaptopDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             <p>No laptop products found.</p>
@@ -539,11 +598,11 @@ const HomeAdmin = () => {
     ) : showHeadsetProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Headsets</h1>
-        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {headsetProducts.length > 0 ? (
             headsetProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
                   <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
@@ -553,7 +612,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -562,10 +621,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleHeadsetDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             <p>No headset products found.</p>
@@ -586,12 +645,12 @@ const HomeAdmin = () => {
     ) : showMenProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Men</h1>
-        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {menProducts.length > 0 ? (
             menProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
-                  <div className="group relative bg-white">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
+                <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
                       <div className="m-auto mt-10 text-center">
@@ -600,19 +659,19 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
                       </div>
                       {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
                     </div>
-                  </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+              </div>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer z-10" onClick={(e) => handleMenDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+                  </div></Link>
             ))
           ) : (
             <p>No men products found.</p>
@@ -633,11 +692,11 @@ const HomeAdmin = () => {
     ) : showWomenProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Women</h1>
-        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {womenProducts.length > 0 ? (
             womenProducts.map((item) => (
-              <div className="text-center" key={item._id}>
-                <div className="bg-green-200 mx-10">
+              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
+                <div className=" mx-5">
                   <div className="group relative bg-white">
                     <ProductSlider images={item.images} />
                     <div className="flex justify-between">
@@ -647,7 +706,7 @@ const HomeAdmin = () => {
                             <span aria-hidden="true" className="absolute inset-0"></span>
                             {item.productname}
                           </h3>
-                          <p className="mt-5text-sm text-gray-700">Rs {item.productprice}</p>
+                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
                           <div></div>
                           
                         </div>
@@ -656,10 +715,10 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-5 bg-red-500 text-sm text-white p-2 mb-5 px-10 rounded-xl" onClick={()=>handleDelete(item._id)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleWomenDelete(item._id,e)}>
                             Delete
                           </button>
-              </div>
+              </div></Link>
             ))
           ) : (
             <p>No women products found.</p>

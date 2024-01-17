@@ -101,7 +101,7 @@ const AddProduct = () => {
 
     useEffect(()=>{
 
-      if(userId !== '659a975490f6b3e4142f9d45'){
+      if(userId !== 'a1b2c3'){
         navigate('/')
       }
 
@@ -114,11 +114,11 @@ const AddProduct = () => {
 
 
   return (
-    <div className='bg-green-200 h-screen'>
+    <div className=' h-screen'>
         
-        <h1 className='font-semibold text-center text-3xl mt-20'>Add Product</h1>
+        <h1 className='font-semibold text-center text-3xl mt-32'>Add Product</h1>
       <div className='m-auto pt-20 text-center flex flex-wrap justify-evenly'>
-            <div className='w-2/5'>
+            <div className='w-4/5 md:w-2/5 '>
         <form onSubmit={handleSubmit}>
 
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productname">Product Name</label></div>
@@ -128,7 +128,7 @@ const AddProduct = () => {
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productdescription">Product Description</label></div>
             <textarea className='w-1/2 mb-7 rounded-lg border h-28 p-3' type="text" name='productdescription' placeholder='Product Description...' onChange={handleChange} /><br />
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productcategory">Product Category</label></div>
-            <select className='w-1/2 h-10 rounded-lg mb-7 px-3' name="productcategory" id="productcategory" onChange={handleChange}> 
+            <select className='w-1/2 h-10 rounded-lg mb-7 px-3 border' name="productcategory" id="productcategory" onChange={handleChange}> 
                <option selected disabled>Select product</option> 
                <option value="mobilephones">Mobile Phones</option> 
                <option value="laptops">Laptops</option> 
@@ -142,11 +142,11 @@ const AddProduct = () => {
             </form>
             </div>
             
-            <div className='w-2/5'>
+            <div className='w-4/5 md:w-2/5'>
             <div className='mb-5'>
               <div className='text-start mb-5'><label htmlFor="image">Product images</label></div>
             <FileBase64 key={fileInputKey} multiple={true} id='image' onDone={handleDone}/>
-            <button onClick={displayImage} className='bg-green-500 text-white py-2 px-4 rounded-xl h-fit'>+</button>
+            <button onClick={displayImage} className='bg-green-500 text-white py-2 px-4 mt-5 rounded-xl h-fit'>+</button>
             </div>
         <h1 className='font-semibold text-3xl mt-20 mb-10'>Uploaded Images</h1>
         <div>
