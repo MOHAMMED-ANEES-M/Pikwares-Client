@@ -14,6 +14,7 @@ import ViewProductAdmin from './Admin/ViewProductAdmin';
 import ViewCartAdmin from './Admin/ViewCartAdmin';
 import CheckoutCustomer from './User/CheckoutCustomer';
 import PaymentCustomer from './User/PaymentCustomer';
+import OrdersCustomer from './User/OrdersCustomer';
 
 function App() {
 
@@ -39,7 +40,8 @@ function App() {
       <Route path='/viewproductadmin/:id/:category' element={<ViewProductAdmin/>}/>
       <Route path='/viewcartadmin/:id' element={<ViewCartAdmin/>}/>   
       <Route path='/checkoutcustomer/:id/:category' element={<CheckoutCustomer/>}/>   
-      <Route path='/paymentcustomer' element={<PaymentCustomer/>}/>   
+      <Route path='/paymentcustomer/:id' element={<PaymentCustomer/>}/>   
+      <Route path='/orderscustomer' element={<OrdersCustomer/>}/>   
       </Route>
     </Routes>
     </BrowserRouter>

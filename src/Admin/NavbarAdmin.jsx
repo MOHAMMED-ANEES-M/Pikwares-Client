@@ -95,8 +95,8 @@ const NavbarAdmin = () => {
               <NavLink to='/cartcustomer'>
                 <li>Cart</li>
               </NavLink>
-              <NavLink to='/historycustomer'>
-                <li>History</li>
+              <NavLink to='/orderscustomer'>
+                <li>Orders</li>
               </NavLink>
               <NavLink to='/accountcustomer'>
                 <li>Account</li>

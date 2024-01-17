@@ -32,12 +32,14 @@ const ViewProduct = () => {
           navigate('/login')
         }
 
+        if(token){
         let response = await axios.post(`http://localhost:8000/insertCart/${userId}`,productData)
         console.log(response);
-        if(response.data){
+          if(response.data){
           console.log('added to cart');
           alert('Added to Cart')
           setRefresh(!refresh)
+          }
         }
       }catch(err){
         console.log(err);

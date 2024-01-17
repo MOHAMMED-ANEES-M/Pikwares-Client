@@ -108,7 +108,7 @@ const CheckoutCustomer = () => {
                 <p className='text-2xl mb-1'>{productData.productname}</p>
                 <p className='text-lg font-semibold mt-1'>₹{productData.productprice}</p>
                 </div>
-               <Link to={'/paymentcustomer'}><div className='sm:text-end'><button className='mt-10 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>PLACE ORDER</button></div></Link>
+               <Link to={`/paymentcustomer/${productData._id}`}><div className='sm:text-end'><button className='mt-10 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>PLACE ORDER</button></div></Link>
             </div>
             </div>
 
