@@ -15,6 +15,8 @@ import ViewCartAdmin from './Admin/ViewCartAdmin';
 import CheckoutCustomer from './User/CheckoutCustomer';
 import PaymentCustomer from './User/PaymentCustomer';
 import OrdersCustomer from './User/OrdersCustomer';
+import OrdersAdmin from './Admin/OrdersAdmin';
+import ViewOrderAdmin from './Admin/ViewOrderAdmin';
 
 function App() {
 
@@ -42,6 +44,8 @@ function App() {
       <Route path='/checkoutcustomer/:id/:category' element={<CheckoutCustomer/>}/>   
       <Route path='/paymentcustomer/:id' element={<PaymentCustomer/>}/>   
       <Route path='/orderscustomer' element={<OrdersCustomer/>}/>   
+      <Route path='/ordersadmin' element={<OrdersAdmin/>}/>   
+      <Route path='/vieworderadmin/:customerId/:productId/:orderId' element={<ViewOrderAdmin/>}/>   
       </Route>
     </Routes>
     </BrowserRouter>

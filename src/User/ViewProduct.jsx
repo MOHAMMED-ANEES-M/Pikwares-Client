@@ -6,6 +6,8 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
+import { FaRegHeart } from "react-icons/fa";
+
 
 const ViewProduct = () => {
 
@@ -148,13 +150,13 @@ const ViewProduct = () => {
         <p className='mt-2 text-sm opacity-60 font-semibold'>Description</p>
         <p className='mt-2 text-xl w-3/4'>{productData && productData.productdescription}</p>
       </div>
-        <div>
+        <div className='flex items-center gap-10'>
           { isCart ? (
               <Link to={'/cartcustomer'}><button className=" mr-2 bg-black text-white py-2 px-4 rounded-xl h-fit">GO TO CART</button></Link>
             ):(
               <button className=" mr-2 bg-black text-white py-2 px-4 rounded-xl h-fit" onClick={handleCart}>ADD TO CART</button>
               )}
-          <Link to={`/checkoutcustomer/${productData._id}/${productData.productcategory}`} ><button className=" ml-2 bg-green-500 text-white py-2 px-10 rounded-xl h-fit">BY NOW</button></Link>
+          <Link to={`/checkoutcustomer/${productData._id}/${productData.productcategory}`} ><button className=" ml-2 text-green-500 py-2 rounded-xl h-fit"><FaRegHeart className='text-3xl'/></button></Link>
         </div>
       </div>
 

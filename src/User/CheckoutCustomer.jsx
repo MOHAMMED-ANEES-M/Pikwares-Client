@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { GrEdit } from 'react-icons/gr'
+import { GrAdd, GrEdit, GrSubtract } from 'react-icons/gr'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const CheckoutCustomer = () => {
@@ -8,6 +8,8 @@ const CheckoutCustomer = () => {
     const [profileData,setProfileData] = useState('')
     const [addressData,setAddressData] = useState('')
     const [productData,setProductData] = useState('')
+    const [cartData,setCartData] = useState('')
+    const [refresh,setRefresh] = useState(false)
     const navigate = useNavigate()
 
     let userId = localStorage.getItem('userId')
@@ -15,6 +17,56 @@ const CheckoutCustomer = () => {
 
     let {id} = useParams()
     let {category} = useParams()
+
+
+    let increment= async(id,pcount,pcategory,pprice,prId)=>{
+        let count = parseInt(pcount, 10) || 1;
+        if(count !==9){
+          count += 1;
+        
+        // let productprice = count+pprice
+        let category = pcategory
+        try{
+  
+          console.log('prPrice:',pprice);
+          console.log('count:',count);
+          console.log('category:',category);
+          let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceIncrement'}
+          let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+          console.log(response);
+          // setCartData(response.data)
+          setRefresh(!refresh)
+  
+        }  catch(err){
+          console.log(err);
+        }
+      }
+      }
+  
+      let decrement= async(id,pcount,pcategory,pprice,prId)=>{
+        let count = parseInt(pcount, 10) || 1;
+        if(count !== 1){
+          count -= 1;
+        
+        // let productprice = pprice/count
+        let category = pcategory
+        try{
+  
+          console.log('prPrice:',pprice);
+          console.log('count:',count);
+          console.log('category:',category);
+          let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceDecrement'}
+          let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+          console.log('countupdate response',response);
+          // setCartData(response.data)
+          setRefresh(!refresh)
+  
+        }  catch(err){
+          console.log(err);
+        }
+  
+      }
+      }
 
 
     useEffect(()=>{
@@ -80,7 +132,19 @@ const CheckoutCustomer = () => {
     }
     fetchProduct()
 
-    },[])
+    let fetchCart = async()=>{
+
+        let response = await axios.get(`http://localhost:8000/findOneCart/${id}/${userId}`,{
+            headers:{
+                Authorization: token
+            },
+        })
+        console.log('cart response:',response);
+        setCartData(response.data)
+    }
+    fetchCart()
+
+    },[refresh])
 
 
   return (
@@ -100,7 +164,7 @@ const CheckoutCustomer = () => {
 
             <div>
             <p className='font-bold mb-5 border-b-2 pb-1'>ORDER SUMMARY</p>
-            <div className='grid grid-cols-1 sm:grid-cols-3 px-5'>
+            <div className='grid grid-cols-1 sm:grid-cols-4 px-5'>
             {productData.images && productData.images.length > 0 && (
                     <img className='w-20 h-20 mb-10 sm:mb-0' key={productData.images[0].id} src={productData.images[0]} alt="" />
                     )} 
@@ -108,6 +172,11 @@ const CheckoutCustomer = () => {
                 <p className='text-2xl mb-1'>{productData.productname}</p>
                 <p className='text-lg font-semibold mt-1'>₹{productData.productprice}</p>
                 </div>
+                <div className='flex gap-3 items-center'>
+                    <button onClick={()=>decrement(cartData._id,cartData.count,cartData.productcategory,cartData.productprice,cartData.productId)}><GrSubtract/></button>
+                    <p className='border-4 py-0 px-2'>{cartData.count}</p>
+                    <button onClick={()=>increment(cartData._id,cartData.count,cartData.productcategory,cartData.productprice,cartData.productId)}><GrAdd/></button>
+                    </div>
                <Link to={`/paymentcustomer/${productData._id}`}><div className='sm:text-end'><button className='mt-10 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>PLACE ORDER</button></div></Link>
             </div>
             </div>
@@ -120,13 +189,15 @@ const CheckoutCustomer = () => {
             <div className='flex justify-between'>   
             <div>
             <p className='text-lg mb-5'>Price</p>
+            <p className='text-lg mb-5'>Quantity</p>
             <p className='text-lg mb-5'>Delivery Charge </p>
             <p className='text-lg font-bold'>Total Payable </p>
             </div>
             <div className='text-end'>
             <p className='text-lg mb-5'>₹{productData.productprice}</p>
+            <p className='text-lg mb-5'>₹{cartData.count}</p>
             <p className='text-lg mb-5 text-green-500'><span className='line-through text-black opacity-40'>₹40</span> FREE</p>
-            <p className='text-lg font-bold'>₹{productData.productprice}</p>
+            <p className='text-lg font-bold'>₹{cartData.productprice}</p>
             </div>
             </div>
         </div>

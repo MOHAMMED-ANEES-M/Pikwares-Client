@@ -10,11 +10,12 @@ import { MdDelete } from "react-icons/md";
 
 
 
+
 const CartCustomer = () => {
 
     const [cartData,setCartData] = useState([''])
     const [refresh,setRefresh] = useState(false)
-    const [count,setCount] = useState(0)
+    // const [count,setCount] = useState(0)
     const navigate = useNavigate()
     const sliderRef = useRef();
 
@@ -22,16 +23,55 @@ const CartCustomer = () => {
     let token = localStorage.getItem('token')
     let userId = localStorage.getItem('userId')
 
-    let increment=()=>{
-        if(count!==10){
-            setCount(count+1)
-        }
+    let increment= async(e,id,pcount,pcategory,pprice,prId)=>{
+      e.preventDefault()
+      let count = parseInt(pcount, 10) || 1;
+      if(count !==9){
+        count += 1;
+      
+      // let productprice = count+pprice
+      let category = pcategory
+      try{
+
+        console.log('prPrice:',pprice);
+        console.log('count:',count);
+        console.log('category:',category);
+        let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceIncrement'}
+        let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+        console.log(response);
+        // setCartData(response.data)
+        setRefresh(!refresh)
+
+      }  catch(err){
+        console.log(err);
+      }
+    }
     }
 
-    let decrement=()=>{
-        if(count!==0){
-            setCount(count-1)
-        }
+    let decrement= async(e,id,pcount,pcategory,pprice,prId)=>{
+      e.preventDefault()
+      let count = parseInt(pcount, 10) || 1;
+      if(count !== 1){
+        count -= 1;
+      
+      // let productprice = pprice/count
+      let category = pcategory
+      try{
+
+        console.log('prPrice:',pprice);
+        console.log('count:',count);
+        console.log('category:',category);
+        let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceDecrement'}
+        let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+        console.log('countupdate response',response);
+        // setCartData(response.data)
+        setRefresh(!refresh)
+
+      }  catch(err){
+        console.log(err);
+      }
+
+    }
     }
 
     let handleCartDelete=async(e,id)=>{
@@ -70,6 +110,7 @@ const CartCustomer = () => {
             console.log(err);
             alert(err.message)
         }
+
     },[refresh])
 
 
@@ -115,9 +156,9 @@ const CartCustomer = () => {
                     <p className='text-xl mb-5'> {item && item.productname}</p>
                     <p className='text-md mb-5'>₹{item && item.productprice} <span className='ms-2 text-green-600'> ( 60% off )</span></p>
                     <div className='flex gap-3'>
-                    <button onClick={decrement}><GrSubtract/></button>
-                    <p className='border-4 px-2'>{count}</p>
-                    <button onClick={increment}><GrAdd/></button>
+                    <button onClick={(e)=>decrement(e,item._id,item.count,item.productcategory,item.productprice,item.productId)}><GrSubtract/></button>
+                    <p className='border-4 px-2'>{item.count}</p>
+                    <button onClick={(e)=>increment(e,item._id,item.count,item.productcategory,item.productprice,item.productId)}><GrAdd/></button>
                     </div>
                 </div>
 
