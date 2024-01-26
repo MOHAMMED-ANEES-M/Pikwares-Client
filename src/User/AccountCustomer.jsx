@@ -317,8 +317,10 @@ const AccountCustomer = () => {
                   </div>
                   </div>
 
+                  <div className='pl-2 mb-3 '><label  htmlFor="address">Address</label></div>
+                  <textarea type="text" onChange={handleChange} placeholder='Enter address' id='address' name='address' className=' w-full bg-white h-16 mb-5 rounded-lg border p-3'  />
                   <div className='pl-2 mb-3 '><label  htmlFor="landmark">Landmark</label></div>
-                  <textarea type="text" onChange={handleChange} placeholder='Enter landmark' id='landmark' name='landmark' className=' w-full bg-white h-32 mb-5 rounded-lg border p-3'  />
+                  <textarea type="text" onChange={handleChange} placeholder='Enter landmark' id='landmark' name='landmark' className=' w-full bg-white h-16 mb-5 rounded-lg border p-3'  />
                   <div className='text-center'>
                   <input type='submit' value='Save' className='bg-green-500 ml-2 text-white py-2 px-4 rounded-xl h-fit'/></div>
                   </form>
@@ -351,8 +353,10 @@ const AccountCustomer = () => {
                 </div>
                 </div>
 
+                <div className='pl-2 mb-3 '><label  htmlFor="address">Address</label></div>
+                <textarea type="text" onChange={handleChange} value={address.address} id='address' name='address' className=' w-full bg-white h-16 mb-5 rounded-lg border p-3' disabled />
                 <div className='pl-2 mb-3 '><label  htmlFor="landmark">Landmark</label></div>
-                <textarea type="text" onChange={handleChange} value={address.landmark} id='landmark' name='landmark' className=' w-full bg-white h-32 mb-5 rounded-lg border p-3' disabled />
+                <textarea type="text" onChange={handleChange} value={address.landmark} id='landmark' name='landmark' className=' w-full bg-white h-16 mb-5 rounded-lg border p-3' disabled />
                 <div className='text-center'><button onClick={handleEdit} className='bg-green-500 text-white py-2 px-4  rounded-xl h-fit'>Edit</button></div>
                 </div>
 
@@ -382,8 +386,10 @@ const AccountCustomer = () => {
             </div>
             </div>
 
+            <div className='pl-2 mb-3 '><label  htmlFor="address">Address</label></div>
+            <textarea type="text" onChange={handleChange} placeholder={address.address} id='address' name='address' className=' w-full bg-white h-16 mb-5 rounded-lg border p-3'  />
             <div className='pl-2 mb-3 '><label  htmlFor="landmark">Landmark</label></div>
-            <textarea type="text" onChange={handleChange} placeholder={address.landmark} id='landmark' name='landmark' className=' w-full bg-white h-32 mb-5 rounded-lg border p-3'  />
+            <textarea type="text" onChange={handleChange} placeholder={address.landmark} id='landmark' name='landmark' className=' w-full bg-white h-16 mb-5 rounded-lg border p-3'  />
             <div className='flex flex-wrap gap-2 justify-center'>
             <input type='submit' value='Update' className='bg-green-500 ml-2 text-white cursor-pointer py-2 px-4 rounded-xl h-fit'/>
             <button onClick={handleCancel} className='bg-white border text-black py-2 px-4 mr-2 rounded-xl h-fit'>Cancel</button>
