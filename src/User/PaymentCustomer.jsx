@@ -3,25 +3,30 @@ import { GrCreditCard } from 'react-icons/gr'
 import { FaGooglePay } from "react-icons/fa";
 import { SiPaytm } from "react-icons/si";
 import { GiPayMoney } from "react-icons/gi";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 
 const PaymentCustomer = () => {
 
   const [confirmPayment,setConfirmPayment] = useState(false)
+  const [data,setdata] = useState('')
+  const navigate = useNavigate()
 
   let {id} = useParams()
   let {amount} = useParams()
+  let {counts} = useParams()
   let userId = localStorage.getItem('userId')
 
-  let handlePayment= async(e)=>{
+  let handleCOD= async(e)=>{
     e.preventDefault()
     try{
       let orderStatus = 'Order Placed'
       let customerId = userId
       let productId = id
-      let data = ({orderStatus,customerId,productId})
+      let count = counts
+      let mode = 'COD'
+      let data = ({orderStatus,customerId,productId,count,mode})
       console.log('data:',data);
       let response = await axios.post(`http://localhost:8000/orders/insert`,data)
       console.log('orders response:',response);
@@ -38,33 +43,66 @@ const PaymentCustomer = () => {
     setConfirmPayment(!confirmPayment)
   }
 
-  let handleOnlinePayment= async()=>{
+  let handleOnlinePayment= async(e)=>{
     try{
       console.log(amount,'amount');
-      let response = await axios.post('http://localhost:8000/paymentorder',{amount})
-      console.log('RazPay order response:',response.data);
+      let orderResponse = await axios.post('http://localhost:8000/paymentorder',{amount})
+      setdata(orderResponse.data)
+      console.log('RazorPay order response:',orderResponse.data);
+
       var options = {
         "key": "rzp_test_tgyzb525OhQfY8", 
-        "amount": response.data.amount, 
+        "amount": orderResponse.data.amount, 
         "currency": "INR",
         "name": "Pikwares", 
-        "order_id": response.data.id, 
-        "callback_url": "http://localhost:8000/paymentCapture",
-        // "prefill": { //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-        //     "name": "Gaurav Kumar", //your customer's name
-        //     "email": "gaurav.kumar@example.com",
-        //     "contact": "9000090000" //Provide the customer's phone number for better conversion rates 
-        // },
-        // "notes": {
-        //     "address": "Razorpay Corporate Office"
-        // },
-        // "theme": {
-        //     "color": "#3399cc"
-        // }
+        "order_id": orderResponse.data.id, 
+        handler: async function (response) {
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature);
+
+          const body = {
+            paymentId:response.razorpay_payment_id,
+            razorId:response.razorpay_order_id,
+            signature:response.razorpay_signature,
+            amount:orderResponse.data.amount,
+          }
+          console.log('body',body);
+          let reciept = await axios.post('http://localhost:8000/paymentCapture',body)
+          console.log('handler reciept response',reciept);
+          if(reciept.data.status === 'ok'){
+              const orderDatas = {
+                  paymentId:response.razorpay_payment_id,
+                  razorId:response.razorpay_order_id,
+                  orderStatus : 'Order Placed',
+                  customerId : userId,
+                  productId : id,
+                  count:counts,
+                  mode: 'Online Payment'
+              }
+            let orderResponse = await axios.post(`http://localhost:8000/orders/insert`,orderDatas)
+            console.log('orders response:',orderResponse);
+            if(orderResponse.data){
+              navigate(`/paymentreciept?paymentId=${orderDatas.paymentId}&productId=${orderDatas.productId}&cartId=${orderDatas.cartId}`)
+            }
+            }
+        }
       };
-      console.log(options,'onlineoptions');
+
+        console.log('options',options);
         const razor = new window.Razorpay(options)
+        razor.on('payment.failed', function (response){
+          alert(response.error.code);
+          alert(response.error.description);
+          alert(response.error.source);
+          alert(response.error.step);
+          alert(response.error.reason);
+          alert(response.error.metadata.order_id);
+          alert(response.error.metadata.payment_id);
+        });
+        console.log(razor,'razor');
         razor.open()
+        e.preventDefault();        
 
     }catch(err){
       console.log(err);
@@ -78,7 +116,7 @@ const PaymentCustomer = () => {
         <p className='text-3xl text-center mb-10 '>PAYMENT OPTIONS</p>
         <div>
           <ul className='mx-10'>
-            <div onClick={handleOnlinePayment}><div className='text-md bg-white rounded-xl p-3 mb-1 px-5 items-center flex justify-between'><p>Online Payment</p> <i className='text-4xl'><GrCreditCard/></i></div></div>
+            <div className='cursor-pointer' onClick={handleOnlinePayment}><div className='text-md bg-white rounded-xl p-3 mb-1 px-5 items-center flex justify-between'><p>Online Payment</p> <i className='text-4xl'><GrCreditCard/></i></div></div>
             {/* <li className='text-md bg-white rounded-xl p-3 mb-1 px-5 items-center flex justify-between'><p>Google Pay</p> <i className='text-4xl'><FaGooglePay/></i></li>
             <li className='text-md bg-white rounded-xl p-3 mb-1 pl-5 pr-4 items-center flex justify-between'><p>Phone Pay</p> <i className='text-4xl'>
               <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="40" viewBox="0 0 24 24">
@@ -89,7 +127,7 @@ const PaymentCustomer = () => {
              */}
             <Link onClick={payment}><li className='text-md bg-white rounded-xl p-3 mb-1 px-5 '><div className='items-center flex justify-between'><p>Cash on Delivery</p> <i className='text-4xl'><GiPayMoney/></i></div>
             { confirmPayment ? (
-             <div> <button className='mt-20 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit' onClick={(e)=>{handlePayment(e)}}>CONFIRM PAYMENT</button></div>
+             <div> <button className='mt-20 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit' onClick={(e)=>{handleCOD(e)}}>CONFIRM PAYMENT</button></div>
             ):(
               null
             )}

@@ -177,7 +177,7 @@ const CheckoutCustomer = () => {
                     <p className='border-4 py-0 px-2'>{cartData.count}</p>
                     <button onClick={()=>increment(cartData._id,cartData.count,cartData.productcategory,cartData.productprice,cartData.productId)}><GrAdd/></button>
                     </div>
-               <Link to={`/paymentcustomer/${productData._id}/${cartData.productprice}/d5v54vsvd1dvsHvscHs1Bxx`}><div className='sm:text-end'><button className='mt-10 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>PLACE ORDER</button></div></Link>
+               <Link to={`/paymentcustomer/${productData._id}/${cartData.productprice}/${cartData.count}`}><div className='sm:text-end'><button className='mt-10 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>PLACE ORDER</button></div></Link>
             </div>
             </div>
 

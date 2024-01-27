@@ -18,6 +18,7 @@ import OrdersCustomer from './User/OrdersCustomer';
 import OrdersAdmin from './Admin/OrdersAdmin';
 import ViewOrderAdmin from './Admin/ViewOrderAdmin';
 import ViewOrderCustomer from './User/ViewOrderCustomer';
+import PaymentSuccess from './User/PaymentSuccess';
 
 function App() {
 
@@ -43,7 +44,8 @@ function App() {
       <Route path='/viewproductadmin/:id/:category' element={<ViewProductAdmin/>}/>
       <Route path='/viewcartadmin/:id' element={<ViewCartAdmin/>}/>   
       <Route path='/checkoutcustomer/:id/:category' element={<CheckoutCustomer/>}/>   
-      <Route path='/paymentcustomer/:id/:amount/d5v54vsvd1dvsHvscHs1Bxx' element={<PaymentCustomer/>}/>   
+      <Route path='/paymentcustomer/:id/:amount/:counts' element={<PaymentCustomer/>}/>   
+      <Route path='/paymentreciept' element={<PaymentSuccess/>}/>   
       <Route path='/orderscustomer' element={<OrdersCustomer/>}/>   
       <Route path='/viewordercustomer/:productId/:orderId' element={<ViewOrderCustomer/>}/>   
       <Route path='/ordersadmin' element={<OrdersAdmin/>}/>   

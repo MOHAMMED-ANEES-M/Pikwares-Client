@@ -118,7 +118,7 @@ const OrdersCustomer = () => {
 
           <div>
           {orderProducts.map((item,index)=>(
-          <Link to={`/viewordercustomer/${item._id}/${orderData[index]._id}`}><div key={index} className='w-10/12 m-auto grid grid-cols-4 items-center border rounded p-5 px-10 mb-5'>
+          <Link to={`/viewordercustomer/${item._id}/${orderData[index]._id}`}><div key={index} className='w-10/12 m-auto grid grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
           <div>
           {item.images && item.images.length > 0 && (
                       <img className='w-20 h-20 mb-10 sm:mb-0' key={item.images[0].id} src={item.images[0]} alt="" />
@@ -134,9 +134,14 @@ const OrdersCustomer = () => {
                       <GoDotFill />
                       </i>
             {orderData[index] && (
-                          <p>{orderData[index].orderStatus} on {orderData[index].statusDate}</p>
+                          <p>{orderData[index].orderStatus} <br /> {orderData[index].statusDate}</p>
                           )}
                       </div>
+                  </div>
+                  <div className='text-center'>
+                  {orderData[index] && (
+                          <p>{orderData[index].mode}</p>
+                          )}
                   </div>
                   {/* <div className='text-end'>
                     { orderData[index].orderStatus === 'Order Cancelled'?(
