@@ -67,9 +67,9 @@ const OrdersCustomer = () => {
 
                 
 
-                  const statusDate = new Date(orderData.statusDate);
-                  const formattedDate = statusDate.toString().split('T')[0];
-                  console.log(formattedDate,'formatted date');
+                  // const statusDate = new Date(orderData.statusDate);
+                  // const formattedDate = statusDate.toString().split('T')[0];
+                  // console.log(formattedDate,'formatted date');
 
             }
             fetchOrders() 
@@ -126,8 +126,9 @@ const OrdersCustomer = () => {
           </div>
           <div>
               <p className='text-xl'>{item.productname}</p>
+              <p className='text-xl'>₹{item.productprice}</p>
           </div>
-            <div> <p>₹{item.productprice}</p></div>
+            <div> <p>Quantity: {orderData[index].count}</p></div>
                   <div>
                       <div className='flex justify-start gap-3 items-center'>
                       <i className={`${orderData[index].orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
@@ -139,9 +140,28 @@ const OrdersCustomer = () => {
                       </div>
                   </div>
                   <div className='text-center'>
-                  {orderData[index] && (
-                          <p>{orderData[index].mode}</p>
-                          )}
+                  {orderData[index].orderStatus === 'Order Cancelled' ?(
+                    null
+                  ):(
+                    <>
+                    {orderData[index] && orderData[index].mode === 'COD'? (
+                      <>
+                      <p>{orderData[index].mode}</p>
+                      { orderData[index].orderStatus === 'Order Delivered' ? (
+                        <p className='text-green-500 font-bold'>Amount paid {item.productprice*orderData[index].count}</p>
+                        ):(
+                          <p className='text-red-500 font-bold'>Amount to be paid {item.productprice*orderData[index].count}</p>
+                      )}
+                      </>
+                      ):(
+                        <>
+                        <p>{orderData[index].mode}</p>
+                        <p className='text-green-500 font-bold'>Amount paid {item.productprice*orderData[index].count}</p>
+                        </>
+                      )}
+                      </>
+                  )}
+                  
                   </div>
                   {/* <div className='text-end'>
                     { orderData[index].orderStatus === 'Order Cancelled'?(

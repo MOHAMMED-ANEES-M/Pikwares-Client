@@ -150,18 +150,32 @@ const ViewOrderAdmin = () => {
           <p><span className='mr-2'>Phone Number:</span>{customerData.number}</p>
       </div>
 
-      <div className='grid grid-cols-4 flex-wrap '>
+      <div className='grid grid-cols-5 flex-wrap '>
         {productData && productData.images && productData.images[0] && (
           <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={productData.images[0]} alt="image not found" />
         )}
           <div>
               <p className='mb-3 text-xl'>{productData.productname}</p>
               <p className='font-bold'>₹{productData.productprice}</p>
+              <p>Quantity: {orderData.count}</p>
           </div>
           <div className='text-center'>
             <p className='font-bold mb-3'>Status</p>
           <p>{orderData.orderStatus} on {orderData.statusDate}</p>
           </div>
+          <div className='text-center '>
+            { orderData.mode === 'COD' ?(
+              <>
+              <p className='mb-3'>{orderData.mode}</p>
+              <p className='text-red-500 font-bold'>Amount to be paid {productData.productprice * orderData.count}</p>
+              </>
+            ):(
+              <>
+              <p className='mb-3'>{orderData.mode}</p>
+              <p className='text-green-500 font-bold'>Amount paid {productData.productprice * orderData.count}</p>
+              </>
+            )}
+            </div>
             <div className='flex justify-center items-center'>
               { isStatusUpdate?(
                 <div className="text-center">
@@ -180,6 +194,7 @@ const ViewOrderAdmin = () => {
                 <button className='bg-green-500 text-white py-2 px-3 w-2/6 text-sm rounded h-fit' onClick={handleStatus}>Update</button>
               )}
             </div>
+            
       </div>
 
       </div>

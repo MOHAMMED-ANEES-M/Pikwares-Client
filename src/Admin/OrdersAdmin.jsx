@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { GoDotFill } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
+import _orderBy from 'lodash/orderBy';
+
 
 const OrdersAdmin = () => {
 
@@ -42,10 +44,11 @@ const OrdersAdmin = () => {
                 statusDate: formatDate(order.statusDate),
               }));
       
-            setOrderData(updatedOrderData)
+              const sortedOrders = _orderBy(updatedOrderData, ['statusDate'], ['asc']);
+              setOrderData(sortedOrders);
 
             let fetchOrderProducts = async () => {
-                const productsPromises = response.data.map(async (order) => {
+                const productsPromises = sortedOrders.map(async (order) => {
                   const productResponse = await axios.get(`http://localhost:8000/customer/orderedProducts/${order.productId}`,{
                     headers: {
                         Authorization: token
@@ -56,7 +59,7 @@ const OrdersAdmin = () => {
       
                 const products = await Promise.all(productsPromises);
                 setOrderProducts(products);
-                // console.log('ordered products response:',orderProducts);
+                console.log('ordered products response:',products);
                 if (products && products.length > 0 && products[0]) {
                   setIsProduct(true); 
                 } else {
@@ -65,12 +68,12 @@ const OrdersAdmin = () => {
               }
               fetchOrderProducts()
 
-              const statusDate = new Date(orderData.statusDate);
-              const formattedDate = statusDate.toString().split('T')[0];
-              console.log(formattedDate,'formatted date');
+              // const statusDate = new Date(orderData.statusDate);
+              // const formattedDate = statusDate.toString().split('T')[0];
+              // console.log(formattedDate,'formatted date');
 
               let fetchOrderCustomers = async () => {
-                const customerPromises = response.data.map(async (order) => {
+                const customerPromises = sortedOrders.map(async (order) => {
                   const customerResponse = await axios.get(`http://localhost:8000/admin/orderedCustomers/${order.customerId}`,{
                     headers: {
                         Authorization: token
@@ -81,7 +84,7 @@ const OrdersAdmin = () => {
       
                 const customers = await Promise.all(customerPromises);
                 setOrderCustomers(customers);
-                // console.log('ordered customers response:',orderCrustomers);
+                console.log('ordered customers response:',customers);
                 // if (customers && customers.length > 0 && customers[0]) {
                 //   setIsProduct(true); 
                 // } else {
@@ -95,8 +98,6 @@ const OrdersAdmin = () => {
     }catch(err){
         console.log(err);
     }
-    console.log('ordered products response:',orderProducts);
-    console.log('ordered customers response:',orderCustomers);
      
   },[])
 
@@ -126,6 +127,7 @@ const OrdersAdmin = () => {
               <div>
                 <p className='text-xl'>{item.productname}</p>
                 <p>₹{item.productprice}</p>
+                <p>Quantity: {orderData[index].count}</p>
               </div>
               <div>
                   {orderData[index] && (
@@ -137,15 +139,16 @@ const OrdersAdmin = () => {
                 </div>
                     )}
               </div>
-              <div className='text-center'>
-              { orderData[index].orderStatus === 'Order Cancelled' || orderData[index].orderStatus === 'Order Delivered' ?(
-                      null
-                    ):(
-                    <Link to={`/vieworderadmin/${orderCustomers[index]?._id}/${item?._id}/${orderData[index]?._id}`}>
-                      <button className='bg-green-500 text-white py-2 px-3 w-2/6 text-sm rounded h-fit'>DELIVER</button>
-                    </Link>
-                    )}
-              </div>
+            <div className='text-center'>
+              {orderData[index].orderStatus === 'Order Delivered' ? (
+                <p className='text-green-500 font-bold'>Amount paid {item.productprice * orderData[index].count}</p>
+              ) : orderData[index].orderStatus !== 'Order Cancelled' ? (
+                <Link to={`/vieworderadmin/${orderCustomers[index]?._id}/${item?._id}/${orderData[index]?._id}`}>
+                  <button className='bg-green-500 text-white py-2 px-3 w-2/6 text-sm rounded h-fit'>DELIVER</button>
+                </Link>
+              ) : null}
+            </div>
+
             </div>
           ))}
         </div>
