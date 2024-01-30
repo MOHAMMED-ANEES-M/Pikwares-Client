@@ -196,7 +196,7 @@ const CheckoutCustomer = () => {
             <div className='text-end'>
             <p className='text-lg mb-5'>₹{productData.productprice}</p>
             <p className='text-lg mb-5'>₹{cartData.count}</p>
-            <p className='text-lg mb-5 text-green-500'><span className='line-through text-black opacity-40'>₹40</span> FREE</p>
+            <p className='text-lg mb-5 text-green-500'><span className='line-through text-black opacity-50'>₹40</span> FREE</p>
             <p className='text-lg font-bold'>₹{cartData.productprice}</p>
             </div>
             </div>

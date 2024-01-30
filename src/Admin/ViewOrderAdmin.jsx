@@ -167,12 +167,12 @@ const ViewOrderAdmin = () => {
             { orderData.mode === 'COD' ?(
               <>
               <p className='mb-3'>{orderData.mode}</p>
-              <p className='text-red-500 font-bold'>Amount to be paid {productData.productprice * orderData.count}</p>
+              <p className='text-red-500 font-bold'>Amount to be paid ₹{productData.productprice * orderData.count}</p>
               </>
             ):(
               <>
               <p className='mb-3'>{orderData.mode}</p>
-              <p className='text-green-500 font-bold'>Amount paid {productData.productprice * orderData.count}</p>
+              <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice * orderData.count}</p>
               </>
             )}
             </div>

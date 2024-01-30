@@ -121,7 +121,7 @@ const ViewCartAdmin = () => {
                     )} 
                     <p>{item.productname}</p>
                     <p>₹{item.productprice}</p>
-                    <p className='text-green-600'>Available</p>
+                    <p>Quantity: {item.count}</p>
                     {/* <div className='text-center'><button className='bg-green-500 text-white py-2 px-4 rounded-xl h-fit'>Deliver</button></div> */}
                 </div>
                 </Link>

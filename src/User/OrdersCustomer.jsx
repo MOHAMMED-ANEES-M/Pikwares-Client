@@ -44,7 +44,7 @@ const OrdersCustomer = () => {
         try{
 
             if(!token){
-                navigate('/login')
+               return navigate('/login')
             }
 
             let fetchOrders = async()=>{
@@ -79,6 +79,11 @@ const OrdersCustomer = () => {
     },[refresh])
 
     useEffect(() => {
+
+      if(!token){
+       return navigate('/login')
+    }
+
       let fetchOrderProducts = async () => {
         const productsPromises = orderData.map(async (order) => {
           try {
@@ -148,15 +153,15 @@ const OrdersCustomer = () => {
                       <>
                       <p>{orderData[index].mode}</p>
                       { orderData[index].orderStatus === 'Order Delivered' ? (
-                        <p className='text-green-500 font-bold'>Amount paid {item.productprice*orderData[index].count}</p>
+                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice*orderData[index].count}</p>
                         ):(
-                          <p className='text-red-500 font-bold'>Amount to be paid {item.productprice*orderData[index].count}</p>
+                          <p className='text-red-500 font-bold'>Amount to be paid ₹{item.productprice*orderData[index].count}</p>
                       )}
                       </>
                       ):(
                         <>
                         <p>{orderData[index].mode}</p>
-                        <p className='text-green-500 font-bold'>Amount paid {item.productprice*orderData[index].count}</p>
+                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice*orderData[index].count}</p>
                         </>
                       )}
                       </>

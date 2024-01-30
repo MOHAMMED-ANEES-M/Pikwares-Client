@@ -166,6 +166,10 @@ const AccountCustomer = () => {
 
     useEffect(()=>{
 
+      
+      if(!token){
+        return navigate('/login')
+     }
 
         if (!isNotEditable) {
             inputRef.current.focus();
@@ -177,10 +181,6 @@ const AccountCustomer = () => {
 
         let fetchAccount= async ()=>{
                 try{
-
-                    if(!token){
-                        navigate('/login')
-                    }
 
                 let response = await axios.get(`http://localhost:8000/customer/findAccount/`,{
                     headers: {
