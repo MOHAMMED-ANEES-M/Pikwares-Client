@@ -68,6 +68,14 @@ const CheckoutCustomer = () => {
       }
       }
 
+      const handlePlaceOrderClick = () => {
+        if (!addressData) {
+            alert('Please provide a shipping address before placing the order.');
+        } else {
+            navigate(`/paymentcustomer/${productData._id}/${cartData.productprice}/${cartData.count}`);
+        }
+    };
+
 
     useEffect(()=>{
         
@@ -177,7 +185,15 @@ const CheckoutCustomer = () => {
                     <p className='border-4 py-0 px-2'>{cartData.count}</p>
                     <button onClick={()=>increment(cartData._id,cartData.count,cartData.productcategory,cartData.productprice,cartData.productId)}><GrAdd/></button>
                     </div>
-               <Link to={`/paymentcustomer/${productData._id}/${cartData.productprice}/${cartData.count}`}><div className='sm:text-end'><button className='mt-10 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>PLACE ORDER</button></div></Link>
+              <div className='sm:text-end'>
+                  <button
+                      className='mt-10 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'
+                      onClick={handlePlaceOrderClick}
+                  >
+                      PLACE ORDER
+                  </button>
+              </div>
+
             </div>
             </div>
 

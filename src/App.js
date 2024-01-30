@@ -19,6 +19,7 @@ import OrdersAdmin from './Admin/OrdersAdmin';
 import ViewOrderAdmin from './Admin/ViewOrderAdmin';
 import ViewOrderCustomer from './User/ViewOrderCustomer';
 import PaymentSuccess from './User/PaymentSuccess';
+import RateProductCustomer from './User/RateProductCustomer';
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
       <Route path='/viewordercustomer/:productId/:orderId' element={<ViewOrderCustomer/>}/>   
       <Route path='/ordersadmin' element={<OrdersAdmin/>}/>   
       <Route path='/vieworderadmin/:customerId/:productId/:orderId' element={<ViewOrderAdmin/>}/>   
+      <Route path='/rateproduct/:productId/:customerId' element={<RateProductCustomer/>}/>   
       </Route>
     </Routes>
     </BrowserRouter>

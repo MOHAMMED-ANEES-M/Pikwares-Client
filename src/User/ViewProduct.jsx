@@ -6,12 +6,43 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+
+
+const renderStarRating = (rating) => {
+  const stars = [];
+  const floorRating = Math.floor(rating);
+
+  for (let i = 0; i < floorRating; i++) {
+    stars.push(<FaStar key={i} color="#FFD700" />);
+  }
+
+  if (rating % 1 !== 0) {
+    stars.push(<FaStarHalfAlt key='half' color="#FFD700" />);
+  }
+
+  const remainingStars = 5 - Math.ceil(rating);
+  for (let i = 0; i < remainingStars; i++) {
+    stars.push(<FaRegStar key={`empty${i}`} color="#FFD700" />);
+  }
+
+  return <>{stars}</>;
+};
+
+const calculateAverageRating = (reviews) => {
+  if (!reviews || reviews.length === 0) {
+    return 0; // Default to 0 if there are no reviews
+  }
+
+  const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+  return totalRating / reviews.length;
+};
 
 
 const ViewProduct = () => {
 
     const [productData,setProductData] =useState('')
+    const [reviewData,setReviewData] =useState([''])
     const [isCart,setIsCart] =useState(false)
     const [refresh,setRefresh] =useState(false)
     const sliderRef = useRef();
@@ -31,7 +62,7 @@ const ViewProduct = () => {
       try{
 
         if(!token){
-          navigate('/login')
+          return navigate('/login')
         }
 
         if(token){
@@ -60,6 +91,13 @@ const ViewProduct = () => {
                 let response = await axios.get(`http://localhost:8000/findOneProduct/${id}/${category}`)
                 console.log('view product response:',response);
                 setProductData(response.data)
+
+                let fetchReview = async()=>{
+                  let reviewResponse = await axios.get(`http://localhost:8000/findReview/${id}`)
+                  console.log('review response:',reviewResponse);
+                  setReviewData(reviewResponse.data)
+                }
+                fetchReview()
 
                 if(token){
                   let fetchCart = async()=>{
@@ -158,8 +196,25 @@ const ViewProduct = () => {
               )}
           <Link to={`/checkoutcustomer/${productData._id}/${productData.productcategory}`} ><button className=" ml-2 text-green-500 py-2 rounded-xl h-fit"><FaRegHeart className='text-3xl'/></button></Link>
         </div>
+        <div>
+          <p className='font-bold text-xl mt-20'>Ratings and Reviews</p>
+          <div className=' mt-2 mb-5 flex gap-2 items-center'>
+           <p>Average Rating: </p> 
+           <p className='flex items-center gap-1 font-bold text-xl bg-green-500 text-white p-1 rounded'><span>{Math.round(calculateAverageRating(reviewData))}</span> <i><FaStar color="#FFFFFF" /></i></p> 
+            <p>( {reviewData.length} Reviews) </p>
+            </div>
+          <div>
+            {reviewData.map((review) => (
+              <div key={review._id} className='border p-5 rounded mb-1'>
+                <p>Certified Buyer {review.customerId}</p>
+                <p className='flex'>{renderStarRating(review.rating)}</p>
+                <p>{review.review}</p>
+                <p>{new Date(review.reviewDate).toLocaleString()}</p>
+              </div>
+            ))}
+          </div>
       </div>
-
+      </div>
     </div>
   )
 }

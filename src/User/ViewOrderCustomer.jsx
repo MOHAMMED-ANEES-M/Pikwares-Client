@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { GoDot, GoDotFill, GoStar, GoStarFill } from 'react-icons/go'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const ViewOrderCustomer = () => {
 
@@ -22,6 +22,10 @@ const ViewOrderCustomer = () => {
         const [year, month, day] = formattedDate.split('-');
         return `${day}-${month}-${year}`;
     };
+
+    let handleReciept=()=>{
+      navigate(`/paymentreciept?paymentId=${orderData.paymentId}&productId=${orderData.productId}`)
+    }
 
     useEffect(()=>{
 
@@ -109,42 +113,48 @@ const ViewOrderCustomer = () => {
           <p><span className='mr-2 font-bold'>Phone Number:</span>{customerData.number}</p>
         </div>
 
-        <div className='flex gap-1 items-center'>
-          <div className='text-green-500 text-xl'><GoStarFill/></div>
-          <button className='text-green-500 text-xl'>Rate & Review Product</button>
+        <div className='mr-10'>
+          {orderData.mode !== 'COD'?(
+            <button className='text-green-500 border py-1 px-4 rounded-xl h-fit' onClick={handleReciept}>Payment Receipt</button> 
+          ):(
+            <>
+            { orderData.orderStatus === 'Order Delivered' ? (
+              <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice*orderData.count}</p>
+              ):(
+                <p className='text-red-500 font-bold'>Amount to be paid ₹{productData.productprice*orderData.count}</p>
+            )}
+            </>
+          )}
         </div>
 
       </div>
 
-      <div className='flex items-center flex-wrap mt-20 '>
-
-        <div className='flex justify-start w-4/12'>
-          {productData && productData.images && productData.images[0] && (
-            <img className='w-32 h-32' src={productData.images[0]} alt="image not found" />
-          )}
-            <div className='p-10'>
-              <p className='mb-3 text-xl'>{productData.productname}</p>
+      <div className='grid grid-cols-4 flex-wrap mt-20'>
+        {productData && productData.images && productData.images[0] && (
+          <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={productData.images[0]} alt="image not found" />
+        )}
+          <div>
+              <p className='mb-1 text-xl'>{productData.productname}</p>
               <p className='font-bold'>₹{productData.productprice}</p>
-            </div>
-        </div>
-
-          <div className='w-8/12'>
-
-          <div className=' grid grid-cols-4 text-center pb-4'>
-                <div className='relative'><p>order placed</p> <GoDotFill className='absolute top-7 right-1/2 text-2xl text-green-500'/></div>
-                <div className='relative'><p>order shipped</p> <GoDotFill className='absolute top-7 right-1/2 text-2xl text-gray-500'/></div>
-                <div className='relative'><p>out for delivery</p> <GoDotFill className='absolute top-7 right-1/2 text-2xl text-gray-500'/></div>
-                <div className='relative'><p>order delivered</p> <GoDotFill className='absolute top-7 right-1/2 text-2xl text-gray-500'/></div>
-        </div>
-              <div className='border-t-2 border-green-500 mx-24 ml-20 mr-28'></div>
-        <div className=' grid grid-cols-4 text-center pt-5 '>
-                <p> {orderData.statusDate}</p>
-                <p> {orderData.statusDate}</p>
-                <p> {orderData.statusDate}</p>
-                <p> {orderData.statusDate}</p>
-        </div>
-            
+              <p>Quantity: {orderData.count}</p>
+              </div>
+              
+          <div className='text-center'>
+            <p className='font-bold mb-3'>Status</p>
+          <p>{orderData.orderStatus} on {orderData.statusDate}</p>
           </div>
+          
+            <div className='flex gap-1 justify-center items-center mt-5'>
+            {orderData.orderStatus === 'Order Delivered'?(
+               <>
+              <div className='text-green-500 text-xl'><GoStarFill/></div>
+              <Link to={`/rateproduct/${productId}/${userId}`}><button className='text-green-500'>Rate & Review Product</button></Link>
+              </>
+              ):(
+                null
+              )}
+          </div>
+            
       </div>
 
     </div>

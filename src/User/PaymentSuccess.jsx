@@ -15,7 +15,6 @@ const PaymentSuccess = () => {
   const searchParams = new URLSearchParams(location.search);
   const paymentId = searchParams.get('paymentId');
   const productId = searchParams.get('productId');
-  const cartId = searchParams.get('cartId');
 
   const token = localStorage.getItem('token')
   const userId = localStorage.getItem('userId')
@@ -165,7 +164,7 @@ const PaymentSuccess = () => {
     <div className='mt-32 w-3/5 m-auto border rounded p-10 mb-10'>
 
       <p className='text-center text-3xl font-bold mb-10 text-green-500'>Pikwares</p>
-      <p className='text-center text-xl font-bold mb-20'>Online Reciept</p>
+      <p className='text-center text-xl font-bold mb-20'>Payment Reciept</p>
       
       <div className='flex flex-wrap justify-around'>
 
@@ -219,7 +218,7 @@ const PaymentSuccess = () => {
             <p className='mb-2'>₹{productData.productprice}</p>
             <p className='mb-2'>{orderData.count}</p>
             <p className='text-green-500 mb-5'><span className='line-through text-black opacity-50'>₹40</span> FREE</p>
-            <p className='text-xl font-bold'>₹{paymentData.amount}</p>
+            <p className='text-xl font-bold'>₹{productData.productprice*orderData.count}</p>
           </div>
         </div>
         <div className='text-center'>

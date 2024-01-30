@@ -140,6 +140,7 @@ const ViewOrderAdmin = () => {
     <div className='mt-32'>
       
       <div className='border rounded w-4/5 m-auto p-10'>
+        <div className='flex flex-wrap justify-between'>
 
         <div className='mb-32'>
         <h1 className='text-xl font-bold mb-5'>Shipping Address</h1>
@@ -149,33 +150,48 @@ const ViewOrderAdmin = () => {
           <p><span className='mr-2'>Landmark:</span> {addressData.landmark}</p>
           <p><span className='mr-2'>Phone Number:</span>{customerData.number}</p>
       </div>
+      
+      <div className=' mt-16 mr-32'>
+        {orderData.mode === 'COD' ? (
+          <>
+            {orderData.orderSatus === 'Order Delivered' ? (
+              <>
+                <p className='mb-3'>Payment mode: {orderData.mode}</p>
+                <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice * orderData.count}</p>
+              </>
+            ) : (
+              <>
+                <p className='mb-3'>Payment mode: {orderData.mode}</p>
+                <p className='text-red-500 font-bold'>Amount to be paid ₹{productData.productprice * orderData.count}</p>
+              </>
+            )}
+          </>
+        ) : (
+          <>
+            <p className='mb-3'>{orderData.mode}</p>
+            <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice * orderData.count}</p>
+          </>
+        )}
+      </div>
 
-      <div className='grid grid-cols-5 flex-wrap '>
+
+      </div>
+
+      <div className='grid grid-cols-4 flex-wrap '>
         {productData && productData.images && productData.images[0] && (
           <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={productData.images[0]} alt="image not found" />
         )}
           <div>
-              <p className='mb-3 text-xl'>{productData.productname}</p>
+              <p className='mb-1 text-xl'>{productData.productname}</p>
               <p className='font-bold'>₹{productData.productprice}</p>
               <p>Quantity: {orderData.count}</p>
-          </div>
+              </div>
+              
           <div className='text-center'>
             <p className='font-bold mb-3'>Status</p>
           <p>{orderData.orderStatus} on {orderData.statusDate}</p>
           </div>
-          <div className='text-center '>
-            { orderData.mode === 'COD' ?(
-              <>
-              <p className='mb-3'>{orderData.mode}</p>
-              <p className='text-red-500 font-bold'>Amount to be paid ₹{productData.productprice * orderData.count}</p>
-              </>
-            ):(
-              <>
-              <p className='mb-3'>{orderData.mode}</p>
-              <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice * orderData.count}</p>
-              </>
-            )}
-            </div>
+          
             <div className='flex justify-center items-center'>
               { isStatusUpdate?(
                 <div className="text-center">
