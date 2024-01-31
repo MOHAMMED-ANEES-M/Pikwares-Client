@@ -6,7 +6,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
-import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-icons/fa';
 
 
 const renderStarRating = (rating) => {
@@ -43,7 +43,9 @@ const ViewProduct = () => {
 
     const [productData,setProductData] =useState('')
     const [reviewData,setReviewData] =useState([''])
+    const [reviewedCustomers,setReviewedCustomers] =useState([''])
     const [isCart,setIsCart] =useState(false)
+    const [isWishlist,setIsWishlist] =useState(false)
     const [refresh,setRefresh] =useState(false)
     const sliderRef = useRef();
     const navigate = useNavigate()
@@ -81,6 +83,56 @@ const ViewProduct = () => {
 
     }
 
+    let handleAddWishlist= async ()=>{
+
+      try{
+
+        if(!token){
+          return navigate('/login')
+        }
+
+        if(token){
+        let response = await axios.post(`http://localhost:8000/insertWishlist/${userId}`,productData)
+        console.log(response);
+          if(response.data){
+          console.log('added to wishlist');
+          setIsWishlist(true)
+          setRefresh(!refresh)
+          alert('Added to Wishlist')
+          }
+        }
+      }catch(err){
+        console.log(err);
+        alert(err.message)
+      }
+
+    }
+
+    let handleDeleteWishlist= async ()=>{
+
+      try{
+
+        if(!token){
+          return navigate('/login')
+        }
+
+        if(token){
+          let response = await axios.delete(`http://localhost:8000/viewProduct/deleteWishlist/${id}`)
+          console.log(response);
+          if(response.data){
+            console.log('removed from wishlist');
+            setIsWishlist(false)
+            setRefresh(!refresh) 
+            alert('Removed from Wishlist')
+          }
+        }
+      }catch(err){
+        console.log(err);
+        alert(err.message)
+      }
+
+    }
+
     useEffect(()=>{
 
         try{
@@ -96,8 +148,28 @@ const ViewProduct = () => {
                   let reviewResponse = await axios.get(`http://localhost:8000/findReview/${id}`)
                   console.log('review response:',reviewResponse);
                   setReviewData(reviewResponse.data)
+
+                  let fetchReviewedCustomers = async () => {
+                    const customerPromises = reviewResponse.data.map(async (review) => {
+                      const customerResponse = await axios.get(`http://localhost:8000/review/customers/${review.customerId}`,{
+                        headers: {
+                            Authorization: token
+                          },
+                    });
+                      return customerResponse.data; 
+                    });
+          
+                    const customer = await Promise.all(customerPromises);
+                    setReviewedCustomers(customer);
+                    console.log('reviewed customers response:',customer);
+                    
+                  }
+                  fetchReviewedCustomers()
+
                 }
                 fetchReview()
+
+                
 
                 if(token){
                   let fetchCart = async()=>{
@@ -122,6 +194,30 @@ const ViewProduct = () => {
           
                 }
                 fetchCart()
+
+                let fetchWishlist = async()=>{
+          
+                  try{
+        
+                    let Wishlistresponse = await axios.get(`http://localhost:8000/findWishlist/${userId}`,{
+                      headers:{
+                        Authorization: token
+                      },
+                    })
+                    console.log('wishlist response:',Wishlistresponse);
+                    
+                    const isProductInWishlist = Wishlistresponse.data.some(wishlistItem => wishlistItem.productId === response.data._id);
+                    setIsWishlist(isProductInWishlist);
+                    console.log('iswishlist',isProductInWishlist);
+        
+                  }catch(err){
+                    console.log(err);
+                    alert(err.message)
+                }
+        
+              }
+              fetchWishlist()
+
               }
 
             }
@@ -194,7 +290,11 @@ const ViewProduct = () => {
             ):(
               <button className=" mr-2 bg-black text-white py-2 px-4 rounded-xl h-fit" onClick={handleCart}>ADD TO CART</button>
               )}
-          <Link to={`/checkoutcustomer/${productData._id}/${productData.productcategory}`} ><button className=" ml-2 text-green-500 py-2 rounded-xl h-fit"><FaRegHeart className='text-3xl'/></button></Link>
+              {isWishlist ? (
+                <button className=" ml-2 text-green-500 py-2 rounded-xl h-fit" onClick={handleDeleteWishlist}><FaHeart className='text-3xl'/></button>
+              ):(
+                <button className=" ml-2 text-green-500 py-2 rounded-xl h-fit" onClick={handleAddWishlist}><FaRegHeart className='text-3xl'/></button>
+              )}
         </div>
         <div>
           <p className='font-bold text-xl mt-20'>Ratings and Reviews</p>
@@ -204,12 +304,16 @@ const ViewProduct = () => {
             <p>( {reviewData.length} Reviews) </p>
             </div>
           <div>
-            {reviewData.map((review) => (
+            {reviewData.map((review, index) => (
               <div key={review._id} className='border p-5 rounded mb-1'>
-                <p>Certified Buyer {review.customerId}</p>
-                <p className='flex'>{renderStarRating(review.rating)}</p>
+                <p className='flex mb-3'>{renderStarRating(review.rating)}</p>
                 <p>{review.review}</p>
-                <p>{new Date(review.reviewDate).toLocaleString()}</p>
+                <div className='flex gap-10 opacity-70 mt-3'>
+                  {reviewedCustomers[index] && (
+                    <p>{reviewedCustomers[index].firstname} {reviewedCustomers[index].lastname}</p>
+                    )}
+                  <p>{new Date(review.reviewDate).toLocaleString()}</p>
+                </div>
               </div>
             ))}
           </div>

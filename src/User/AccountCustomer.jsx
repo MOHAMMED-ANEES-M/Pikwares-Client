@@ -308,7 +308,7 @@ const AccountCustomer = () => {
                   </div>
 
                   <div className='flex flex-wrap gap-5'>
-                      <div>
+                  <div>
                   <div className='pl-2 mb-3'><label  htmlFor="district">District</label></div>
                   <input type="text" onChange={handleChange} placeholder='Enter district' id='district' name='district' className=' w-full bg-white h-10 mb-5 rounded-lg border p-3'  />
                   </div><div>

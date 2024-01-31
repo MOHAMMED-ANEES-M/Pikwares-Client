@@ -20,11 +20,12 @@ import ViewOrderAdmin from './Admin/ViewOrderAdmin';
 import ViewOrderCustomer from './User/ViewOrderCustomer';
 import PaymentSuccess from './User/PaymentSuccess';
 import RateProductCustomer from './User/RateProductCustomer';
+import WishlistCustomer from './User/WishlistCustomer';
 
 function App() {
 
   let userId = localStorage.getItem('userId')
-  console.log(userId,'oo');
+  // console.log(userId,'oo');
 
   return (
       <div className='App'>
@@ -42,6 +43,7 @@ function App() {
       <Route path='/customersadmin' element={<CustomersAdmin/>}/>
       <Route path='/viewproduct/:id/:category' element={<ViewProduct/>}/>
       <Route path='/cartcustomer' element={<CartCustomer/>}/>
+      <Route path='/wishlistcustomer' element={<WishlistCustomer/>}/>
       <Route path='/viewproductadmin/:id/:category' element={<ViewProductAdmin/>}/>
       <Route path='/viewcartadmin/:id' element={<ViewCartAdmin/>}/>   
       <Route path='/checkoutcustomer/:id/:category' element={<CheckoutCustomer/>}/>   
