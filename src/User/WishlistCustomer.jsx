@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Slider from 'react-slick'
+import { Slide, ToastContainer, toast } from 'react-toastify'
 
 const WishlistCustomer = () => {
 
@@ -26,7 +27,9 @@ const WishlistCustomer = () => {
             console.log(response);
             if(response.data){
               console.log('removed from wishlist',response);
-              alert('Removed from Wishlist')
+              toast.error('Removed from Wishlist',{
+                position: "bottom-center",
+              })
               setRefresh(!refresh) 
             }
           }
@@ -78,9 +81,10 @@ const WishlistCustomer = () => {
       const prevSlide = () => {
         sliderRef.current.slickPrev();
       };
-
-  return (
-    <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
+      
+      return (
+        <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
+      <ToastContainer/>
 
     {wishlistData&&wishlistData.length!==0 ? (
 
@@ -115,7 +119,7 @@ const WishlistCustomer = () => {
         </div>
     
     ):(
-        <p className='text-red-500 text-center mt-32 '>No product in cart</p>
+        <p className='text-red-500 text-center mt-32 '>No product in wishlist</p>
     )}
     </div>
   )

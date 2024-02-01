@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import FileBase64 from 'react-file-base64';
 import { useNavigate } from 'react-router-dom';
+import { Slide, toast } from 'react-toastify';
 
 
 
@@ -80,20 +81,22 @@ const AddProduct = () => {
           })
           console.log('product response: ',response);
           if(response.data){
-            alert('Product added')
+            toast.success('Product added',{
+              transition:Slide
+            })
             setrefresh(!refresh)
             window.location.reload();
         }
               
       }else{
-        alert('Image are required')
+        toast.warn('Image are required')
         console.log('no',displayImages);
         console.log(data,'data');
       }
 
       }catch(err){
         console.log(err);
-        alert(err.response.data.message)
+        toast.warn(err.response.data.message)
       }
     };
 

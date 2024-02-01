@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { GoDot, GoDotFill, GoStar, GoStarFill } from 'react-icons/go'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const ViewOrderCustomer = () => {
 
@@ -9,6 +10,7 @@ const ViewOrderCustomer = () => {
     const [productData,setProductData] = useState('')
     const [customerData,setCustomerData] = useState('')
     const [addressData,setAddressData] = useState('')
+    const [refresh,setRefresh] = useState(false)
 
     const navigate = useNavigate()
     let {productId} = useParams()
@@ -27,6 +29,18 @@ const ViewOrderCustomer = () => {
       navigate(`/paymentreciept?paymentId=${orderData.paymentId}&productId=${orderData.productId}`)
     }
 
+    let handleCancel=async (id)=>{
+      try{
+        const data = {orderStatus: 'Order Cancelled'}
+        let response = await axios.put(`http://localhost:8000/cancelOrder/${id}`,data)
+        console.log('deleted cart response:',response);
+        toast.error('Order Cancelled')
+        setRefresh(!refresh)
+      }catch(err){
+        console.log(err);
+      }
+    }
+
     useEffect(()=>{
 
         try{
@@ -34,7 +48,7 @@ const ViewOrderCustomer = () => {
             if(!token){
                 navigate = ('/login')
             }
-
+            
             let fetchOrderData = async()=>{
         
                 let response = await axios.get(`http://localhost:8000/admin/order/findOne/${orderId}`,{
@@ -95,7 +109,7 @@ const ViewOrderCustomer = () => {
         }catch(err){
             console.log(err);
         }
-    },[])
+    },[refresh])
 
 
   return (
@@ -114,6 +128,7 @@ const ViewOrderCustomer = () => {
         </div>
 
         <div className='mr-10'>
+          
           {orderData.mode !== 'COD'?(
             <button className='text-green-500 border py-1 px-4 rounded-xl h-fit' onClick={handleReciept}>Payment Receipt</button> 
           ):(
@@ -121,7 +136,16 @@ const ViewOrderCustomer = () => {
             { orderData.orderStatus === 'Order Delivered' ? (
               <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice*orderData.count}</p>
               ):(
+                <>
+                { orderData.orderStatus === 'Order Cancelled' ?(
+                  <p className='text-red-500 font-bold'>Order Cancelled</p>
+                ):(
+                  <>
+                <button className="mb-5 ms-7 bg-red-500 text-white py-2 px-5 text-sm  rounded-xl h-fit" onClick={()=>handleCancel(orderData._id)}>CANCEL ORDER</button>
                 <p className='text-red-500 font-bold'>Amount to be paid ₹{productData.productprice*orderData.count}</p>
+                </>
+                )}
+                </>
             )}
             </>
           )}

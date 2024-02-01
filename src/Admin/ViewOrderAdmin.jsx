@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Slide, toast } from 'react-toastify'
 
 const ViewOrderAdmin = () => {
 
@@ -52,13 +53,16 @@ const ViewOrderAdmin = () => {
           }
         })
         console.log('updated orderData:',response);
+        toast.success('Status updated',{
+          transition:Slide
+        })
         setOrderData(response.data)
         setIsStatusUpdate(false)
         setRefresh(!refresh)
       }
     }catch(err){
       console.log(err);
-      alert(err.message)
+      toast.warn(err.message)
     }
   }
 

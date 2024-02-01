@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
 import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-icons/fa';
+import { Slide, ToastContainer, toast } from 'react-toastify';
 
 
 const renderStarRating = (rating) => {
@@ -72,13 +73,15 @@ const ViewProduct = () => {
         console.log(response);
           if(response.data){
           console.log('added to cart');
-          alert('Added to Cart')
+          toast.success('Added to Cart',{
+            transition:Slide
+          })
           setRefresh(!refresh)
           }
         }
       }catch(err){
         console.log(err);
-        alert(err.message)
+        toast.warn(err.message)
       }
 
     }
@@ -98,12 +101,14 @@ const ViewProduct = () => {
           console.log('added to wishlist');
           setIsWishlist(true)
           setRefresh(!refresh)
-          alert('Added to Wishlist')
+          toast.success('Added to Wishlist',{
+            transition: Slide,
+          })
           }
         }
       }catch(err){
         console.log(err);
-        alert(err.message)
+        toast.warn(err.message)
       }
 
     }
@@ -123,12 +128,12 @@ const ViewProduct = () => {
             console.log('removed from wishlist');
             setIsWishlist(false)
             setRefresh(!refresh) 
-            alert('Removed from Wishlist')
+            toast.error('Removed from Wishlist')
           }
         }
       }catch(err){
         console.log(err);
-        alert(err.message)
+        toast.warn(err.message)
       }
 
     }
@@ -291,9 +296,19 @@ const ViewProduct = () => {
               <button className=" mr-2 bg-black text-white py-2 px-4 rounded-xl h-fit" onClick={handleCart}>ADD TO CART</button>
               )}
               {isWishlist ? (
+                <>
                 <button className=" ml-2 text-green-500 py-2 rounded-xl h-fit" onClick={handleDeleteWishlist}><FaHeart className='text-3xl'/></button>
+                <ToastContainer
+                position="bottom-center"
+                />
+                </>
               ):(
+                <>
                 <button className=" ml-2 text-green-500 py-2 rounded-xl h-fit" onClick={handleAddWishlist}><FaRegHeart className='text-3xl'/></button>
+                <ToastContainer
+                position="bottom-center"
+                />
+                </>
               )}
         </div>
         <div>

@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './HomeAdmin.css'
+import { toast } from "react-toastify";
 
 const ProductSlider = ({ images }) => {
   const settings = {
@@ -144,6 +145,7 @@ const HomeAdmin = () => {
     console.log('handleMobiledelete');
     let response = await axios.delete(`http://localhost:8000/deleteMobiles/${id}`)
     console.log(response);
+    toast.error("Product Deleted")
     setRefresh(!refresh)
       setShowLaptopProducts(false);
       setShowMobileProducts(true);
@@ -161,6 +163,7 @@ const HomeAdmin = () => {
     console.log('handleLaptopdelete');
     let response = await axios.delete(`http://localhost:8000/deleteLaptops/${id}`)
     console.log(response);
+    toast.error("Product Deleted")
     setRefresh(!refresh)
   }
 
@@ -172,6 +175,7 @@ const HomeAdmin = () => {
     console.log('handleHeadsetdelete');
     let response = await axios.delete(`http://localhost:8000/deleteHeadsets/${id}`)
     console.log(response);
+    toast.error("Product Deleted")
     setRefresh(!refresh)
   }
 
@@ -183,6 +187,7 @@ const HomeAdmin = () => {
     console.log('handleMendelete');
     let response = await axios.delete(`http://localhost:8000/deleteMen/${id}`)
     console.log(response);
+    toast.error("Product Deleted")
     setRefresh(!refresh)
   }
 
@@ -194,6 +199,7 @@ const HomeAdmin = () => {
     console.log('handleWomendelete');
     let response = await axios.delete(`http://localhost:8000/deleteWomen/${id}`)
     console.log(response);
+    toast.error("Product Deleted")
     setRefresh(!refresh)
   }
 

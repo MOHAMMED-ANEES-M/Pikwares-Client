@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import easyinvoice from "easyinvoice";
+import { toast } from 'react-toastify';
 
 
 const PaymentSuccess = () => {
@@ -25,43 +27,83 @@ const PaymentSuccess = () => {
     return `${day}-${month}-${year}`;
   };
 
-  const handleDownload = () => {
-    // Create a Blob containing the receipt content
-    const receiptContent = generateReceiptContent(); // You need to implement this function
-    const blob = new Blob([receiptContent], { type: 'text/plain' });
+  const downloadInvoice = async () => {
+    toast('Reciept will be downloaded after sometime. Please wait for a while')
+    const data = {
+    images: {
+        // The logo on top of your invoice
+        // logo: "https://public.budgetinvoice.com/img/logo_en_original.png",
+        // The invoice background
+        // background: "https://public.budgetinvoice.com/img/watermark-draft.jpg"
+    },
+    // Your own data
+    sender: {
+        company: "Pikwares",
+        address: "an@pikwares.com",
+        // zip: "1234 AB",
+        // city: "Sampletown",
+        // country: "Samplecountry"
+        // custom1: "custom value 1",
+        // custom2: "custom value 2",
+        // custom3: "custom value 3"
+    },
+    // Your recipient
+    client: {
+        company: `${accountData.firstname} ${accountData.lastname}`,
+        address: `${addressData.address}`,
+        zip: `${addressData.district}`,
+        city: `${addressData.state} - ${addressData.pincode}`,
+        country: `Phone Number: ${accountData.number}`
+        // custom1: "custom value 1",
+        // custom2: "custom value 2",
+        // custom3: "custom value 3"
+    },
+    information: {
+        number: `${paymentData.timestamp}`,
+        date: `${orderData._id}`,
+        dueDate: `${paymentData.paymentId}`
+    },
+    products: [
+        {
+            quantity: `${orderData.count}`,
+            description: `${productData.productname}`,
+            taxRate: 0,
+            price: `${productData.productprice}`
+        },
+    ],
+    // The message you would like to display on the bottom of your invoice
+    // bottomNotice: "Kindly pay your invoice within 15 days.",
+    // Settings to customize your invoice
+    settings: {
+        currency: "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // locale: "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')        
+        // marginTop: 25, // Defaults to '25'
+        // marginRight: 25, // Defaults to '25'
+        // marginLeft: 25, // Defaults to '25'
+        // marginBottom: 25, // Defaults to '25'
+        // format: "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // height: "1000px", // allowed units: mm, cm, in, px
+        // width: "500px", // allowed units: mm, cm, in, px
+        // orientation: "landscape" // portrait or landscape, defaults to portrait
+    },  
 
-    // Create a download link and trigger a click to download the file
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'receipt.txt';
-    link.click();
-  };
-
-  const generateReceiptContent = () => {
-    // Generate the content of the receipt as a string
-    // You can format it based on your requirements
-    const receiptContent = `
-
-                                                        Pikwares
-
-                                                    Payment Reciept
+    translate: {
+      invoice: "INVOICE",
+      number: "Order ID", 
+      date: "Order Date", 
+      dueDate: "Payment ID"
+    },
 
 
-                Order Date: ${paymentData.timestamp}                                    ${accountData.firstname} ${accountData.lastname}
-                Order Id: ${orderData._id}                        ${addressData.address}
-                Payment Id: ${paymentId}                            ${addressData.district}, ${addressData.pincode} - ${addressData.pincode}
-                                                                          Phone Number: ${accountData.number}
-
-
-                                                  Product: ${productData.productname}
-                                                  Unit Price: ₹${productData.productprice}
-                                                  Quantity: ${orderData.count}
-                                                  Delivery Charge: FREE
-                                                  Total Paid: ₹${paymentData.amount}
-
-    `;
-
-    return receiptContent;
+    // Customize enables you to provide your own templates
+    // Please review the documentation for instructions and examples
+    // "customize": {
+    //      "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+    // }
+};
+  
+    const result = await easyinvoice.createInvoice(data);
+    easyinvoice.download(`invoice_1.pdf`, result.pdf);
   };
 
   useEffect(()=>{
@@ -222,7 +264,7 @@ const PaymentSuccess = () => {
           </div>
         </div>
         <div className='text-center'>
-          <button className='mt-16 bg-green-500 text-white py-2 px-4 rounded-xl h-fit' onClick={handleDownload}>
+          <button className='mt-16 bg-green-500 text-white py-2 px-4 rounded-xl h-fit' onClick={() => downloadInvoice()}>
             Download Receipt
           </button>
         </div>

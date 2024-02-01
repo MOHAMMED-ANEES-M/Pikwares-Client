@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const CustomersAdmin = () => {
 
@@ -30,7 +31,7 @@ const CustomersAdmin = () => {
             fetchCustomers()
         }catch(err){
             console.log(err);
-            alert(err.message)
+            toast.warn(err.message)
         }
     },[])
 

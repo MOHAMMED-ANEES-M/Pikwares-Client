@@ -7,6 +7,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
+import { toast } from 'react-toastify';
 
 
 
@@ -80,9 +81,10 @@ const CartCustomer = () => {
             let response = await axios.delete(`http://localhost:8000/deleteCartProduct/${id}`)
             console.log(response);
             setRefresh(!refresh)
+            toast.error('Product deleted from cart')
         }catch(err){
             console.log(err);
-            alert(err.message)
+            toast.warn(err.message)
         }
     }
 

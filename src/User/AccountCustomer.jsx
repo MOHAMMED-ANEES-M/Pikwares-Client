@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Slide, toast } from 'react-toastify'
 
 
 const AccountCustomer = () => {
@@ -72,12 +73,17 @@ const AccountCustomer = () => {
             console.log(response,'res');
             setisNotAddress(!isNotAddress)
             setrefresh(!refresh)
-            alert('Address added')
+            toast.success('Address added',{
+              position: "bottom-center",
+              transition: Slide,
+            })
           }
         }
         catch(err){
           console.log(err.response.data.message);
-          alert(err.response.data.message)
+          toast.warn(err.response.data.message,{
+            position: "bottom-center"
+          })
         }
     }
 
@@ -117,12 +123,14 @@ const AccountCustomer = () => {
         if(response){
           console.log(response,'res');
           setisNotEditable(!isNotEditable)
-          alert('Address details updated')
+          toast.success('Address details updated',{
+            transition: Slide,
+          })
         }
       }
       catch(err){
         console.log(err.response.data.message);
-        alert(err.response.data.message)
+        toast.warn(err.response.data.message)
       }
   }
 
@@ -154,12 +162,14 @@ const AccountCustomer = () => {
         console.log('updatedPersonal: ',response);
         setisPersonalEdit(!isPersonalEdit)
         setrefresh(!refresh)
-        alert('Personal details updated')
+        toast.success('Personal details updated',{
+          transition: Slide,
+        })
       }
 
     }catch(err){
       console.log(err.response.data.message);
-      alert(err.response.data.message)
+      toast.warn(err.response.data.message)
     }
   }
 
@@ -231,6 +241,7 @@ const AccountCustomer = () => {
       console.log(isNotAddress,'sdb');
 
     },[userId,token,isNotEditable,navigate,refresh])
+    
   return (
     <div>
       

@@ -5,6 +5,7 @@ import { SiPaytm } from "react-icons/si";
 import { GiPayMoney } from "react-icons/gi";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Slide, toast } from 'react-toastify';
 
 
 const PaymentCustomer = () => {
@@ -31,11 +32,13 @@ const PaymentCustomer = () => {
       let response = await axios.post(`http://localhost:8000/orders/insert`,data)
       console.log('orders response:',response);
       if(response.data){
-        alert('Order Placed')
+        toast.success('Order Placed',{
+          transition: Slide
+        })
       }
     }catch(err){
       console.log(err);
-      alert(err.response.data.message)
+      toast.warn(err.response.data.message)
     }
   }
 
@@ -92,11 +95,11 @@ const PaymentCustomer = () => {
         console.log('options',options);
         const razor = new window.Razorpay(options)
         razor.on('payment.failed', function (response){
-          alert(response.error.code);
-          alert(response.error.description);
-          alert(response.error.source);
-          alert(response.error.step);
-          alert(response.error.reason);
+          toast.warn(response.error.code);
+          toast.warn(response.error.description);
+          toast.warn(response.error.source);
+          toast.warn(response.error.step);
+          toast.warn(response.error.reason);
           alert(response.error.metadata.order_id);
           alert(response.error.metadata.payment_id);
         });

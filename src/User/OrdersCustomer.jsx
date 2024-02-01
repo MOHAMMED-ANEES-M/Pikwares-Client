@@ -24,16 +24,16 @@ const OrdersCustomer = () => {
       };
 
 
-      let handleCancel=async (id)=>{
-        try{
-          const data = {orderStatus: 'Order Cancelled'}
-          let response = await axios.put(`http://localhost:8000/cancelOrder/${id}`,data)
-          console.log('deleted cart response:',response);
-          setRefresh(!refresh)
-        }catch(err){
-          console.log(err);
-        }
-      }
+      // let handleCancel=async (id)=>{
+      //   try{
+      //     const data = {orderStatus: 'Order Cancelled'}
+      //     let response = await axios.put(`http://localhost:8000/cancelOrder/${id}`,data)
+      //     console.log('deleted cart response:',response);
+      //     setRefresh(!refresh)
+      //   }catch(err){
+      //     console.log(err);
+      //   }
+      // }
 
       const sortOrdersByDate = (orders) => {
         return _orderBy(orders, ['statusDate'], ['desc']);
