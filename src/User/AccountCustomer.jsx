@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Slide, toast } from 'react-toastify'
+import { successToast, warnToast } from '../components/Toast'
 
 
 const AccountCustomer = () => {
@@ -73,17 +74,12 @@ const AccountCustomer = () => {
             console.log(response,'res');
             setisNotAddress(!isNotAddress)
             setrefresh(!refresh)
-            toast.success('Address added',{
-              position: "bottom-center",
-              transition: Slide,
-            })
+            successToast('Address added')
           }
         }
         catch(err){
           console.log(err.response.data.message);
-          toast.warn(err.response.data.message,{
-            position: "bottom-center"
-          })
+          warnToast(err.response.data.message)
         }
     }
 
@@ -123,14 +119,12 @@ const AccountCustomer = () => {
         if(response){
           console.log(response,'res');
           setisNotEditable(!isNotEditable)
-          toast.success('Address details updated',{
-            transition: Slide,
-          })
+          successToast('Address details updated')
         }
       }
       catch(err){
         console.log(err.response.data.message);
-        toast.warn(err.response.data.message)
+        warnToast(err.response.data.message)
       }
   }
 
@@ -162,14 +156,12 @@ const AccountCustomer = () => {
         console.log('updatedPersonal: ',response);
         setisPersonalEdit(!isPersonalEdit)
         setrefresh(!refresh)
-        toast.success('Personal details updated',{
-          transition: Slide,
-        })
+        successToast('Personal details updated')
       }
 
     }catch(err){
       console.log(err.response.data.message);
-      toast.warn(err.response.data.message)
+      warnToast(err.response.data.message)
     }
   }
 

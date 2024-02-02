@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import axios from 'axios';
 import { Slide, toast } from 'react-toastify';
+import { successToast, warnToast } from '../components/Toast';
 
 const RateProductCustomer = () => {
     const [rating, setRating] = useState(0);
@@ -26,12 +27,10 @@ const RateProductCustomer = () => {
     try{
         let response = await axios.post(`http://localhost:8000/review/insert`,data)
         console.log(response);
-        toast.success('Review added',{
-          transition:Slide
-        })
+        successToast('Review added')
     }catch(err){
         console.log(err);
-        toast.warn(err && err.response.data)
+        warnToast(err && err.response.data)
     }
     
   };

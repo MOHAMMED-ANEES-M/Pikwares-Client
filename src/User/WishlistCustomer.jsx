@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Slider from 'react-slick'
 import { Slide, ToastContainer, toast } from 'react-toastify'
+import { errorToast, warnToast } from '../components/Toast'
 
 const WishlistCustomer = () => {
 
@@ -27,15 +28,13 @@ const WishlistCustomer = () => {
             console.log(response);
             if(response.data){
               console.log('removed from wishlist',response);
-              toast.error('Removed from Wishlist',{
-                position: "bottom-center",
-              })
+              errorToast('Removed from Wishlist')
               setRefresh(!refresh) 
             }
           }
         }catch(err){
           console.log(err);
-          alert(err.message)
+          warnToast(err.message)
         }
   
       }

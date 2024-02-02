@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { warnToast } from '../components/Toast'
 
 const CustomersAdmin = () => {
 
@@ -31,7 +32,7 @@ const CustomersAdmin = () => {
             fetchCustomers()
         }catch(err){
             console.log(err);
-            toast.warn(err.message)
+            warnToast(err.message)
         }
     },[])
 

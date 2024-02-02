@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { GrAdd, GrEdit, GrSubtract } from 'react-icons/gr'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { warnToast } from '../components/Toast'
 
 const CheckoutCustomer = () => {
 
@@ -71,7 +72,7 @@ const CheckoutCustomer = () => {
 
       const handlePlaceOrderClick = () => {
         if (!addressData) {
-            toast.warn('Please provide a shipping address before placing the order.');
+            warnToast('Please provide a shipping address before placing the order.');
         } else {
             navigate(`/paymentcustomer/${productData._id}/${cartData.productprice}/${cartData.count}`);
         }

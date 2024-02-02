@@ -8,6 +8,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
 import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-icons/fa';
 import { Slide, ToastContainer, toast } from 'react-toastify';
+import { errorToast, successToast, successToasy, warnToast } from '../components/Toast';
 
 
 const renderStarRating = (rating) => {
@@ -73,15 +74,13 @@ const ViewProduct = () => {
         console.log(response);
           if(response.data){
           console.log('added to cart');
-          toast.success('Added to Cart',{
-            transition:Slide
-          })
+          successToast('Added to Cart')
           setRefresh(!refresh)
           }
         }
       }catch(err){
         console.log(err);
-        toast.warn(err.message)
+        warnToast(err.message)
       }
 
     }
@@ -101,14 +100,12 @@ const ViewProduct = () => {
           console.log('added to wishlist');
           setIsWishlist(true)
           setRefresh(!refresh)
-          toast.success('Added to Wishlist',{
-            transition: Slide,
-          })
+          successToast('Added to Wishlist')
           }
         }
       }catch(err){
         console.log(err);
-        toast.warn(err.message)
+        // toast.warn(err.message)
       }
 
     }
@@ -128,12 +125,12 @@ const ViewProduct = () => {
             console.log('removed from wishlist');
             setIsWishlist(false)
             setRefresh(!refresh) 
-            toast.error('Removed from Wishlist')
+            errorToast('Removed from Wishlist')
           }
         }
       }catch(err){
         console.log(err);
-        toast.warn(err.message)
+        warnToast(err.message)
       }
 
     }

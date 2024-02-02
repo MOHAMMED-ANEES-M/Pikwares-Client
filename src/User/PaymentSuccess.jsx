@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import easyinvoice from "easyinvoice";
 import { toast } from 'react-toastify';
+import { infoToast } from '../components/Toast';
 
 
 const PaymentSuccess = () => {
@@ -28,7 +29,7 @@ const PaymentSuccess = () => {
   };
 
   const downloadInvoice = async () => {
-    toast('Reciept will be downloaded after sometime. Please wait for a while')
+    infoToast('Reciept will be downloaded after sometime. Please wait for a while')
     const data = {
     images: {
         // The logo on top of your invoice

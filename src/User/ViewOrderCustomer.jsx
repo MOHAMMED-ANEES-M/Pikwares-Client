@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { GoDot, GoDotFill, GoStar, GoStarFill } from 'react-icons/go'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { errorToast } from '../components/Toast'
 
 const ViewOrderCustomer = () => {
 
@@ -34,7 +35,7 @@ const ViewOrderCustomer = () => {
         const data = {orderStatus: 'Order Cancelled'}
         let response = await axios.put(`http://localhost:8000/cancelOrder/${id}`,data)
         console.log('deleted cart response:',response);
-        toast.error('Order Cancelled')
+        errorToast('Order Cancelled')
         setRefresh(!refresh)
       }catch(err){
         console.log(err);

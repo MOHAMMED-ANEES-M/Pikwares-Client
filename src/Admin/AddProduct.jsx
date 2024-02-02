@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import FileBase64 from 'react-file-base64';
 import { useNavigate } from 'react-router-dom';
 import { Slide, toast } from 'react-toastify';
+import { successToast, warnToast } from '../components/Toast';
 
 
 
@@ -81,22 +82,20 @@ const AddProduct = () => {
           })
           console.log('product response: ',response);
           if(response.data){
-            toast.success('Product added',{
-              transition:Slide
-            })
+            successToast('Product added')
             setrefresh(!refresh)
             window.location.reload();
         }
               
       }else{
-        toast.warn('Image are required')
+        warnToast('Image are required')
         console.log('no',displayImages);
         console.log(data,'data');
       }
 
       }catch(err){
         console.log(err);
-        toast.warn(err.response.data.message)
+        warnToast(err.response.data.message)
       }
     };
 
