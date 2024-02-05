@@ -7,8 +7,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
 import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-icons/fa';
-import { Slide, ToastContainer, toast } from 'react-toastify';
-import { errorToast, successToast, successToasy, warnToast } from '../components/Toast';
+import { ToastContainer } from 'react-toastify';
+import { errorToast, successToast, warnToast } from '../components/Toast';
 
 
 const renderStarRating = (rating) => {
@@ -33,7 +33,7 @@ const renderStarRating = (rating) => {
 
 const calculateAverageRating = (reviews) => {
   if (!reviews || reviews.length === 0) {
-    return 0; // Default to 0 if there are no reviews
+    return 0;
   }
 
   const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
@@ -254,17 +254,13 @@ const ViewProduct = () => {
   return (
     <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
 
-      <div className='w-2/5 text-center relative'>
+      <div className='w-2/5 text-center '>
       {productData && productData.images && (
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
             {productData.images.map((image, index) => (
-              <div  key={index}>
+              <div  key={index} className='relative'>
                 <img src={image} alt={`Image ${index + 1}`} className='h-full w-full object-contain object-center aspect-square lg:h-full lg:w-full border rounded-xl  inline-block' />
-                
-              </div>
-            ))}
-          </Slider>
-        )}
+           
         { productData && productData.images && productData.images.length > 1 ? (
         <>
         <button className='slider-btn  absolute top-1/2 left-2 z-10' onClick={prevSlide}>
@@ -273,10 +269,15 @@ const ViewProduct = () => {
         <button className='slider-btn  absolute top-1/2 right-2 z-10' onClick={nextSlide}>
         <GrNext className='w-5 h-5'/>
         </button>
+
         </>
         ):(
           null
         )}
+        </div>
+        ))}
+        </Slider>
+      )}
       </div>
 
       <div className='w-2/5 mt-10 ms-20'>
@@ -308,6 +309,7 @@ const ViewProduct = () => {
                 </>
               )}
         </div>
+        
         <div>
           <p className='font-bold text-xl mt-20'>Ratings and Reviews</p>
           <div className=' mt-2 mb-5 flex gap-2 items-center'>

@@ -12,6 +12,8 @@ const OrdersCustomer = () => {
     const [isProduct,setIsProduct] = useState(false)
     const [refresh,setRefresh] = useState(false)
     const [isCancelled,setIsCancelled] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [ordersPerPage] = useState(5);
     const navigate = useNavigate()
 
     let userId = localStorage.getItem('userId')
@@ -117,79 +119,83 @@ const OrdersCustomer = () => {
       fetchOrderProducts();
     }, [orderData, token]);
 
+
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const currentOrders = orderProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+  
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
   return (
     <div className='mt-32'>
-      {isProduct ? (
+    {isProduct ? (
+      <div>
+       {currentOrders.map((item, index) => {
+      const orderIndex = indexOfFirstOrder + index;
+      const currentOrderData = orderData[orderIndex];
 
-          <div>
-          {orderProducts.map((item,index)=>(
-          <Link to={`/viewordercustomer/${item._id}/${orderData[index]._id}`}><div key={index} className='w-10/12 m-auto grid grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
-          <div>
-          {item.images && item.images.length > 0 && (
-                      <img className='w-20 h-20 mb-10 sm:mb-0' key={item.images[0].id} src={item.images[0]} alt="" />
-                      )} 
-          </div>
-          <div>
-              <p className='text-xl'>{item.productname}</p>
-              <p className='text-xl'>₹{item.productprice}</p>
-          </div>
-            <div> <p>Quantity: {orderData[index].count}</p></div>
-                  <div>
-                      <div className='flex justify-start gap-3 items-center'>
-                      <i className={`${orderData[index].orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
-                      <GoDotFill />
-                      </i>
-            {orderData[index] && (
-                          <p>{orderData[index].orderStatus} <br /> {orderData[index].statusDate}</p>
-                          )}
-                      </div>
-                  </div>
-                  <div className='text-center'>
-                  {orderData[index].orderStatus === 'Order Cancelled' ?(
-                    null
-                  ):(
-                    <>
-                    {orderData[index] && orderData[index].mode === 'COD'? (
+      return (
+          <Link to={`/viewordercustomer/${item._id}/${currentOrderData._id}`} key={index}>
+            <div className='w-10/12 m-auto grid grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
+              <div>
+                {item.images && item.images.length > 0 && (
+                  <img className='w-20 h-20 mb-10 sm:mb-0' key={item.images[0].id} src={item.images[0]} alt='' />
+                )}
+              </div>
+              <div>
+                <p className='text-xl'>{item.productname}</p>
+                <p className='text-xl'>₹{item.productprice}</p>
+              </div>
+              <div>
+                <p>Quantity: {currentOrderData.count}</p>
+              </div>
+              <div>
+                <div className='flex justify-start gap-3 items-center'>
+                  <i className={`${currentOrderData.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
+                    <GoDotFill />
+                  </i>
+                  {currentOrderData && <p>{currentOrderData.orderStatus} <br /> {currentOrderData.statusDate}</p>}
+                </div>
+              </div>
+              <div className='text-center'>
+                {currentOrderData.orderStatus === 'Order Cancelled' ? null : (
+                  <>
+                    {currentOrderData && currentOrderData.mode === 'COD' ? (
                       <>
-                      <p>{orderData[index].mode}</p>
-                      { orderData[index].orderStatus === 'Order Delivered' ? (
-                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice*orderData[index].count}</p>
-                        ):(
-                          <p className='text-red-500 font-bold'>Amount to be paid ₹{item.productprice*orderData[index].count}</p>
-                      )}
+                        <p>{currentOrderData.mode}</p>
+                        {currentOrderData.orderStatus === 'Order Delivered' ? (
+                          <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * currentOrderData.count}</p>
+                        ) : (
+                          <p className='text-red-500 font-bold'>Amount to be paid ₹{item.productprice * currentOrderData.count}</p>
+                        )}
                       </>
-                      ):(
-                        <>
-                        <p>{orderData[index].mode}</p>
-                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice*orderData[index].count}</p>
-                        </>
-                      )}
-                      </>
-                  )}
-                  
-                  </div>
-                  {/* <div className='text-end'>
-                    { orderData[index].orderStatus === 'Order Cancelled'?(
-                      null
-                    ):(
+                    ) : (
                       <>
-                      { orderData[index].orderStatus === 'Order Delivered' ? (
-                    <button className="mb-1 text-green-500 py-2 px-5  rounded-xl h-fit" >Rate Product</button>
-                      ):(
-                    <button className="mb-1 bg-red-500 text-white py-2 px-5 text-sm  rounded-xl h-fit" onClick={()=>handleCancel(orderData[index]._id)}>CANCEL ORDER</button>
-                      )}
-                    </>
+                        <p>{currentOrderData.mode}</p>
+                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * currentOrderData.count}</p>
+                      </>
                     )}
-                  </div> */}
-          </div></Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </Link>
+          );
+                    })}
+        <div className='flex justify-center mt-10 mb-10'>
+          {Array.from({ length: Math.ceil(orderProducts.length / ordersPerPage) }, (_, index) => (
+            <button key={index} onClick={() => paginate(index + 1)} 
+            className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+            {index + 1}
+            </button>
           ))}
-          </div>
-
-      ):(
-        <p className='mt-60 text-center'>no orders found</p>
-      )}
-      
-    </div>
+        </div>
+      </div>
+    ) : (
+      <p className='mt-60 text-center'>no orders found</p>
+    )}
+  </div>
   )
 }
 

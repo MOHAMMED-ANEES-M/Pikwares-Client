@@ -25,7 +25,7 @@ const NavbarAdmin = () => {
   return (
     <div>
       <div className='container px-3 sm:px-10 py-5 fixed top-0 z-20 flex lg:flex justify-between items-center bg-green-400'>
-        <h1 className='font-semibold text-lg sm:text-3xl'>Pikwares</h1>
+        <a href="/"><h1 className='font-semibold text-lg sm:text-3xl'>Pikwares</h1></a>
         <div className='lg:hidden'>
           <button
             onClick={toggleMenu}
@@ -77,8 +77,8 @@ const NavbarAdmin = () => {
               <NavLink to='/customersadmin'>
                 <li>Customers</li>
               </NavLink>
-              <NavLink to='/reportadmin'>
-                <li>Report</li>
+              <NavLink to='/addproduct'>
+                <li>Add Product</li>
               </NavLink>
               <NavLink to='/ordersadmin'>
                 <li>Orders</li>

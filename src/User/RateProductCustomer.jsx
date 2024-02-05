@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import axios from 'axios';
-import { Slide, toast } from 'react-toastify';
 import { successToast, warnToast } from '../components/Toast';
 
 const RateProductCustomer = () => {
+
+    const [productData,setProductData] = useState('')
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
     const { productId, customerId } = useParams();
+
+    let token = localStorage.getItem('token')
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -22,9 +25,12 @@ const RateProductCustomer = () => {
     e.preventDefault();
     console.log('Rating:', rating);
     console.log('Review:', review);
-    const data = {productId,customerId,review,rating}
-
+    
     try{
+      if(productId==='' || customerId==='' || review==='' || rating===''){
+        return warnToast('All fields are required')
+      }
+      const data = {productId,customerId,review,rating}
         let response = await axios.post(`http://localhost:8000/review/insert`,data)
         console.log(response);
         successToast('Review added')
@@ -70,9 +76,34 @@ const RateProductCustomer = () => {
     }
   }
 
+  useEffect(()=>{
+
+    let fetchProduct = async ()=>{
+      try{
+        let response = await axios.get(`http://localhost:8000/admin/product/findOne/${productId}`,{
+          headers: {
+            Authorization: token,
+          }
+        })
+        console.log('rating product reponse:',response);
+        setProductData(response.data)
+      }catch(err){
+        console.log(err);
+      }
+    }
+    fetchProduct()
+  },[])
+
   return (
     <div className='mt-32 border rounded w-2/4 m-auto p-10 mb-10'>
       <h2 className='text-center text-3xl font-bold mb-20'>Rate and Review Product</h2>
+      <div className='grid grid-cols-3 items-center mb-20 border rounded p-5'>
+      {productData.images && productData.images.length > 0 && (
+        <img className='w-20 h-20 mb-10 sm:mb-0 ms-32' key={productData.images[0].id} src={productData.images[0]} alt='' />
+      )}
+      <p className='text-center'>{productData.productname}</p>
+      <p>{productData.productprice}</p>
+      </div>
       <form onSubmit={handleSubmit}>
         <div className='flex gap-7 mb-10'>
           <p className='text-3xl'>Rating:</p>

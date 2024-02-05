@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import easyinvoice from "easyinvoice";
-import { toast } from 'react-toastify';
 import { infoToast } from '../components/Toast';
 
 

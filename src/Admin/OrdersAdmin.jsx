@@ -10,6 +10,8 @@ const OrdersAdmin = () => {
   const [orderData,setOrderData] = useState([''])
     const [orderProducts,setOrderProducts] = useState([''])
     const [orderCustomers,setOrderCustomers] = useState([''])
+    const [currentPage, setCurrentPage] = useState(1);
+    const [ordersPerPage] = useState(5);
     const [isProduct,setIsProduct] = useState(false)
     const navigate = useNavigate()
 
@@ -21,6 +23,7 @@ const OrdersAdmin = () => {
         const [year, month, day] = formattedDate.split('-');
         return `${day}-${month}-${year}`;
       };
+      
 
 
   useEffect(()=>{
@@ -43,8 +46,9 @@ const OrdersAdmin = () => {
                 ...order,
                 statusDate: formatDate(order.statusDate),
               }));
-      
+              
               const sortedOrders = _orderBy(updatedOrderData, ['statusDate'], ['asc']);
+
               setOrderData(sortedOrders);
 
             let fetchOrderProducts = async () => {
@@ -67,10 +71,6 @@ const OrdersAdmin = () => {
                 }
               }
               fetchOrderProducts()
-
-              // const statusDate = new Date(orderData.statusDate);
-              // const formattedDate = statusDate.toString().split('T')[0];
-              // console.log(formattedDate,'formatted date');
 
               let fetchOrderCustomers = async () => {
                 const customerPromises = sortedOrders.map(async (order) => {
@@ -101,60 +101,79 @@ const OrdersAdmin = () => {
      
   },[])
 
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orderProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
   return (
     <div className='mt-32'>
 
       
-      {isProduct ? (
-        <div>
-          {orderProducts.map((item, index) => (
-            <div key={index} className='w-11/12 m-auto grid grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
-              <div>
-                {orderCustomers[index] && (
-                  <div>
-                    <p className='font-bold'>{orderCustomers[index].firstname} {orderCustomers[index].lastname}</p>
-                    <p>{orderCustomers[index].email}</p>
-                  </div>
-                )}
-              </div>
-              <div>
-                {item.images && item.images.length > 0 && (
-                  <img className='w-20 h-20 mb-10 sm:mb-0 ms-10' key={item.images[0].id} src={item.images[0]} alt="" />
-                )}
-              </div>
-              <div>
-                <p className='text-xl'>{item.productname}</p>
-                <p>₹{item.productprice}</p>
-                <p>Quantity: {orderData[index].count}</p>
-              </div>
-              <div>
-                  {orderData[index] && (
-                <div className='flex justify-start gap-3 items-center'>
-                      <i className={`${orderData[index].orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
-                      <GoDotFill />
-                      </i>
-                      <p>{orderData[index].orderStatus} on {orderData[index].statusDate}</p>
-                </div>
-                    )}
-              </div>
-            <div className='text-center'>
-              {orderData[index].orderStatus === 'Order Delivered' ? (
-                <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * orderData[index].count}</p>
-              ) : orderData[index].orderStatus !== 'Order Cancelled' ? (
-                <Link to={`/vieworderadmin/${orderCustomers[index]?._id}/${item?._id}/${orderData[index]?._id}`}>
-                  <button className='bg-green-500 text-white py-2 px-3 w-2/6 text-sm rounded h-fit'>DELIVER</button>
-                </Link>
-              ) : null}
-            </div>
+{isProduct ? (
+  <div>
+    {currentOrders.map((item, index) => {
+      const orderIndex = indexOfFirstOrder + index;
+      const currentOrderData = orderData[orderIndex];
+      const currentOrderCustomer = orderCustomers[orderIndex];
 
-            </div>
-          ))}
+      return (
+        <div key={index} className='w-11/12 m-auto grid grid-cols-3 lg:grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
+          <div>
+            {currentOrderCustomer && (
+              <div>
+                <p className='font-bold'>{currentOrderCustomer.firstname} {currentOrderCustomer.lastname}</p>
+                <p>{currentOrderCustomer.email}</p>
+              </div>
+            )}
+          </div>
+          <div>
+            {item.images && item.images.length > 0 && (
+              <img className='w-20 h-20 mb-10 sm:mb-0 ms-10' key={item.images[0].id} src={item.images[0]} alt="" />
+            )}
+          </div>
+          <div>
+            <p className='text-xl'>{item.productname}</p>
+            <p>₹{item.productprice}</p>
+            <p>Quantity: {currentOrderData.count}</p>
+          </div>
+          <div>
+            {currentOrderData && (
+              <div className='flex justify-start gap-3 items-center mt-10 lg:mt-0'>
+                <i className={`${currentOrderData.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
+                  <GoDotFill />
+                </i>
+                <p>{currentOrderData.orderStatus} on {currentOrderData.statusDate}</p>
+              </div>
+            )}
+          </div>
+          <div className='text-center mt-10 lg:mt-0'>
+            {currentOrderData.orderStatus === 'Order Delivered' ? (
+              <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * currentOrderData.count}</p>
+            ) : currentOrderData.orderStatus !== 'Order Cancelled' ? (
+              <Link to={`/vieworderadmin/${currentOrderCustomer?._id}/${item?._id}/${currentOrderData?._id}`}>
+                <button className='bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>DELIVER</button>
+              </Link>
+            ) : null}
+          </div>
         </div>
-      ) : (
-        <p className='mt-60 text-center'>no orders found</p>
-      )}
+      );
+    })}
+    <div className='flex justify-center mt-10 mb-10'>
+      {Array.from({ length: Math.ceil(orderProducts.length / ordersPerPage) }, (_, index) => (
+        <button key={index} onClick={() => paginate(index + 1)} 
+        className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+        {index + 1}
+        </button>
+      ))}
+    </div>
+  </div>
+) : (
+  <p className='mt-60 text-center'>no orders found</p>
+)}
+
     </div>
   )
 }

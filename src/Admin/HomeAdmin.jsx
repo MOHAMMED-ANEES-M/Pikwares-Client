@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import './HomeAdmin.css'
 import { toast } from "react-toastify";
 import { errorToast } from "../components/Toast";
+import ImageSlider from "../components/ImageSlider/ImageSlider";
 
 const ProductSlider = ({ images }) => {
   const settings = {
@@ -47,6 +48,8 @@ const HomeAdmin = () => {
   const [headsetProducts,setHeadsetProducts] = useState([''])
   const [menProducts,setMenProducts] = useState([''])
   const [womenProducts,setWomenProducts] = useState([''])
+  const [currentPage, setCurrentPage] = useState(1);
+  const [ordersPerPage] = useState(18);
   const [showMobileProducts,setShowMobileProducts] = useState(false)
   const [showLaptopProducts,setShowLaptopProducts] = useState(false)
   const [showHeadsetProducts,setShowHeadsetProducts] = useState(false)
@@ -138,70 +141,20 @@ const HomeAdmin = () => {
     return () => clearTimeout(timer);
   };
 
-  let handleMobileDelete= async (id,e)=>{
-    if (e) {
+  
+  let handleProductDelete=async(id,e,category)=>{
+    try{
+      if (e) {
       e.preventDefault(); 
+      }
+      console.log('del');
+      let response = await axios.delete(`http://localhost:8000/deleteProduct/${id}/${category}`)
+      console.log('deleted product:',response);
+      errorToast('Product Deleted')
+      setRefresh(!refresh)
+    }catch(err){
+      console.log(err);
     }
-    console.log(id);
-    console.log('handleMobiledelete');
-    let response = await axios.delete(`http://localhost:8000/deleteMobiles/${id}`)
-    console.log(response);
-    errorToast("Product Deleted")
-    setRefresh(!refresh)
-      setShowLaptopProducts(false);
-      setShowMobileProducts(true);
-      setShowHeadsetProducts(false);
-      setShowMenProducts(false);
-      setShowProducts(false)
-      setShowWomenProducts(false);
-  }
-
-  let handleLaptopDelete= async (id,e)=>{
-    if (e) {
-      e.preventDefault(); 
-    }
-    console.log(id);
-    console.log('handleLaptopdelete');
-    let response = await axios.delete(`http://localhost:8000/deleteLaptops/${id}`)
-    console.log(response);
-    errorToast("Product Deleted")
-    setRefresh(!refresh)
-  }
-
-  let handleHeadsetDelete= async (id,e)=>{
-    if (e) {
-      e.preventDefault(); 
-    }
-    console.log(id);
-    console.log('handleHeadsetdelete');
-    let response = await axios.delete(`http://localhost:8000/deleteHeadsets/${id}`)
-    console.log(response);
-    errorToast("Product Deleted")
-    setRefresh(!refresh)
-  }
-
-  let handleMenDelete= async (id,e)=>{
-    if (e) {
-      e.preventDefault(); 
-    }
-    console.log(id);
-    console.log('handleMendelete');
-    let response = await axios.delete(`http://localhost:8000/deleteMen/${id}`)
-    console.log(response);
-    errorToast("Product Deleted")
-    setRefresh(!refresh)
-  }
-
-  let handleWomenDelete= async (id,e)=>{
-    if (e) {
-      e.preventDefault(); 
-    }
-    console.log(id);
-    console.log('handleWomendelete');
-    let response = await axios.delete(`http://localhost:8000/deleteWomen/${id}`)
-    console.log(response);
-    errorToast("Product Deleted")
-    setRefresh(!refresh)
   }
 
   useEffect(()=>{
@@ -215,7 +168,7 @@ const HomeAdmin = () => {
       }
 
       if(!token){
-        navigate('/login')
+       return navigate('/login')
       }
       
 
@@ -307,6 +260,22 @@ const HomeAdmin = () => {
     
   },[token,navigate,refresh])
 
+
+  const allProducts = [ ...laptopProducts, ...headsetProducts, ...mobileProducts, ...menProducts, ...womenProducts];
+  // shuffleArray(allProducts);
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentProducts = allProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentMobilePro = mobileProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentLaptopPro = laptopProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentHeadsetPro = headsetProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentMenPro = menProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentWomenPro = womenProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+
   return (
     <div className="mt-20">
 
@@ -321,7 +290,7 @@ const HomeAdmin = () => {
 </div>
     <button className="list-none button" onClick={showMen}>Men</button>
     <button className="list-none button" onClick={showWomen}>Women</button>
-    <Link to='/addproductadmin'><button className="absolute top-2 right-2 sm:right-5 bg-green-500 text-white py-1 sm:py-2 px-2 sm:px-4 rounded-xl h-fit">Add Product</button></Link>
+    {/* <Link to='/addproductadmin'><button className="absolute top-2 right-2 sm:right-5 bg-green-500 text-white py-1 sm:py-2 px-2 sm:px-4 rounded-xl h-fit">Add Product</button></Link> */}
     </div>
 
 
@@ -331,11 +300,13 @@ const HomeAdmin = () => {
     <div>
      {showProducts ? (
       <>
-      <h1 className='font-semibold text-center text-3xl mt-40'>Products</h1>
+      <h1 className='font-semibold text-center text-3xl mt-32'>
+      <ImageSlider/>
+      </h1>
         <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
 
-          {mobileProducts.length > 0 ? (
-            mobileProducts.map((item) => (
+          {currentProducts.length > 0 ? (
+            currentProducts.map((item) => (
               <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
                 <div className=" mx-5">
                   <div className="group relative bg-white">
@@ -357,7 +328,7 @@ const HomeAdmin = () => {
                     
                   </div>
                 </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer " onClick={(e) => handleMobileDelete(item._id,e)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer " onClick={(e) => handleProductDelete(item._id,e,item.productcategory)}>
                             Delete
                 </button>
               </div></Link>
@@ -365,136 +336,18 @@ const HomeAdmin = () => {
           ) : (
             null
           )}
-       
-          {laptopProducts.length > 0 ? (
-            laptopProducts.map((item) => (
-              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
-                <div className=" mx-5">
-                  <div className="group relative bg-white ">
-                    <ProductSlider images={item.images} />
-                    <div className="flex justify-between">
-                      <div className="m-auto mt-10 text-center">
-                        <div>
-                          <h3 className="text-sm text-gray-700">
-                            <span aria-hidden="true" className="absolute inset-0"></span>
-                            {item.productname}
-                          </h3>
-                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
-                          <div></div>
-                          
-                        </div>
-                      </div>
-                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
-                    </div>
-                  </div>
-                </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleLaptopDelete(item._id,e)}>
-                            Delete
-                          </button>
-              </div></Link>
-            ))
-          ) : (
-            null
-          )}
-
-
-{headsetProducts.length > 0 ? (
-            headsetProducts.map((item) => (
-              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
-                <div className=" mx-5">
-                  <div className="group relative bg-white">
-                    <ProductSlider images={item.images} />
-                    <div className="flex justify-between">
-                      <div className="m-auto mt-10 text-center">
-                        <div>
-                          <h3 className="text-sm text-gray-700">
-                            <span aria-hidden="true" className="absolute inset-0"></span>
-                            {item.productname}
-                          </h3>
-                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
-                          <div></div>
-                          
-                        </div>
-                      </div>
-                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
-                    </div>
-                  </div>
-                </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleHeadsetDelete(item._id,e)}>
-                            Delete
-                          </button>
-              </div></Link>
-            ))
-          ) : (
-            null
-          )}
-
-
-{menProducts.length > 0 ? (
-            menProducts.map((item) => (
-              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
-                <div className="mx-5">
-                  <div className="group relative bg-white">
-                    <ProductSlider images={item.images} />
-                    <div className="flex justify-between">
-                      <div className="m-auto mt-10 text-center">
-                        <div>
-                          <h3 className="text-sm text-gray-700">
-                            <span aria-hidden="true" className="absolute inset-0"></span>
-                            {item.productname}
-                          </h3>
-                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
-                          <div></div>
-                          
-                        </div>
-                      </div>
-                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
-                    </div>
-                  </div>
-                </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleMenDelete(item._id,e)}>
-                            Delete
-                          </button>
-              </div></Link>
-            ))
-          ) : (
-            null
-          )}
-
-
-{womenProducts.length > 0 ? (
-            womenProducts.map((item) => (
-              <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
-                <div className="mx-5">
-                  <div className="group relative bg-white">
-                    <ProductSlider images={item.images} />
-                    <div className="flex justify-between">
-                      <div className="m-auto mt-10 text-center">
-                        <div>
-                          <h3 className="text-sm text-gray-700">
-                            <span aria-hidden="true" className="absolute inset-0"></span>
-                            {item.productname}
-                          </h3>
-                          <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
-                          <div></div>
-                          
-                        </div>
-                      </div>
-                      {/* <p className="text-sm font-medium text-gray-900">$35</p> */}
-                    </div>
-                  </div>
-                </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleWomenDelete(item._id,e)}>
-                            Delete
-                          </button>
-              </div></Link>
-            ))
-          ) : (
-            null
-          )}
-
 
         </div>
+
+        <div className='flex justify-center mt-10 mb-10'>
+            {Array.from({ length: Math.ceil(allProducts.length / ordersPerPage) }, (_, index) => (
+              <button key={index} onClick={() => paginate(index + 1)} 
+              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+                {index + 1}
+              </button>
+            ))}
+       </div>
+
       </>
     ) : null}
     </div>
@@ -513,8 +366,8 @@ const HomeAdmin = () => {
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Mobile Phones</h1>
       <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
-          {mobileProducts.length > 0 ? (
-            mobileProducts.map((item) => (
+          {currentMobilePro.length > 0 ? (
+            currentMobilePro.map((item) => (
               <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
                 <div className=" mx-5">
                   <div className="group relative bg-white">
@@ -535,7 +388,7 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleMobileDelete(item._id,e)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleProductDelete(item._id,e,item.productcategory)}>
                             Delete
                           </button>
               </div></Link>
@@ -544,6 +397,16 @@ const HomeAdmin = () => {
             <p>No mobile products found.</p>
           )}
         </div>
+
+        <div className='flex justify-center mt-10 mb-10'>
+            {Array.from({ length: Math.ceil(mobileProducts.length / ordersPerPage) }, (_, index) => (
+              <button key={index} onClick={() => paginate(index + 1)} 
+              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+                {index + 1}
+              </button>
+            ))}
+       </div>
+
       </>
     ) : null}
     </div>
@@ -560,8 +423,8 @@ const HomeAdmin = () => {
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Laptops</h1>
       <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
-          {laptopProducts.length > 0 ? (
-            laptopProducts.map((item) => (
+          {currentLaptopPro.length > 0 ? (
+            currentLaptopPro.map((item) => (
               <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
                 <div className=" mx-5">
                   <div className="group relative bg-white">
@@ -582,7 +445,7 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleLaptopDelete(item._id,e)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleProductDelete(item._id,e,item.productcategory)}>
                             Delete
                           </button>
               </div></Link>
@@ -591,6 +454,16 @@ const HomeAdmin = () => {
             <p>No laptop products found.</p>
           )}
         </div>
+
+        <div className='flex justify-center mt-10 mb-10'>
+            {Array.from({ length: Math.ceil(laptopProducts.length / ordersPerPage) }, (_, index) => (
+              <button key={index} onClick={() => paginate(index + 1)} 
+              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+                {index + 1}
+              </button>
+            ))}
+       </div>
+
       </>
     ) : null}
     </div>
@@ -606,8 +479,8 @@ const HomeAdmin = () => {
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Headsets</h1>
       <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
-          {headsetProducts.length > 0 ? (
-            headsetProducts.map((item) => (
+          {currentHeadsetPro.length > 0 ? (
+            currentHeadsetPro.map((item) => (
               <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
                 <div className=" mx-5">
                   <div className="group relative bg-white">
@@ -628,7 +501,7 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleHeadsetDelete(item._id,e)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleProductDelete(item._id,e,item.productcategory)}>
                             Delete
                           </button>
               </div></Link>
@@ -637,6 +510,16 @@ const HomeAdmin = () => {
             <p>No headset products found.</p>
           )}
         </div>
+
+        <div className='flex justify-center mt-10 mb-10'>
+            {Array.from({ length: Math.ceil(headsetProducts.length / ordersPerPage) }, (_, index) => (
+              <button key={index} onClick={() => paginate(index + 1)} 
+              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+                {index + 1}
+              </button>
+            ))}
+       </div>
+
       </>
     ) : null}
     </div>
@@ -653,8 +536,8 @@ const HomeAdmin = () => {
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Men</h1>
       <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
-          {menProducts.length > 0 ? (
-            menProducts.map((item) => (
+          {currentMenPro.length > 0 ? (
+            currentMenPro.map((item) => (
               <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
                 <div className=" mx-5">
                 <div className="group relative bg-white">
@@ -675,7 +558,7 @@ const HomeAdmin = () => {
                     </div>
                 </div>
               </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer z-10" onClick={(e) => handleMenDelete(item._id,e)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer z-10" onClick={(e) => handleProductDelete(item._id,e,item.productcategory)}>
                             Delete
                           </button>
                   </div></Link>
@@ -684,6 +567,16 @@ const HomeAdmin = () => {
             <p>No men products found.</p>
           )}
         </div>
+
+        <div className='flex justify-center mt-10 mb-10'>
+            {Array.from({ length: Math.ceil(menProducts.length / ordersPerPage) }, (_, index) => (
+              <button key={index} onClick={() => paginate(index + 1)} 
+              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+                {index + 1}
+              </button>
+            ))}
+       </div>
+
       </>
     ) : null}
     </div>
@@ -700,8 +593,8 @@ const HomeAdmin = () => {
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Women</h1>
       <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
-          {womenProducts.length > 0 ? (
-            womenProducts.map((item) => (
+          {currentWomenPro.length > 0 ? (
+            currentWomenPro.map((item) => (
               <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
                 <div className=" mx-5">
                   <div className="group relative bg-white">
@@ -722,7 +615,7 @@ const HomeAdmin = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleWomenDelete(item._id,e)}>
+                <button className="mt-3 text-center bg-red-500 text-sm text-white p-1 mb-5 px-5 rounded-xl cursor-pointer" onClick={(e) => handleProductDelete(item._id,e,item.productcategory)}>
                             Delete
                           </button>
               </div></Link>
@@ -731,6 +624,16 @@ const HomeAdmin = () => {
             <p>No women products found.</p>
           )}
         </div>
+
+        <div className='flex justify-center mt-10 mb-10'>
+            {Array.from({ length: Math.ceil(womenProducts.length / ordersPerPage) }, (_, index) => (
+              <button key={index} onClick={() => paginate(index + 1)} 
+              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+                {index + 1}
+              </button>
+            ))}
+       </div>
+
       </>
     ) : null}
     </div>

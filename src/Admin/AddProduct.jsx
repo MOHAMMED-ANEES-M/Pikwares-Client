@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import FileBase64 from 'react-file-base64';
 import { useNavigate } from 'react-router-dom';
-import { Slide, toast } from 'react-toastify';
 import { successToast, warnToast } from '../components/Toast';
 
 
@@ -72,6 +71,10 @@ const AddProduct = () => {
       
       try{
 
+        if (displayImages.length===0) {
+          return warnToast('Images are required')
+        }
+
         if(displayImages){
           console.log('sub',displayImages);
           
@@ -84,7 +87,16 @@ const AddProduct = () => {
           if(response.data){
             successToast('Product added')
             setrefresh(!refresh)
-            window.location.reload();
+            setData({
+              productname: '',
+              productprice: '',
+              productcategory: "",
+              productdescription: '',
+            });
+            setImages([]);
+            setDisplayImages([]);
+            setShowImg(false);
+            // window.location.reload();
         }
               
       }else{
@@ -124,14 +136,14 @@ const AddProduct = () => {
         <form onSubmit={handleSubmit}>
 
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productname">Product Name</label></div>
-            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="text" name='productname' placeholder='Enter Product Name' onChange={handleChange} /><br />
+            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="text" name='productname' value={data.productname} placeholder='Enter Product Name' onChange={handleChange} /><br />
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productprice">Product Price</label></div>
-            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="number" name='productprice' placeholder='Enter Product Price' onChange={handleChange} /><br />
+            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="number" name='productprice' value={data.productprice} placeholder='Enter Product Price' onChange={handleChange} /><br />
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productdescription">Product Description</label></div>
-            <textarea className='w-1/2 mb-7 rounded-lg border h-28 p-3' type="text" name='productdescription' placeholder='Product Description...' onChange={handleChange} /><br />
+            <textarea className='w-1/2 mb-7 rounded-lg border h-28 p-3' type="text" name='productdescription' value={data.productdescription} placeholder='Product Description...' onChange={handleChange} /><br />
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productcategory">Product Category</label></div>
-            <select className='w-1/2 h-10 rounded-lg mb-7 px-3 border' name="productcategory" id="productcategory" onChange={handleChange}> 
-               <option selected disabled>Select product</option> 
+            <select className='w-1/2 h-10 rounded-lg mb-7 px-3 border' name="productcategory" id="productcategory" value={data.productcategory} onChange={handleChange}> 
+               <option value="" disabled>Select product</option> 
                <option value="mobilephones">Mobile Phones</option> 
                <option value="laptops">Laptops</option> 
                <option value="headsets">Headsets</option> 
