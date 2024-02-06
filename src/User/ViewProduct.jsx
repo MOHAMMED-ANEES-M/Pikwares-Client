@@ -281,8 +281,12 @@ const ViewProduct = () => {
       </div>
 
       <div className='w-2/5 mt-10 ms-20'>
-        <p className='text-3xl mb-10'> {productData && productData.productname}</p>
-        <p className='text-2xl mb-10'>₹{productData && productData.productprice} <span className='ms-2 text-green-600'> ( 60% off )</span></p>
+        <p className='text-2xl mb-5'> {productData && productData.productname}</p>
+        <p className='text-2xl font-semibold mb-5'>₹{productData && productData.productprice} <span className='ms-2 text-green-600'> ( 60% off )</span></p>
+        <div className=' mt-2 mb-5 flex gap-2 items-center'>
+           <p className='flex items-center gap-1 font-bold text-xl bg-green-500 text-white p-1 rounded'><span>{Math.round(calculateAverageRating(reviewData))}</span> <i><FaStar color="#FFFFFF" /></i></p> 
+           <p>( {reviewData.length} Reviews) </p>
+         </div>
         <div className='flex flex-wrap justify-between mb-20'>
         <p className='mt-2 text-sm opacity-60 font-semibold'>Description</p>
         <p className='mt-2 text-xl w-3/4'>{productData && productData.productdescription}</p>
@@ -311,12 +315,8 @@ const ViewProduct = () => {
         </div>
         
         <div>
-          <p className='font-bold text-xl mt-20'>Ratings and Reviews</p>
-          <div className=' mt-2 mb-5 flex gap-2 items-center'>
-           <p>Average Rating: </p> 
-           <p className='flex items-center gap-1 font-bold text-xl bg-green-500 text-white p-1 rounded'><span>{Math.round(calculateAverageRating(reviewData))}</span> <i><FaStar color="#FFFFFF" /></i></p> 
-            <p>( {reviewData.length} Reviews) </p>
-            </div>
+          <p className='font-bold text-xl mt-20 mb-5'>Ratings and Reviews</p>
+         
           <div>
             {reviewData.map((review, index) => (
               <div key={review._id} className='border p-5 rounded mb-1'>

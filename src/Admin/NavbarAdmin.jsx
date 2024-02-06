@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import './NavbarAdmin.css';
+import { RiShoppingCartFill } from "react-icons/ri";
+import { FaHeart } from 'react-icons/fa';
+import { IoMdHome } from "react-icons/io";
+import { MdAccountCircle } from "react-icons/md";
+import { FaBoxesPacking } from "react-icons/fa6";
+
 
 const NavbarAdmin = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -90,19 +96,19 @@ const NavbarAdmin = () => {
           ) : (
             <>
               <NavLink to='/'>
-                <li>Home</li>
+                <li className='flex gap-1 items-center'><IoMdHome /> Home</li>
               </NavLink>
               <NavLink to='/cartcustomer'>
-                <li>Cart</li>
+                <li className='flex gap-1 items-center'><RiShoppingCartFill />Cart</li>
               </NavLink>
               <NavLink to='/wishlistcustomer'>
-                <li>Wishlist</li>
+                <li className='flex gap-1 items-center'><FaHeart />Wishlist</li>
               </NavLink>
               <NavLink to='/orderscustomer'>
-                <li>Orders</li>
+                <li className='flex gap-1 items-center'><FaBoxesPacking /> Orders</li>
               </NavLink>
               <NavLink to='/accountcustomer'>
-                <li>Account</li>
+                <li className='flex gap-1 items-center'><MdAccountCircle /> Account</li>
               </NavLink>
             </>
           )}

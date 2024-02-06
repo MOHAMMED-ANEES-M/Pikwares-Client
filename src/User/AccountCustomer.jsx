@@ -237,9 +237,9 @@ const AccountCustomer = () => {
   return (
     <div>
       
-        <div className='w-2/3 m-auto text-start p-10 mt-10 rounded-3xl'>
+        <div className='w-2/3 m-auto text-start p-10 mt-20 rounded-3xl'>
 
-            <h1 className='font-semibold text-3xl text-center mb-10 '>Account Details</h1>
+            {/* <h1 className='font-semibold text-3xl text-center mb-10 '>Account Details</h1> */}
             <div className='flex flex-wrap justify-center gap-10'>
 
 

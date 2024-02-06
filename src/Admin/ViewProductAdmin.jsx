@@ -158,10 +158,6 @@ const ViewProductAdmin = () => {
         <p className='mt-2 text-sm opacity-60 font-semibold'>Description</p>
         <p className='mt-2 text-xl w-3/4'>{productData && productData.productdescription}</p>
       </div>
-        {/* <div>
-          <button className=" mr-2 bg-black text-white py-2 px-4 rounded-xl h-fit" onClick={handleCart}>ADD TO CART</button>
-          <button className=" ml-2 bg-green-500 text-white py-2 px-10 rounded-xl h-fit">BY NOW</button>
-        </div> */}
 
 <div>
           <p className='font-bold text-xl mt-20'>Ratings and Reviews</p>

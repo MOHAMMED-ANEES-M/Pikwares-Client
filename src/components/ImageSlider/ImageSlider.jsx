@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import img1 from '../../assets/proBanner1.webp'
-import img2 from '../../assets/proBanner2.jpg'
-import img3 from '../../assets/proBanner3.jpg'
-import img4 from '../../assets/proBanner4.jpg'
+import img1 from '../../assets/banner7.jpg'
+import img2 from '../../assets/banner6.jpg'
+import img3 from '../../assets/banner1.jpg'
+import img4 from '../../assets/banner2.jpg'
 import { GrNext, GrPrevious } from 'react-icons/gr';
 
 
