@@ -7,7 +7,6 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
 import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-icons/fa';
-import { ToastContainer } from 'react-toastify';
 import { errorToast, successToast, warnToast } from '../components/Toast';
 
 
@@ -280,7 +279,7 @@ const ViewProduct = () => {
       )}
       </div>
 
-      <div className='w-2/5 mt-10 ms-20'>
+      <div className='w-2/5 mt-10 ms-20 overflow-y-auto max-h-[70vh]'>
         <p className='text-2xl mb-5'> {productData && productData.productname}</p>
         <p className='text-2xl font-semibold mb-5'>₹{productData && productData.productprice} <span className='ms-2 text-green-600'> ( 60% off )</span></p>
         <div className=' mt-2 mb-5 flex gap-2 items-center'>
@@ -300,16 +299,10 @@ const ViewProduct = () => {
               {isWishlist ? (
                 <>
                 <button className=" ml-2 text-green-500 py-2 rounded-xl h-fit" onClick={handleDeleteWishlist}><FaHeart className='text-3xl'/></button>
-                <ToastContainer
-                position="bottom-center"
-                />
                 </>
               ):(
                 <>
                 <button className=" ml-2 text-green-500 py-2 rounded-xl h-fit" onClick={handleAddWishlist}><FaRegHeart className='text-3xl'/></button>
-                <ToastContainer
-                position="bottom-center"
-                />
                 </>
               )}
         </div>

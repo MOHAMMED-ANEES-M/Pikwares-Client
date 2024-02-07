@@ -88,7 +88,7 @@ const Login = () => {
 
   return (
     <div>
-      <div className='text-center mt-40 m-auto w-1/4 bg-green-100 px-10 py-10 rounded-3xl'>
+      <div className='text-center mt-40 m-auto w-3/4 md:w-1/4 bg-green-100 px-10 py-10 rounded-3xl'>
             <h1 className='font-semibold text-3xl mb-16'>Login</h1>
         <form onSubmit={handleSubmit}>
          <div className='text-start mb-2'>  <label htmlFor="email" className='text-start'>Email</label></div>

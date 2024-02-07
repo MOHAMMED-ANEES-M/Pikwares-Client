@@ -30,12 +30,15 @@ const NavbarAdmin = () => {
 
   return (
     <div>
-      <div className='container px-3 sm:px-10 py-5 fixed top-0 z-20 flex lg:flex justify-between items-center bg-green-400'>
-        <a href="/"><h1 className='font-semibold text-lg sm:text-3xl'>Pikwares</h1></a>
+      <div className={`container px-3 sm:px-10 py-5 fixed top-0 z-20  bg-green-400 ${
+        isMenuOpen ? 'h-screen flex-none text-center pt-20' : 'h-20 flex lg:flex justify-between items-center' 
+      }`}>
+        <a href="/"><h1 className={`font-semibold  ${
+        isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl' }`}>Pikwares</h1></a>
         <div className='lg:hidden'>
           <button
             onClick={toggleMenu}
-            className='text-white focus:outline-none'
+            className='text-white focus:outline-none '
           >
             {!isMenuOpen ? (
               <svg
@@ -58,7 +61,7 @@ const NavbarAdmin = () => {
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
-                className='h-6 w-6 lg:hidden absolute top-2 right-2'
+                className='h-6 w-6 lg:hidden absolute top-5 right-5 sm:right-10'
               >
                 <path
                   strokeLinecap='round'
@@ -72,8 +75,8 @@ const NavbarAdmin = () => {
         </div>
         <ul
           className={`${
-            isMenuOpen ? 'flex flex-col space-y-2' : 'hidden lg:flex'
-          } lg:flex gap-x-2 sm:gap-x-5 md:gap-x-10 lg:gap-x-20`}
+            isMenuOpen ? 'flex flex-col space-y-2 mb-5 w-3/12 sm:w-2/12 m-auto' : 'hidden lg:flex'
+          } lg:flex gap-x-2 sm:gap-x-5 md:gap-x-5 lg:gap-x-10`}
         >
           {userId === 'a1b2c3' ? (
             <>
@@ -96,19 +99,19 @@ const NavbarAdmin = () => {
           ) : (
             <>
               <NavLink to='/'>
-                <li className='flex gap-1 items-center'><IoMdHome /> Home</li>
+                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><IoMdHome /> Home</li>
               </NavLink>
               <NavLink to='/cartcustomer'>
-                <li className='flex gap-1 items-center'><RiShoppingCartFill />Cart</li>
+                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><RiShoppingCartFill />Cart</li>
               </NavLink>
               <NavLink to='/wishlistcustomer'>
-                <li className='flex gap-1 items-center'><FaHeart />Wishlist</li>
+                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaHeart />Wishlist</li>
               </NavLink>
               <NavLink to='/orderscustomer'>
-                <li className='flex gap-1 items-center'><FaBoxesPacking /> Orders</li>
+                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaBoxesPacking /> Orders</li>
               </NavLink>
               <NavLink to='/accountcustomer'>
-                <li className='flex gap-1 items-center'><MdAccountCircle /> Account</li>
+                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdAccountCircle /> Account</li>
               </NavLink>
             </>
           )}

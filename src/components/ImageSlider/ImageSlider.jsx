@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -19,6 +19,8 @@ const ImageSlider = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,        
+    autoplaySpeed: 2000,
   };
 
   const images = [ img1, img2, img3, img4 ];
@@ -30,6 +32,10 @@ const ImageSlider = () => {
   const goToPrev = () => {
     sliderRef.current.slickPrev();
   };
+
+  useEffect(() => {
+    sliderRef.current.slickPlay();
+  }, []);
 
   return (
     <div className="relative">
@@ -44,10 +50,10 @@ const ImageSlider = () => {
         </div>
       ))}
     </Slider>
-    <button onClick={goToPrev} className="absolute top-1/2 left-10 transform -translate-y-1/2 focus:outline-none">
+    <button onClick={goToPrev} className="absolute top-1/2 left-2 md:left-10 transform -translate-y-1/2 focus:outline-none">
       <GrPrevious size={24} />
     </button>
-    <button onClick={goToNext} className="absolute top-1/2 right-10 transform -translate-y-1/2 focus:outline-none">
+    <button onClick={goToNext} className="absolute top-1/2 right-2 md:right-10 transform -translate-y-1/2 focus:outline-none">
       <GrNext size={24} />
     </button>
   </div>
