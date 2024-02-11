@@ -20,7 +20,7 @@ const ImageSlider = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,        
-    autoplaySpeed: 2000,
+    autoplaySpeed: 3000,
   };
 
   const images = [ img1, img2, img3, img4 ];
@@ -50,12 +50,12 @@ const ImageSlider = () => {
         </div>
       ))}
     </Slider>
-    <button onClick={goToPrev} className="absolute top-1/2 left-2 md:left-10 transform -translate-y-1/2 focus:outline-none">
+    {/* <button onClick={goToPrev} className="absolute top-1/2 left-2 md:left-10 transform -translate-y-1/2 focus:outline-none">
       <GrPrevious size={24} />
     </button>
     <button onClick={goToNext} className="absolute top-1/2 right-2 md:right-10 transform -translate-y-1/2 focus:outline-none">
       <GrNext size={24} />
-    </button>
+    </button> */}
   </div>
   );
 };

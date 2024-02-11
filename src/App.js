@@ -21,11 +21,14 @@ import ViewOrderCustomer from './User/ViewOrderCustomer';
 import PaymentSuccess from './User/PaymentSuccess';
 import RateProductCustomer from './User/RateProductCustomer';
 import WishlistCustomer from './User/WishlistCustomer';
+import ChatListAdmin from './Admin/ChatListAdmin';
+import ChatAdmin from './Admin/ChatAdmin';
+import ChatCustomer from './User/ChatCustomer';
 
 function App() {
 
-  let userId = localStorage.getItem('userId')
-  // console.log(userId,'oo');
+  // let userId = localStorage.getItem('userId')
+  // // console.log(userId,'oo');
 
   return (
       <div className='App'>
@@ -44,6 +47,7 @@ function App() {
       <Route path='/viewproduct/:id/:category' element={<ViewProduct/>}/>
       <Route path='/cartcustomer' element={<CartCustomer/>}/>
       <Route path='/wishlistcustomer' element={<WishlistCustomer/>}/>
+      <Route path='/chatcustomer' element={<ChatCustomer/>}/>
       <Route path='/viewproductadmin/:id/:category' element={<ViewProductAdmin/>}/>
       <Route path='/viewcartadmin/:id' element={<ViewCartAdmin/>}/>   
       <Route path='/checkoutcustomer/:id/:category' element={<CheckoutCustomer/>}/>   
@@ -52,6 +56,8 @@ function App() {
       <Route path='/orderscustomer' element={<OrdersCustomer/>}/>   
       <Route path='/viewordercustomer/:productId/:orderId' element={<ViewOrderCustomer/>}/>   
       <Route path='/ordersadmin' element={<OrdersAdmin/>}/>   
+      <Route path='/chatlistadmin' element={<ChatListAdmin/>}/>   
+      <Route path='/chatadmin/:id' element={<ChatAdmin/>}/>   
       <Route path='/vieworderadmin/:customerId/:productId/:orderId' element={<ViewOrderAdmin/>}/>   
       <Route path='/rateproduct/:productId/:customerId' element={<RateProductCustomer/>}/>   
       </Route>

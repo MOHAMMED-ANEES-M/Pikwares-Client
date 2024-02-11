@@ -4,7 +4,7 @@ import './NavbarAdmin.css';
 import { RiShoppingCartFill } from "react-icons/ri";
 import { FaHeart } from 'react-icons/fa';
 import { IoMdHome } from "react-icons/io";
-import { MdAccountCircle } from "react-icons/md";
+import { MdAccountCircle, MdChat } from "react-icons/md";
 import { FaBoxesPacking } from "react-icons/fa6";
 
 
@@ -92,8 +92,8 @@ const NavbarAdmin = () => {
               <NavLink to='/ordersadmin'>
                 <li>Orders</li>
               </NavLink>
-              <NavLink to='/subadmins'>
-                <li>Sub Admins</li>
+              <NavLink to='/chatlistadmin'>
+                <li>Chat</li>
               </NavLink>
             </>
           ) : (
@@ -112,6 +112,9 @@ const NavbarAdmin = () => {
               </NavLink>
               <NavLink to='/accountcustomer'>
                 <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdAccountCircle /> Account</li>
+              </NavLink>
+              <NavLink to='/chatcustomer'>
+                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdChat /> Chat</li>
               </NavLink>
             </>
           )}
