@@ -41,6 +41,7 @@ const ChatCustomer = () => {
         }
 
         console.log('chat');
+        socket.connect()
         socket.emit('joinRoom', { room: `room_${id}`, hint:'User connected' });
     
         socket.on('loadMessages', (data) => {
@@ -56,6 +57,7 @@ const ChatCustomer = () => {
           socket.off('loadMessages');
           socket.off('userMessage');
           socket.off('adminMessage');
+          socket.disconnect()
         };
       }, []);
 

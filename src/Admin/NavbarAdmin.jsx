@@ -33,8 +33,15 @@ const NavbarAdmin = () => {
       <div className={`container px-3 sm:px-10 py-5 fixed top-0 z-20  bg-green-400 ${
         isMenuOpen ? 'h-screen flex-none text-center pt-20' : 'h-20 flex lg:flex justify-between items-center' 
       }`}>
-        <a href="/"><h1 className={`font-semibold  ${
-        isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl' }`}>Pikwares</h1></a>
+        { userId === 'a1b2c3'? (
+          <a href="/homeadmin"><h1 className={`font-semibold  ${
+            isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl' }`}>Pikwares</h1></a>
+        ):(
+          <a href="/"><h1 className={`font-semibold  ${
+            isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl' }`}>Pikwares</h1></a>
+        )}
+        
+
         <div className='lg:hidden'>
           <button
             onClick={toggleMenu}
