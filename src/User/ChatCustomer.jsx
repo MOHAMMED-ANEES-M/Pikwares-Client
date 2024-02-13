@@ -64,11 +64,11 @@ const ChatCustomer = () => {
 
   return (
     <div className='mt-32'>
-      <div className='w-1/3 m-auto mb-5 border rounded '>
+      <div className='w-2/3 lg:w-1/3 m-auto mb-5 border rounded '>
       <h1 className='text-2xl text-center p-3 bg-green-400 rounded-t'>Admin</h1>
         <ScrollToBottom className='h-96 overflow-scroll p-5 bg-green-50'>
         {messages.map((message, index) => (
-          <div key={index} className='bg-green-500 text-white p-1 w-5/12 rounded mt-2 break-all'>
+          <div key={index} className={`text-white p-2 w-7/12 rounded mt-2 break-all ${message.role === 'Admin' ? 'bg-green-900' : 'bg-green-600  ml-48'}`}>
             <p>{message.message}</p>
               {/* <p className='text-end text-xs'>
                   {message.timestamb}
@@ -76,9 +76,9 @@ const ChatCustomer = () => {
           </div>
         ))}
         </ScrollToBottom>
-      <div className='shadow'>
+      <div className='shadow border-2'>
       <input
-        className='w-10/12 p-3 '
+        className='w-10/12 p-3 focus:outline-none'
         type="text"
         value={newMessage}
         placeholder="Type your message..."

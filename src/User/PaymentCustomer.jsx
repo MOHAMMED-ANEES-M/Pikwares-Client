@@ -1,11 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GrCreditCard } from 'react-icons/gr'
-import { FaGooglePay } from "react-icons/fa";
-import { SiPaytm } from "react-icons/si";
 import { GiPayMoney } from "react-icons/gi";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Slide, toast } from 'react-toastify';
 import { successToast, warnToast } from '../components/Toast';
 
 
@@ -13,12 +10,15 @@ const PaymentCustomer = () => {
 
   const [confirmPayment,setConfirmPayment] = useState(false)
   const [data,setdata] = useState('')
+  const [productData,setProductData] = useState('')
   const navigate = useNavigate()
 
   let {id} = useParams()
   let {amount} = useParams()
   let {counts} = useParams()
+
   let userId = localStorage.getItem('userId')
+  let token = localStorage.getItem('token')
 
   let handleCOD= async(e)=>{
     e.preventDefault()
@@ -28,7 +28,10 @@ const PaymentCustomer = () => {
       let productId = id
       let count = counts
       let mode = 'COD'
-      let data = ({orderStatus,customerId,productId,count,mode})
+      let productname = productData.productname
+      let productprice = productData.productprice
+      let images = productData.images
+      let data = ({orderStatus,customerId,productId,count,mode,productname,productprice,images})
       console.log('data:',data);
       let response = await axios.post(`http://localhost:8000/orders/insert`,data)
       console.log('orders response:',response);
@@ -80,7 +83,10 @@ const PaymentCustomer = () => {
                   customerId : userId,
                   productId : id,
                   count:counts,
-                  mode: 'Online Payment'
+                  mode: 'Online Payment',
+                  productname : productData.productname,
+                  productprice : productData.productprice,
+                  images : productData.images
               }
             let orderResponse = await axios.post(`http://localhost:8000/orders/insert`,orderDatas)
             console.log('orders response:',orderResponse);
@@ -110,6 +116,24 @@ const PaymentCustomer = () => {
       console.log(err);
     }
   }
+
+  useEffect(()=>{
+
+    let fetchProduct = async ()=>{
+      try{
+        let response = await axios.get(`http://localhost:8000/admin/product/findOne/${id}`,{
+          headers: {
+            Authorization: token,
+          }
+        })
+        console.log('rating product reponse:',response);
+        setProductData(response.data)
+      }catch(err){
+        console.log(err);
+      }
+    }
+    fetchProduct()
+  },[])
 
 
   return (

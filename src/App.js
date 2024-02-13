@@ -54,11 +54,11 @@ function App() {
       <Route path='/paymentcustomer/:id/:amount/:counts' element={<PaymentCustomer/>}/>   
       <Route path='/paymentreciept' element={<PaymentSuccess/>}/>   
       <Route path='/orderscustomer' element={<OrdersCustomer/>}/>   
-      <Route path='/viewordercustomer/:productId/:orderId' element={<ViewOrderCustomer/>}/>   
+      <Route path='/viewordercustomer/:orderId' element={<ViewOrderCustomer/>}/>   
       <Route path='/ordersadmin' element={<OrdersAdmin/>}/>   
       <Route path='/chatlistadmin' element={<ChatListAdmin/>}/>   
       <Route path='/chatadmin/:id' element={<ChatAdmin/>}/>   
-      <Route path='/vieworderadmin/:customerId/:productId/:orderId' element={<ViewOrderAdmin/>}/>   
+      <Route path='/vieworderadmin/:customerId/:orderId' element={<ViewOrderAdmin/>}/>   
       <Route path='/rateproduct/:productId/:customerId' element={<RateProductCustomer/>}/>   
       </Route>
     </Routes>

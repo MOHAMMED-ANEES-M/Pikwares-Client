@@ -50,27 +50,11 @@ const OrdersAdmin = () => {
               const sortedOrders = _orderBy(updatedOrderData, ['statusDate'], ['asc']);
 
               setOrderData(sortedOrders);
-
-            let fetchOrderProducts = async () => {
-                const productsPromises = sortedOrders.map(async (order) => {
-                  const productResponse = await axios.get(`http://localhost:8000/customer/orderedProducts/${order.productId}`,{
-                    headers: {
-                        Authorization: token
-                      },
-                });
-                  return productResponse.data; 
-                });
-      
-                const products = await Promise.all(productsPromises);
-                setOrderProducts(products);
-                console.log('ordered products response:',products);
-                if (products && products.length > 0 && products[0]) {
-                  setIsProduct(true); 
-                } else {
-                  setIsProduct(false);  
-                }
-              }
-              fetchOrderProducts()
+              if (sortedOrders && sortedOrders.length > 0 && sortedOrders[0]) {
+                    setIsProduct(true); 
+                  } else {
+                    setIsProduct(false);  
+                  }
 
               let fetchOrderCustomers = async () => {
                 const customerPromises = sortedOrders.map(async (order) => {
@@ -85,16 +69,12 @@ const OrdersAdmin = () => {
                 const customers = await Promise.all(customerPromises);
                 setOrderCustomers(customers);
                 console.log('ordered customers response:',customers);
-                // if (customers && customers.length > 0 && customers[0]) {
-                //   setIsProduct(true); 
-                // } else {
-                //   setIsProduct(false);  
-                // }
               }
               fetchOrderCustomers()
 
         }
         fetchOrders() 
+
     }catch(err){
         console.log(err);
     }
@@ -103,7 +83,7 @@ const OrdersAdmin = () => {
 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = orderProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = orderData.slice(indexOfFirstOrder, indexOfLastOrder);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -140,20 +120,20 @@ const OrdersAdmin = () => {
             <p>Quantity: {currentOrderData.count}</p>
           </div>
           <div>
-            {currentOrderData && (
+            {item && (
               <div className='flex justify-start gap-3 items-center mt-10 lg:mt-0'>
-                <i className={`${currentOrderData.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
+                <i className={`${item.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
                   <GoDotFill />
                 </i>
-                <p>{currentOrderData.orderStatus} on {currentOrderData.statusDate}</p>
+                <p>{item.orderStatus} on {item.statusDate}</p>
               </div>
             )}
           </div>
           <div className='text-center mt-10 lg:mt-0'>
-            {currentOrderData.orderStatus === 'Order Delivered' ? (
-              <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * currentOrderData.count}</p>
-            ) : currentOrderData.orderStatus !== 'Order Cancelled' ? (
-              <Link to={`/vieworderadmin/${currentOrderCustomer?._id}/${item?._id}/${currentOrderData?._id}`}>
+            {item.orderStatus === 'Order Delivered' ? (
+              <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * item.count}</p>
+            ) : item.orderStatus !== 'Order Cancelled' ? (
+              <Link to={`/vieworderadmin/${currentOrderCustomer?._id}/${item?._id}`}>
                 <button className='bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>DELIVER</button>
               </Link>
             ) : null}
@@ -162,7 +142,7 @@ const OrdersAdmin = () => {
       );
     })}
     <div className='flex justify-center mt-10 mb-10'>
-      {Array.from({ length: Math.ceil(orderProducts.length / ordersPerPage) }, (_, index) => (
+      {Array.from({ length: Math.ceil(orderData.length / ordersPerPage) }, (_, index) => (
         <button key={index} onClick={() => paginate(index + 1)} 
         className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
         {index + 1}

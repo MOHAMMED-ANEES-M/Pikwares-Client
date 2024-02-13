@@ -1,20 +1,19 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { GoDot, GoDotFill, GoStar, GoStarFill } from 'react-icons/go'
+import { GoStarFill } from 'react-icons/go'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { errorToast } from '../components/Toast'
 
 const ViewOrderCustomer = () => {
 
     const [orderData,setOrderData] = useState('')
-    const [productData,setProductData] = useState('')
+    // const [productData,setProductData] = useState('')
     const [customerData,setCustomerData] = useState('')
     const [addressData,setAddressData] = useState('')
     const [refresh,setRefresh] = useState(false)
 
     const navigate = useNavigate()
-    let {productId} = useParams()
+    // let {productId} = useParams()
     let {orderId} = useParams()
 
     let token = localStorage.getItem('token')
@@ -34,7 +33,7 @@ const ViewOrderCustomer = () => {
       try{
         const data = {orderStatus: 'Order Cancelled'}
         let response = await axios.put(`http://localhost:8000/cancelOrder/${id}`,data)
-        console.log('deleted cart response:',response);
+        console.log('order cancel response:',response);
         errorToast('Order Cancelled')
         setRefresh(!refresh)
       }catch(err){
@@ -47,7 +46,7 @@ const ViewOrderCustomer = () => {
         try{
 
             if(!token){
-                navigate = ('/login')
+               return navigate('/login')
             }
             
             let fetchOrderData = async()=>{
@@ -67,19 +66,6 @@ const ViewOrderCustomer = () => {
         
               }
               fetchOrderData()
-        
-              let fetchProductData = async()=>{
-                
-                let response = await axios.get(`http://localhost:8000/admin/product/findOne/${productId}`,{
-                  headers: {
-                    Authorization: token,
-                  }
-                })
-                console.log('productData response;',response);
-                setProductData(response.data)
-        
-              }
-              fetchProductData()
 
               let fetchCustomerData = async()=>{
         
@@ -131,11 +117,14 @@ const ViewOrderCustomer = () => {
         <div className='mr-10'>
           
           {orderData.mode !== 'COD'?(
+            <>
             <button className='text-green-500 border py-1 px-4 rounded-xl h-fit' onClick={handleReciept}>Payment Receipt</button> 
+            <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice*orderData.count}</p>
+            </>
           ):(
             <>
             { orderData.orderStatus === 'Order Delivered' ? (
-              <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice*orderData.count}</p>
+              <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice*orderData.count}</p>
               ):(
                 <>
                 { orderData.orderStatus === 'Order Cancelled' ?(
@@ -143,7 +132,7 @@ const ViewOrderCustomer = () => {
                 ):(
                   <>
                 <button className="mb-5 ms-7 bg-red-500 text-white py-2 px-5 text-sm  rounded-xl h-fit" onClick={()=>handleCancel(orderData._id)}>CANCEL ORDER</button>
-                <p className='text-red-500 font-bold'>Amount to be paid ₹{productData.productprice*orderData.count}</p>
+                <p className='text-red-500 font-bold'>Amount to be paid ₹{orderData.productprice*orderData.count}</p>
                 </>
                 )}
                 </>
@@ -155,12 +144,12 @@ const ViewOrderCustomer = () => {
       </div>
 
       <div className='grid grid-cols-4 flex-wrap mt-20'>
-        {productData && productData.images && productData.images[0] && (
-          <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={productData.images[0]} alt="image not found" />
+        {orderData && orderData.images && orderData.images[0] && (
+          <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={orderData.images[0]} alt="image not found" />
         )}
           <div>
-              <p className='mb-1 text-xl'>{productData.productname}</p>
-              <p className='font-bold'>₹{productData.productprice}</p>
+              <p className='mb-1 text-xl'>{orderData.productname}</p>
+              <p className='font-bold'>₹{orderData.productprice}</p>
               <p>Quantity: {orderData.count}</p>
               </div>
               
@@ -173,7 +162,7 @@ const ViewOrderCustomer = () => {
             {orderData.orderStatus === 'Order Delivered'?(
                <>
               <div className='text-green-500 text-xl'><GoStarFill/></div>
-              <Link to={`/rateproduct/${productId}/${userId}`}><button className='text-green-500'>Rate & Review Product</button></Link>
+              <Link to={`/rateproduct/${orderData.productId}/${userId}`}><button className='text-green-500'>Rate & Review Product</button></Link>
               </>
               ):(
                 null

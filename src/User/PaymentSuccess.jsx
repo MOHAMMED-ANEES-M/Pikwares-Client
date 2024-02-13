@@ -210,6 +210,13 @@ const PaymentSuccess = () => {
       
       <div className='flex flex-wrap justify-around'>
 
+          <div>
+            <p>{accountData.firstname} {accountData.lastname}</p>
+            <p>{addressData.address}</p>
+            <p>{addressData.district}, {addressData.pincode} - {addressData.pincode}</p>
+            <p>Phone Number: {accountData.number}</p>
+          </div>
+
         <div className='flex justify-center gap-5'>
           <div className='flex gap-2'>
             <div>
@@ -230,12 +237,6 @@ const PaymentSuccess = () => {
           </div>
         </div>
 
-          <div>
-            <p>{accountData.firstname} {accountData.lastname}</p>
-            <p>{addressData.address}</p>
-            <p>{addressData.district}, {addressData.pincode} - {addressData.pincode}</p>
-            <p>Phone Number: {accountData.number}</p>
-          </div>
       </div>
 
       <div className='flex justify-center gap-20 mt-20 text-xl'>

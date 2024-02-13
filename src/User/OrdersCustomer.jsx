@@ -8,7 +8,7 @@ import _orderBy from 'lodash/orderBy';
 const OrdersCustomer = () => {
 
     const [orderData,setOrderData] = useState([''])
-    const [orderProducts,setOrderProducts] = useState([''])
+    // const [orderProducts,setOrderProducts] = useState([''])
     const [isProduct,setIsProduct] = useState(false)
     const [refresh,setRefresh] = useState(false)
     const [isCancelled,setIsCancelled] = useState(false)
@@ -66,8 +66,11 @@ const OrdersCustomer = () => {
 
                   setOrderData((prevOrderData) => sortOrdersByDate(updatedOrderData));
                   console.log('updateddata ;',orderData);
-
-                
+                  if (updatedOrderData && updatedOrderData.length > 0 && updatedOrderData[0]) {
+                      setIsProduct(true);
+                  } else {
+                      setIsProduct(false);
+                  }
 
                   // const statusDate = new Date(orderData.statusDate);
                   // const formattedDate = statusDate.toString().split('T')[0];
@@ -80,49 +83,10 @@ const OrdersCustomer = () => {
         }
     },[refresh])
 
-    useEffect(() => {
-
-      if(!token){
-       return navigate('/login')
-    }
-
-      let fetchOrderProducts = async () => {
-        const productsPromises = orderData.map(async (order) => {
-          try {
-            if (order && order.productId) {
-              const productResponse = await axios.get(`http://localhost:8000/customer/orderedProducts/${order.productId}`, {
-                headers: {
-                  Authorization: token,
-                },
-              });
-  
-              return productResponse.data;
-            }
-            return null;
-          } catch (error) {
-            console.error('Error fetching orderedProducts:', error);
-            return null;
-          }
-        });
-  
-        const products = await Promise.all(productsPromises);
-        console.log('ordered products response:', products);
-        setOrderProducts(products.filter((product) => product !== null));
-  
-        if (products && products.length > 0 && products[0]) {
-          setIsProduct(true);
-        } else {
-          setIsProduct(false);
-        }
-      };
-  
-      fetchOrderProducts();
-    }, [orderData, token]);
-
 
     const indexOfLastOrder = currentPage * ordersPerPage;
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-    const currentOrders = orderProducts.slice(indexOfFirstOrder, indexOfLastOrder);
+    const currentOrders = orderData.slice(indexOfFirstOrder, indexOfLastOrder);
   
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -136,7 +100,7 @@ const OrdersCustomer = () => {
       const currentOrderData = orderData[orderIndex];
 
       return (
-          <Link to={`/viewordercustomer/${item._id}/${currentOrderData._id}`} key={index}>
+          <Link to={`/viewordercustomer/${item._id}`} key={index}>
             <div className='w-10/12 m-auto grid grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
               <div>
                 {item.images && item.images.length > 0 && (
@@ -152,28 +116,28 @@ const OrdersCustomer = () => {
               </div>
               <div>
                 <div className='flex justify-start gap-3 items-center'>
-                  <i className={`${currentOrderData.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
+                  <i className={`${item.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
                     <GoDotFill />
                   </i>
-                  {currentOrderData && <p>{currentOrderData.orderStatus} <br /> {currentOrderData.statusDate}</p>}
+                  {item && <p>{item.orderStatus} <br /> {item.statusDate}</p>}
                 </div>
               </div>
               <div className='text-center'>
-                {currentOrderData.orderStatus === 'Order Cancelled' ? null : (
+                {item.orderStatus === 'Order Cancelled' ? null : (
                   <>
-                    {currentOrderData && currentOrderData.mode === 'COD' ? (
+                    {item && item.mode === 'COD' ? (
                       <>
-                        <p>{currentOrderData.mode}</p>
-                        {currentOrderData.orderStatus === 'Order Delivered' ? (
-                          <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * currentOrderData.count}</p>
+                        <p>{item.mode}</p>
+                        {item.orderStatus === 'Order Delivered' ? (
+                          <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * item.count}</p>
                         ) : (
-                          <p className='text-red-500 font-bold'>Amount to be paid ₹{item.productprice * currentOrderData.count}</p>
+                          <p className='text-red-500 font-bold'>Amount to be paid ₹{item.productprice * item.count}</p>
                         )}
                       </>
                     ) : (
                       <>
-                        <p>{currentOrderData.mode}</p>
-                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * currentOrderData.count}</p>
+                        <p>{item.mode}</p>
+                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * item.count}</p>
                       </>
                     )}
                   </>
@@ -182,9 +146,9 @@ const OrdersCustomer = () => {
             </div>
           </Link>
           );
-                    })}
+        })}
         <div className='flex justify-center mt-10 mb-10'>
-          {Array.from({ length: Math.ceil(orderProducts.length / ordersPerPage) }, (_, index) => (
+          {Array.from({ length: Math.ceil(orderData.length / ordersPerPage) }, (_, index) => (
             <button key={index} onClick={() => paginate(index + 1)} 
             className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
             {index + 1}

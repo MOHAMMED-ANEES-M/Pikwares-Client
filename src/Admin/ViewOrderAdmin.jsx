@@ -19,7 +19,7 @@ const ViewOrderAdmin = () => {
   let token = localStorage.getItem('token')
 
   let {customerId} = useParams()
-  let {productId} = useParams()
+  // let {productId} = useParams()
   let {orderId} = useParams()
 
 
@@ -39,7 +39,6 @@ const ViewOrderAdmin = () => {
 
   const handleChange = (e) => {
     setSelectedValue(e.target.value);
-    console.log('selvalue',selectedValue);
   };
 
   let handleStatusSubmit= async()=>{
@@ -70,7 +69,7 @@ const ViewOrderAdmin = () => {
     try{
 
       if(!token){
-        navigate('/login')
+       return navigate('/login')
     }
 
       let fetchOrderData = async()=>{
@@ -91,18 +90,18 @@ const ViewOrderAdmin = () => {
       }
       fetchOrderData()
 
-      let fetchProductData = async()=>{
+      // let fetchProductData = async()=>{
         
-        let response = await axios.get(`http://localhost:8000/admin/product/findOne/${productId}`,{
-          headers: {
-            Authorization: token,
-          }
-        })
-        console.log('productData response;',response);
-        setProductData(response.data)
+      //   let response = await axios.get(`http://localhost:8000/admin/product/findOne/${productId}`,{
+      //     headers: {
+      //       Authorization: token,
+      //     }
+      //   })
+      //   console.log('productData response;',response);
+      //   setProductData(response.data)
 
-      }
-      fetchProductData()
+      // }
+      // fetchProductData()
 
       let fetchCustomerData = async()=>{
         
@@ -160,19 +159,19 @@ const ViewOrderAdmin = () => {
             {orderData.orderSatus === 'Order Delivered' ? (
               <>
                 <p className='mb-3'>Payment mode: {orderData.mode}</p>
-                <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice * orderData.count}</p>
+                <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice * orderData.count}</p>
               </>
             ) : (
               <>
                 <p className='mb-3'>Payment mode: {orderData.mode}</p>
-                <p className='text-red-500 font-bold'>Amount to be paid ₹{productData.productprice * orderData.count}</p>
+                <p className='text-red-500 font-bold'>Amount to be paid ₹{orderData.productprice * orderData.count}</p>
               </>
             )}
           </>
         ) : (
           <>
             <p className='mb-3'>{orderData.mode}</p>
-            <p className='text-green-500 font-bold'>Amount paid ₹{productData.productprice * orderData.count}</p>
+            <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice * orderData.count}</p>
           </>
         )}
       </div>
@@ -181,12 +180,12 @@ const ViewOrderAdmin = () => {
       </div>
 
       <div className='grid grid-cols-4 flex-wrap '>
-        {productData && productData.images && productData.images[0] && (
-          <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={productData.images[0]} alt="image not found" />
+        {orderData && orderData.images && orderData.images[0] && (
+          <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={orderData.images[0]} alt="image not found" />
         )}
           <div>
-              <p className='mb-1 text-xl'>{productData.productname}</p>
-              <p className='font-bold'>₹{productData.productprice}</p>
+              <p className='mb-1 text-xl'>{orderData.productname}</p>
+              <p className='font-bold'>₹{orderData.productprice}</p>
               <p>Quantity: {orderData.count}</p>
               </div>
               
