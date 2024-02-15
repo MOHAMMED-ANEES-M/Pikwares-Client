@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import axios from 'axios';
@@ -15,6 +15,7 @@ const ChatAdmin = () => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const[customerData,setCustomerData] = useState('')
+    const navigate = useNavigate()
 
     const {id} = useParams()
 
@@ -30,23 +31,29 @@ const ChatAdmin = () => {
 
     const handleSendMessage = () => {
         if (newMessage.trim() !== '') {
+
             const messageData = {
             room: `room_${userId}_${id}`, 
+            to: `room_${id}_${userId}`,
             role: 'Admin', 
             message: newMessage, 
             customerId: userId, 
             timestamb: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
             }
-            console.log('messageData', messageData);
-            socket.emit('adminMessage', messageData);
+
+            socket.emit('sendMessage', messageData);
+            console.log('sendMessage', messageData);
             setMessages(prevMessages => [...prevMessages, messageData]);
             setNewMessage('');
-            console.log('messages', messages);
         }
       };
     
 
       useEffect(() => {
+
+        if (!token) {
+          return navigate('/login')
+        }
 
         let fetchCustomer= async()=>{
 
@@ -60,12 +67,14 @@ const ChatAdmin = () => {
           })
           console.log('customers response: ',response);
           setCustomerData(response.data)
+
       }
       fetchCustomer()
 
         console.log('chat');
         socket.connect()
-        socket.emit('joinRoom', { room: `room_${userId}_${id}`, hint:'Admin connected' });
+        
+        socket.emit('joinRoom', {room: `room_${userId}_${id}`, to: `room_${id}_${userId}`, hint: `${userId} connected` });
     
         socket.on('loadMessages', (data) => {
           console.log('load messages', data.messages);
@@ -76,8 +85,12 @@ const ChatAdmin = () => {
           setMessages(data.messages);
         });
     
-        socket.on('userMessage', (data) => {
-          setMessages(prevMessages => [...prevMessages, data]);
+        socket.on('recieveMessage', (data) => {
+          console.log('recieveMesage',data);
+          if (!messages.some(msg => msg.message === data.message && msg.timestamb === data.timestamb)) {
+            console.log('dupMsg',data.message);
+            setMessages(prevMessages => [...prevMessages, data]);
+          }
         });
     
         return () => {
@@ -86,8 +99,12 @@ const ChatAdmin = () => {
           socket.off('adminMessage');
           socket.disconnect();
         };
-      }, [id,token]);
+      }, [id, token, userId, navigate]);
 
+      useEffect(() => {
+        // Update the state when the messages array changes
+        console.log('Messages updated:', messages);
+      }, [messages]);
 
   return (
 

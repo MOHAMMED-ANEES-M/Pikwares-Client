@@ -16,24 +16,24 @@ const ChatCustomer = () => {
 
     const {id} = useParams()
     const userId = localStorage.getItem('userId')
-    const token = localStorage.getItem('token')
-
+    const token = localStorage.getItem('token')            
+            
 
     const handleSendMessage = () => {
         
       if (newMessage.trim() !== '') {
 
             const messageData = {
-            from: `room_${userId}`, 
+            room: `room_${userId}_${id}`, 
             role: 'User', 
-            to: `room_${id}`,
+            to: `room_${id}_${userId}`,
             message: newMessage, 
             customerId: userId, 
             timestamb: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
             }
 
-            console.log('messageData', messageData);
             socket.emit('sendMessage', messageData);
+            console.log('sendMessage', messageData);
             setMessages(prevMessages => [...prevMessages, messageData]);
             setNewMessage('');
             console.log('messages', messages);
@@ -49,20 +49,24 @@ const ChatCustomer = () => {
 
         console.log('chat');
         socket.connect()
-        socket.emit('joinRoom', {from: `room_${userId}`, to: `room_${id}`, hint: 'User connected' });
+        socket.emit('joinRoom', {room: `room_${userId}_${id}`, to: `room_${id}_${userId}`, hint: `${userId} connected` });
        
         socket.on('loadMessages', (data) => {
           console.log('load messages', data.messages);
           setMessages(data.messages);
         });
     
-        socket.on('adminMessage', (data) => {
-            setMessages(prevMessages => [...prevMessages, data]);
-        });
+        // socket.on('adminMessage', (data) => {
+        //     setMessages(prevMessages => [...prevMessages, data]);
+        // });
 
-        socket.on('userMessage', (data) => {
-          setMessages(prevMessages => [...prevMessages, data]);
-      });
+        socket.on('recieveMessage', (data) => {
+          console.log('recieveMessage',data);
+          if (!messages.some(msg => msg.message === data.message && msg.timestamb === data.timestamb)) {
+            console.log('dupMsg',messages);
+            setMessages(prevMessages => [...prevMessages, data]);
+          }
+        });
     
         return () => {
           socket.off('loadMessages');
@@ -70,7 +74,13 @@ const ChatCustomer = () => {
           socket.off('adminMessage');
           socket.disconnect()
         };
-      }, []);
+      }, [id, token, userId, navigate]);
+
+      
+      useEffect(() => {
+        // Update the state when the messages array changes
+        console.log('Messages updated:', messages);
+      }, [messages]);
 
 
   return (

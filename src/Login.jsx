@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { successToast } from './components/Toast';
 
 const Login = () => {
 
@@ -38,7 +39,7 @@ const Login = () => {
               localStorage.setItem('token', response.data.token)
               localStorage.setItem('userId', response.data.id)
               console.log('token: ',response.data.token);
-              alert('welcome admin')
+              successToast('welcome admin')
               navigate('/homeadmin')
               return
             }
@@ -47,7 +48,7 @@ const Login = () => {
               localStorage.setItem('token', response.data.token)
               localStorage.setItem('userId', response.data.id)
               console.log('login success');
-              alert(`Welcome ${response.data.firstname}` )
+              successToast(`Welcome ${response.data.firstname}` )
               navigate('/')
             }
             else{
