@@ -24,6 +24,7 @@ import WishlistCustomer from './User/WishlistCustomer';
 import ChatListAdmin from './Admin/ChatListAdmin';
 import ChatAdmin from './Admin/ChatAdmin';
 import ChatCustomer from './User/ChatCustomer';
+import ChatListCustomer from './User/ChatListCustomer';
 
 function App() {
 
@@ -47,7 +48,8 @@ function App() {
       <Route path='/viewproduct/:id/:category' element={<ViewProduct/>}/>
       <Route path='/cartcustomer' element={<CartCustomer/>}/>
       <Route path='/wishlistcustomer' element={<WishlistCustomer/>}/>
-      <Route path='/chatcustomer' element={<ChatCustomer/>}/>
+      <Route path='/chatlistcustomer' element={<ChatListCustomer/>}/>
+      <Route path='/chatcustomer/:id' element={<ChatCustomer/>}/>
       <Route path='/viewproductadmin/:id/:category' element={<ViewProductAdmin/>}/>
       <Route path='/viewcartadmin/:id' element={<ViewCartAdmin/>}/>   
       <Route path='/checkoutcustomer/:id/:category' element={<CheckoutCustomer/>}/>   

@@ -19,6 +19,7 @@ const ChatAdmin = () => {
     const {id} = useParams()
 
     let token = localStorage.getItem('token')
+    let userId = localStorage.getItem('userId')
     
     const formatTime12Hour = (timeString) => {
       const [hours, minutes] = timeString.split(':');
@@ -30,10 +31,10 @@ const ChatAdmin = () => {
     const handleSendMessage = () => {
         if (newMessage.trim() !== '') {
             const messageData = {
-            room: `room_${id}`, 
+            room: `room_${userId}_${id}`, 
             role: 'Admin', 
             message: newMessage, 
-            customerId: 'a1b2c3', 
+            customerId: userId, 
             timestamb: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
             }
             console.log('messageData', messageData);
@@ -47,7 +48,7 @@ const ChatAdmin = () => {
 
       useEffect(() => {
 
-        let fetchCustomers= async()=>{
+        let fetchCustomer= async()=>{
 
           let response = await axios.get(`http://localhost:8000/customer/findAccount/`,{
                     headers: {
@@ -60,11 +61,11 @@ const ChatAdmin = () => {
           console.log('customers response: ',response);
           setCustomerData(response.data)
       }
-      fetchCustomers()
+      fetchCustomer()
 
         console.log('chat');
         socket.connect()
-        socket.emit('joinRoom', { room: `room_${id}`, hint:'Admin connected' });
+        socket.emit('joinRoom', { room: `room_${userId}_${id}`, hint:'Admin connected' });
     
         socket.on('loadMessages', (data) => {
           console.log('load messages', data.messages);

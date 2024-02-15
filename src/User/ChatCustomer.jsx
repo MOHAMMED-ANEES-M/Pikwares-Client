@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const socket = io('http://localhost:8000', {
     pingInterval: 10000,
@@ -14,23 +14,30 @@ const ChatCustomer = () => {
     const [newMessage, setNewMessage] = useState('');
     const navigate = useNavigate()
 
-    const id = localStorage.getItem('userId')
+    const {id} = useParams()
+    const userId = localStorage.getItem('userId')
     const token = localStorage.getItem('token')
 
+
     const handleSendMessage = () => {
-        if (newMessage.trim() !== '') {
+        
+      if (newMessage.trim() !== '') {
+
             const messageData = {
-            room: `room_${id}`, 
+            from: `room_${userId}`, 
             role: 'User', 
+            to: `room_${id}`,
             message: newMessage, 
-            customerId: id, 
+            customerId: userId, 
             timestamb: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
             }
+
             console.log('messageData', messageData);
-            socket.emit('userMessage', messageData);
+            socket.emit('sendMessage', messageData);
             setMessages(prevMessages => [...prevMessages, messageData]);
             setNewMessage('');
             console.log('messages', messages);
+
         }
       };
 
@@ -42,8 +49,8 @@ const ChatCustomer = () => {
 
         console.log('chat');
         socket.connect()
-        socket.emit('joinRoom', { room: `room_${id}`, hint:'User connected' });
-    
+        socket.emit('joinRoom', {from: `room_${userId}`, to: `room_${id}`, hint: 'User connected' });
+       
         socket.on('loadMessages', (data) => {
           console.log('load messages', data.messages);
           setMessages(data.messages);
@@ -52,6 +59,10 @@ const ChatCustomer = () => {
         socket.on('adminMessage', (data) => {
             setMessages(prevMessages => [...prevMessages, data]);
         });
+
+        socket.on('userMessage', (data) => {
+          setMessages(prevMessages => [...prevMessages, data]);
+      });
     
         return () => {
           socket.off('loadMessages');
@@ -65,10 +76,10 @@ const ChatCustomer = () => {
   return (
     <div className='mt-32'>
       <div className='w-2/3 lg:w-1/3 m-auto mb-5 border rounded '>
-      <h1 className='text-2xl text-center p-3 bg-green-400 rounded-t'>Admin</h1>
+      <h1 className='text-xl text-center p-3 bg-green-400 rounded-t'>Chat</h1>
         <ScrollToBottom className='h-96 overflow-scroll p-5 bg-green-50'>
         {messages.map((message, index) => (
-          <div key={index} className={`text-white p-2 w-7/12 rounded mt-2 break-all ${message.role === 'Admin' ? 'bg-green-900' : 'bg-green-600  ml-48'}`}>
+          <div key={index} className={`text-white p-2 w-7/12 rounded mt-2 break-all ${message.customerId === id ? 'bg-green-900' : 'bg-green-600  ml-48'}`}>
             <p>{message.message}</p>
               {/* <p className='text-end text-xs'>
                   {message.timestamb}

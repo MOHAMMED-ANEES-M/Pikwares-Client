@@ -120,7 +120,7 @@ const NavbarAdmin = () => {
               <NavLink to='/accountcustomer'>
                 <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdAccountCircle /> Account</li>
               </NavLink>
-              <NavLink to='/chatcustomer'>
+              <NavLink to='/chatlistcustomer'>
                 <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdChat /> Chat</li>
               </NavLink>
             </>
