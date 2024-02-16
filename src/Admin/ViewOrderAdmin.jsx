@@ -144,7 +144,7 @@ const ViewOrderAdmin = () => {
       <div className='border rounded w-4/5 m-auto p-10'>
         <div className='flex flex-wrap justify-between'>
 
-        <div className='mb-32'>
+        <div className='mb-10 md:mb-32'>
         <h1 className='text-xl font-bold mb-5'>Shipping Address</h1>
         <p>{customerData.firstname} {customerData.lastname}</p>
           <p>{addressData.address} {addressData.city}</p>
@@ -153,7 +153,7 @@ const ViewOrderAdmin = () => {
           <p><span className='mr-2'>Phone Number:</span>{customerData.number}</p>
       </div>
       
-      <div className=' mt-16 mr-32'>
+      <div className=' md:mt-16 mr-32'>
         {orderData.mode === 'COD' ? (
           <>
             {orderData.orderSatus === 'Order Delivered' ? (
@@ -179,7 +179,7 @@ const ViewOrderAdmin = () => {
 
       </div>
 
-      <div className='grid grid-cols-4 flex-wrap '>
+      <div className='grid grid-cols-2 gap-y-20 md:grid-cols-4 flex-wrap mt-20 md:mt-0'>
         {orderData && orderData.images && orderData.images[0] && (
           <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={orderData.images[0]} alt="image not found" />
         )}

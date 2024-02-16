@@ -104,8 +104,8 @@ const ViewOrderCustomer = () => {
 
     <div className='border rounded w-4/5 m-auto p-10'>
 
-      <div className='flex flex-wrap justify-between items-center pr-32'>
-        <div>
+      <div className='flex flex-wrap justify-between pr-32'>
+        <div className='mb-10 md:mb-32'>
           <h1 className='text-xl font-bold mb-5'>Shipping Address</h1>
           <p>{customerData.firstname} {customerData.lastname}</p>
           <p>{addressData.address} {addressData.city}</p>
@@ -114,11 +114,11 @@ const ViewOrderCustomer = () => {
           <p><span className='mr-2 font-bold'>Phone Number:</span>{customerData.number}</p>
         </div>
 
-        <div className='mr-10'>
+        <div className='md:mt-16 mr-32'>
           
           {orderData.mode !== 'COD'?(
             <>
-            <button className='text-green-500 border py-1 px-4 rounded-xl h-fit' onClick={handleReciept}>Payment Receipt</button> 
+            <button className='text-green-500 border mb-5 py-1 px-4 rounded-xl h-fit' onClick={handleReciept}>Payment Receipt</button> 
             <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice*orderData.count}</p>
             </>
           ):(
@@ -143,7 +143,7 @@ const ViewOrderCustomer = () => {
 
       </div>
 
-      <div className='grid grid-cols-4 flex-wrap mt-20'>
+      <div className='grid grid-cols-2 gap-y-20 md:grid-cols-4 flex-wrap mt-20 md:mt-0'>
         {orderData && orderData.images && orderData.images[0] && (
           <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={orderData.images[0]} alt="image not found" />
         )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import axios from 'axios';
@@ -14,9 +14,10 @@ const ChatAdmin = () => {
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const[customerData,setCustomerData] = useState('')
     const navigate = useNavigate()
-
+  
+    const location = useLocation()
+    const customerData = location.state     
     const {id} = useParams()
 
     let token = localStorage.getItem('token')
@@ -47,29 +48,13 @@ const ChatAdmin = () => {
             setNewMessage('');
         }
       };
-    
+
 
       useEffect(() => {
 
         if (!token) {
           return navigate('/login')
         }
-
-        let fetchCustomer= async()=>{
-
-          let response = await axios.get(`http://localhost:8000/customer/findAccount/`,{
-                    headers: {
-                        Authorization: token
-                      },
-                      params: {
-                        id: id,
-                      },
-          })
-          console.log('customers response: ',response);
-          setCustomerData(response.data)
-
-      }
-      fetchCustomer()
 
         console.log('chat');
         socket.connect()
@@ -95,8 +80,8 @@ const ChatAdmin = () => {
     
         return () => {
           socket.off('loadMessages');
-          socket.off('userMessage');
-          socket.off('adminMessage');
+          socket.off('recieveMessage');
+          socket.off('sendMessage');
           socket.disconnect();
         };
       }, [id, token, userId, navigate]);
@@ -110,7 +95,7 @@ const ChatAdmin = () => {
 
     <div className='mt-32'>
       <div className='w-2/3 lg:w-1/3 m-auto mb-5 border rounded '>
-      <h1 className='text-2xl text-center p-3 bg-green-400 rounded-t'>{customerData.firstname} {customerData.lastname}</h1>
+      <h1 className='text-xl text-center p-3 bg-green-400 rounded-t'>{customerData.firstname} {customerData.lastname}</h1>
         <ScrollToBottom className='h-96 overflow-scroll p-5 bg-green-50'>
         {messages.map((message, index) => (
           <div key={index} className={`bg-green-500 text-white p-1 w-7/12 rounded mt-2 break-all ${message.role === 'User' ? 'bg-green-900' : 'bg-green-600  ml-48'}`}>

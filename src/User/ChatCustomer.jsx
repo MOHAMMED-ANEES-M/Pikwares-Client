@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const socket = io('http://localhost:8000', {
     pingInterval: 10000,
@@ -16,7 +16,9 @@ const ChatCustomer = () => {
 
     const {id} = useParams()
     const userId = localStorage.getItem('userId')
-    const token = localStorage.getItem('token')            
+    const token = localStorage.getItem('token')      
+    const location = useLocation()
+    const customerData = location.state      
             
 
     const handleSendMessage = () => {
@@ -70,8 +72,8 @@ const ChatCustomer = () => {
     
         return () => {
           socket.off('loadMessages');
-          socket.off('userMessage');
-          socket.off('adminMessage');
+          socket.off('recieveMessage');
+          socket.off('sendMessage');
           socket.disconnect()
         };
       }, [id, token, userId, navigate]);
@@ -86,7 +88,7 @@ const ChatCustomer = () => {
   return (
     <div className='mt-32'>
       <div className='w-2/3 lg:w-1/3 m-auto mb-5 border rounded '>
-      <h1 className='text-xl text-center p-3 bg-green-400 rounded-t'>Chat</h1>
+      <h1 className='text-xl text-center p-3 bg-green-400 rounded-t'>{customerData.firstname} {customerData.lastname}</h1>
         <ScrollToBottom className='h-96 overflow-scroll p-5 bg-green-50'>
         {messages.map((message, index) => (
           <div key={index} className={`text-white p-2 w-7/12 rounded mt-2 break-all ${message.customerId === id ? 'bg-green-900' : 'bg-green-600  ml-48'}`}>
