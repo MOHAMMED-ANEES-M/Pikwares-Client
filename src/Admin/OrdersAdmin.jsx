@@ -131,7 +131,7 @@ const OrdersAdmin = () => {
           </div>
           <div className='text-center mt-10 lg:mt-0'>
             {item.orderStatus === 'Order Delivered' ? (
-              <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * item.count}</p>
+              <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice}</p>
             ) : item.orderStatus !== 'Order Cancelled' ? (
               <Link to={`/vieworderadmin/${currentOrderCustomer?._id}/${item?._id}`}>
                 <button className='bg-green-500 text-white py-2 px-3 text-sm rounded h-fit'>DELIVER</button>

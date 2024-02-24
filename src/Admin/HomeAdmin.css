@@ -11,9 +11,7 @@
   }
   
   .button:hover{
-    font-weight: bold;
-    font-size: small;
-    transition: all 100ms;
+    transition: all 50ms;
 }
 .button:hover{
   background-color: rgb(220 252 231);

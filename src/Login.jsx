@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { successToast } from './components/Toast';
+import { errorToast, successToast, warnToast } from './components/Toast';
 
 const Login = () => {
 
@@ -53,19 +53,19 @@ const Login = () => {
             }
             else{
               console.log('login failed');
-              alert('incorrect email or password')
+              warnToast('incorrect email or password')
             }
   
           }
           else if(email === ''){
-            alert('Email is Required')
+            warnToast('Email is Required')
           }else{
-            alert('Password is required')
+            warnToast('Password is required')
           }
   
           }catch(err){
           console.log(err.response.data.message);
-          alert(err.response.data.message)
+          errorToast(err.response.data.message)
         }
     }
 

@@ -119,12 +119,12 @@ const ViewOrderCustomer = () => {
           {orderData.mode !== 'COD'?(
             <>
             <button className='text-green-500 border mb-5 py-1 px-4 rounded-xl h-fit' onClick={handleReciept}>Payment Receipt</button> 
-            <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice*orderData.count}</p>
+            <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice}</p>
             </>
           ):(
             <>
             { orderData.orderStatus === 'Order Delivered' ? (
-              <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice*orderData.count}</p>
+              <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice}</p>
               ):(
                 <>
                 { orderData.orderStatus === 'Order Cancelled' ?(
@@ -132,7 +132,7 @@ const ViewOrderCustomer = () => {
                 ):(
                   <>
                 <button className="mb-5 ms-7 bg-red-500 text-white py-2 px-5 text-sm  rounded-xl h-fit" onClick={()=>handleCancel(orderData._id)}>CANCEL ORDER</button>
-                <p className='text-red-500 font-bold'>Amount to be paid ₹{orderData.productprice*orderData.count}</p>
+                <p className='text-red-500 font-bold'>Amount to be paid ₹{orderData.productprice}</p>
                 </>
                 )}
                 </>

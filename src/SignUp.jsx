@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { errorToast, successToast, warnToast } from './components/Toast'
 
 const SignUp = () => {
 
@@ -25,17 +26,17 @@ const SignUp = () => {
         let response=await axios.post('http://localhost:8000/customer/insert',data)
         console.log(response,'res');
         if(response.data){
-          alert('Registration Successfull')
+          successToast('Registration Successfull')
           navigate('/login')
         }
       }else{
         console.log('Password not matching');
-        alert('Password not matching')
+        warnToast('Password not matching')
       }
     }
     catch(err){
       console.log(err.response.data.message);
-      alert(err.response.data.message)
+      errorToast(err.response.data.message)
     }
 }
 

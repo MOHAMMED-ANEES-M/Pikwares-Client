@@ -19,7 +19,7 @@ const ChatCustomer = () => {
     const token = localStorage.getItem('token')      
     const location = useLocation()
     const customerData = location.state      
-            
+    
 
     const handleSendMessage = () => {
         

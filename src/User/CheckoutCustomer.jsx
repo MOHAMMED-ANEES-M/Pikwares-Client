@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { GrAdd, GrEdit, GrSubtract } from 'react-icons/gr'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { warnToast } from '../components/Toast'
 
 const CheckoutCustomer = () => {
@@ -21,18 +20,15 @@ const CheckoutCustomer = () => {
     let {category} = useParams()
 
 
-    let increment= async(id,pcount,pcategory,pprice,prId)=>{
+    let increment= async(id,pcount,pcategory,pprice,prId,stock)=>{
         let count = parseInt(pcount, 10) || 1;
-        if(count !==9){
+        if(stock>count){
           count += 1;
         
         // let productprice = count+pprice
         let category = pcategory
         try{
   
-          console.log('prPrice:',pprice);
-          console.log('count:',count);
-          console.log('category:',category);
           let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceIncrement'}
           let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
           console.log(response);
@@ -54,9 +50,6 @@ const CheckoutCustomer = () => {
         let category = pcategory
         try{
   
-          console.log('prPrice:',pprice);
-          console.log('count:',count);
-          console.log('category:',category);
           let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceDecrement'}
           let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
           console.log('countupdate response',response);
@@ -74,7 +67,7 @@ const CheckoutCustomer = () => {
         if (!addressData) {
             warnToast('Please provide a shipping address before placing the order.');
         } else {
-            navigate(`/paymentcustomer/${productData._id}/${cartData.productprice}/${cartData.count}`);
+            navigate(`/paymentcustomer/${productData._id}/${totalAmount}/${cartData.count}`);
         }
     };
 
@@ -150,11 +143,14 @@ const CheckoutCustomer = () => {
             },
         })
         console.log('cart response:',response);
+        
         setCartData(response.data)
     }
     fetchCart()
 
     },[refresh])
+
+    const totalAmount = parseInt(cartData.productprice,10)+parseInt(productData.deliverycharge,10)
 
 
   return (
@@ -180,12 +176,12 @@ const CheckoutCustomer = () => {
                     )} 
                 <div>
                 <p className='text-2xl mb-1'>{productData.productname}</p>
-                <p className='text-lg font-semibold mt-1'>₹{productData.productprice}</p>
+                <p className='text-lg font-semibold mt-1'>₹{cartData.productprice}</p>
                 </div>
                 <div className='flex gap-3 items-center'>
                     <button onClick={()=>decrement(cartData._id,cartData.count,cartData.productcategory,cartData.productprice,cartData.productId)}><GrSubtract/></button>
                     <p className='border-4 py-0 px-2'>{cartData.count}</p>
-                    <button onClick={()=>increment(cartData._id,cartData.count,cartData.productcategory,cartData.productprice,cartData.productId)}><GrAdd/></button>
+                    <button onClick={()=>increment(cartData._id,cartData.count,cartData.productcategory,cartData.productprice,cartData.productId,productData.stock)}><GrAdd/></button>
                     </div>
               <div className='sm:text-end'>
                   <button
@@ -214,8 +210,8 @@ const CheckoutCustomer = () => {
             <div className='text-end'>
             <p className='text-lg mb-5'>₹{productData.productprice}</p>
             <p className='text-lg mb-5'>₹{cartData.count}</p>
-            <p className='text-lg mb-5 text-green-500'><span className='line-through text-black opacity-50'>₹40</span> FREE</p>
-            <p className='text-lg font-bold'>₹{cartData.productprice}</p>
+            <p className='text-lg mb-5'>₹{productData.deliverycharge}</p>
+            <p className='text-lg font-bold'>₹{totalAmount}</p>
             </div>
             </div>
         </div>

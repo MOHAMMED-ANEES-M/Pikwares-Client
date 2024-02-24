@@ -61,6 +61,9 @@ const HomeAdmin = () => {
   const [isMenLoading, setIsMenLoading] = useState(false);
   const [isWomenLoading, setIsWomenLoading] = useState(false);
   const [refresh,setRefresh] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [results, setResults] = useState(['']);
+  const [isSearchActive,setisSearchActive] = useState(false)
   const navigate = useNavigate()
 
   let token = localStorage.getItem('token')
@@ -156,6 +159,33 @@ const HomeAdmin = () => {
       console.log(err);
     }
   }
+
+  const handleSearch = async () => {
+    try {
+      
+      const mobileResponse = await axios.get(`http://localhost:8000/products/mobiles/find?s=${searchTerm}`);
+      const laptopResponse = await axios.get(`http://localhost:8000/products/laptops/find?s=${searchTerm}`);
+      const headsetResponse = await axios.get(`http://localhost:8000/products/headsets/find?s=${searchTerm}`);
+      const menResponse = await axios.get(`http://localhost:8000/products/men/find?s=${searchTerm}`);
+      const womenResponse = await axios.get(`http://localhost:8000/products/women/find?s=${searchTerm}`);
+
+      const filteredMobileResults = mobileResponse.data.filter(product => product.productname.toLowerCase().includes(searchTerm.toLowerCase()));
+      const filteredLaptopResults = laptopResponse.data.filter(product => product.productname.toLowerCase().includes(searchTerm.toLowerCase()));
+      const filteredHeadsetResults = headsetResponse.data.filter(product => product.productname.toLowerCase().includes(searchTerm.toLowerCase()));
+      const filteredMenResults = menResponse.data.filter(product => product.productname.toLowerCase().includes(searchTerm.toLowerCase()));
+      const filteredWomenResults = womenResponse.data.filter(product => product.productname.toLowerCase().includes(searchTerm.toLowerCase()));
+     
+      const allResults = [ ...filteredMobileResults, ...filteredLaptopResults, ...filteredHeadsetResults, ...filteredMenResults, ...filteredWomenResults ];
+
+      console.log(allResults,'response search');
+      setResults(allResults); 
+      setisSearchActive(true);
+      console.log(isSearchActive,'search active');
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
 
   useEffect(()=>{
     
@@ -300,11 +330,48 @@ const HomeAdmin = () => {
     <div>
      {showProducts ? (
       <>
-      <h1 className='font-semibold text-center text-3xl mt-32'>
+      <h1 className='font-semibold text-center text-3xl mt-28 md:mt-32'>
       <ImageSlider/>
       </h1>
-        <div className="mt-20 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
 
+      <div className='w-50 m-auto text-center mt-5'>
+        <input className='w-2/4 border me-3 border-black h-10 ps-3 rounded mb-3' type="text" placeholder="Search Products..." value={searchTerm} 
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {if (e.key === 'Enter') {handleSearch()} }}
+        />
+      <button onClick={handleSearch} className='btn bg-black  px-5 h-10 text-white rounded'>Search</button>
+      </div>
+
+        <div className="mt-10 mb-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+        {isSearchActive ? (
+              results.length > 0 ? (
+                results.map((item) => (
+                  <Link to={`/viewproduct/${item._id}/${item.productcategory}`} key={item._id}>
+                    <div className="border rounded-xl text-center">
+                      <div className="mx-5">
+                        <div className="group relative bg-white">
+                          <ProductSlider images={item.images} />
+                          <div className="flex justify-between">
+                            <div className="m-auto mt-10 text-center">
+                              <div>
+                                <h3 className="text-sm text-gray-700">
+                                  <span aria-hidden="true" className="absolute inset-0"></span>
+                                  {item.productname}
+                                </h3>
+                                <p className="my-2 text-sm text-gray-700">Rs {item.productprice}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p>No search results found.</p>
+              )
+            ) : (
+              <>
           {currentProducts.length > 0 ? (
             currentProducts.map((item) => (
               <Link to={`/viewproductadmin/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
@@ -333,21 +400,24 @@ const HomeAdmin = () => {
                 </button>
               </div></Link>
             ))
+           
           ) : (
             null
           )}
-
+          </>
+          )}
         </div>
 
-        <div className='flex justify-center mt-10 mb-10'>
-            {Array.from({ length: Math.ceil(allProducts.length / ordersPerPage) }, (_, index) => (
-              <button key={index} onClick={() => paginate(index + 1)} 
-              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
-                {index + 1}
-              </button>
-            ))}
-       </div>
-
+        {isSearchActive ? (null):(
+          <div className='flex justify-center mt-10 mb-10'>
+          {Array.from({ length: Math.ceil(allProducts.length / ordersPerPage) }, (_, index) => (
+            <button key={index} onClick={() => paginate(index + 1)} 
+            className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+              {index + 1}
+            </button>
+          ))}
+          </div>
+        )}
       </>
     ) : null}
     </div>

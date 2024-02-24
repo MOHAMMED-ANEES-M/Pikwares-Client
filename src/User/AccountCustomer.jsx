@@ -269,7 +269,7 @@ const AccountCustomer = () => {
             ) : (
 
            
-            <div className='w-2/5 bg-green-100 p-5 rounded-3xl'>
+            <div className='w-2/5 bg-green-100 p-5 rounded'>
             <h1 className='font-medium text-2xl text-center mb-10 '>Personal Details</h1>
             <div className='pl-2 mb-3'><label  htmlFor="firstname">First Name</label></div>
             <input type="text" value={profile.firstname} className=' w-full bg-white h-10 mb-5 rounded-lg border p-3' disabled />

@@ -7,4 +7,6 @@ font-weight: bold;
 ul {
     transition: all 0.3s ease;
   }
-  
+  .nav-btn1:hover {
+    border-bottom: 1px solid black;
+  }

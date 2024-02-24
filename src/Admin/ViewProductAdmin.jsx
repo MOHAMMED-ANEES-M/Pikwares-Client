@@ -7,6 +7,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { GrPrevious } from "react-icons/gr";
 import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import DiscountCalculator from '../utils/DiscountCalculator';
+import ReactImageMagnify from 'react-image-magnify';
 
 
 const renderStarRating = (rating) => {
@@ -130,7 +132,25 @@ const ViewProductAdmin = () => {
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
             {productData.images.map((image, index) => (
               <div  key={index} className='relative'>
-                <img src={image} alt={`Image ${index + 1}`} className='h-full w-full object-contain object-center aspect-square lg:h-full lg:w-full border rounded-xl  inline-block' />
+                <div style={{ width: '100%', height: '500px', position: 'relative',left:'10%' }}>
+              <ReactImageMagnify
+                smallImage={{
+                  alt: 'Wristwatch by Ted Baker London',
+                  isFluidWidth: true,
+                  width: 50,
+                  height: 50,
+                  src: image,
+                }}
+                largeImage={{
+                  src: image,
+                  width: 500,
+                  height: 1800,
+                }}
+                enlargedImagePosition="over"
+                enlargedImageContainerDimensions={{ width: '100%', height: '100%' }}
+              />
+            </div>
+                {/* <img src={image} alt={`Image ${index + 1}`} className='h-full w-full object-contain object-center aspect-square lg:h-full lg:w-full border rounded-xl  inline-block' /> */}
            
         { productData && productData.images && productData.images.length > 1 ? (
         <>
@@ -153,7 +173,23 @@ const ViewProductAdmin = () => {
 
       <div className='w-2/5 mt-10 ms-20'>
         <p className='text-3xl mb-10'> {productData && productData.productname}</p>
-        <p className='text-2xl mb-10'>₹{productData && productData.productprice} <span className='ms-2 text-green-600'> ( 60% off )</span></p>
+        <div className="flex items-center mb-3">
+        <p className='text-2xl font-medium '>₹{productData && productData.productprice} 
+        <span className='ms-4 line-through opacity-50 text-lg'>₹{productData && productData.productactualprice}</span> </p>
+        <DiscountCalculator actualPrice={productData.productactualprice} offerPrice={productData.productprice} />
+        </div>
+
+        {productData.stock >= 10 ? (
+          <p className='text-xl text-green-500 mb-5 '>Available</p>
+        ) : (
+          <p className='text-xl text-red-500 mb-5 '>Only {productData.stock} left</p>
+        )}
+
+        <div className=' mt-2 mb-5 flex gap-2 items-center'>
+           <p className='flex items-center gap-1 font-bold text-xl bg-green-500 text-white p-1 rounded'><span>{Math.round(calculateAverageRating(reviewData))}</span> <i><FaStar color="#FFFFFF" /></i></p> 
+           <p>( {reviewData.length} Reviews) </p>
+         </div>
+
         <div className='flex flex-wrap justify-between mb-20'>
         <p className='mt-2 text-sm opacity-60 font-semibold'>Description</p>
         <p className='mt-2 text-xl w-3/4'>{productData && productData.productdescription}</p>
@@ -161,11 +197,7 @@ const ViewProductAdmin = () => {
 
 <div>
           <p className='font-bold text-xl mt-20'>Ratings and Reviews</p>
-          <div className=' mt-2 mb-5 flex gap-2 items-center'>
-           <p>Average Rating: </p> 
-           <p className='flex items-center gap-1 font-bold text-xl bg-green-500 text-white p-1 rounded'><span>{Math.round(calculateAverageRating(reviewData))}</span> <i><FaStar color="#FFFFFF" /></i></p> 
-            <p>( {reviewData.length} Reviews) </p>
-            </div>
+          
           <div>
             {reviewData.map((review, index) => (
               <div key={review._id} className='border p-5 rounded mb-1'>

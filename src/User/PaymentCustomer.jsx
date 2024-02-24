@@ -16,6 +16,7 @@ const PaymentCustomer = () => {
   let {id} = useParams()
   let {amount} = useParams()
   let {counts} = useParams()
+  console.log('amount',amount);
 
   let userId = localStorage.getItem('userId')
   let token = localStorage.getItem('token')
@@ -29,7 +30,7 @@ const PaymentCustomer = () => {
       let count = counts
       let mode = 'COD'
       let productname = productData.productname
-      let productprice = productData.productprice
+      let productprice = amount
       let images = productData.images
       let data = ({orderStatus,customerId,productId,count,mode,productname,productprice,images})
       console.log('data:',data);
@@ -85,7 +86,7 @@ const PaymentCustomer = () => {
                   count:counts,
                   mode: 'Online Payment',
                   productname : productData.productname,
-                  productprice : productData.productprice,
+                  productprice : amount,
                   images : productData.images
               }
             let orderResponse = await axios.post(`http://localhost:8000/orders/insert`,orderDatas)

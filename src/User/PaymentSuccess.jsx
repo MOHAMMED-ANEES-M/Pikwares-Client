@@ -27,7 +27,10 @@ const PaymentSuccess = () => {
     return `${day}-${month}-${year}`;
   };
 
+  const totalAmount = parseInt(productData.productprice,10)+parseInt(productData.deliverycharge,10)
+
   const downloadInvoice = async () => {
+    try{
     infoToast('Reciept will be downloaded after sometime. Please wait for a while')
     const data = {
     images: {
@@ -64,13 +67,20 @@ const PaymentSuccess = () => {
         dueDate: `${paymentData.paymentId}`
     },
     products: [
-        {
-            quantity: `${orderData.count}`,
-            description: `${productData.productname}`,
-            taxRate: 0,
-            price: `${productData.productprice}`
-        },
+      {
+        quantity: `${orderData.count}`,
+        description: `${productData.productname}`,
+        taxRate: 0,
+        price: `${productData.productprice}`
+      },
+      {
+        quantity: 0, 
+        description: 'Delivery Charge',
+        taxRate: 0,
+        price: `${productData.deliverycharge}`
+      }
     ],
+
     // The message you would like to display on the bottom of your invoice
     // bottomNotice: "Kindly pay your invoice within 15 days.",
     // Settings to customize your invoice
@@ -91,7 +101,8 @@ const PaymentSuccess = () => {
       invoice: "INVOICE",
       number: "Order ID", 
       date: "Order Date", 
-      dueDate: "Payment ID"
+      dueDate: "Payment ID",
+      taxRate:'Delivery Charge'
     },
 
 
@@ -104,6 +115,9 @@ const PaymentSuccess = () => {
   
     const result = await easyinvoice.createInvoice(data);
     easyinvoice.download(`invoice_1.pdf`, result.pdf);
+  }catch(err){
+    console.log('Package error: ',err);
+  }
   };
 
   useEffect(()=>{
@@ -200,7 +214,6 @@ const PaymentSuccess = () => {
 
   },[])
 
-  
 
   return (
     <div className='mt-32 w-3/5 m-auto border rounded p-10 mb-10'>
@@ -213,7 +226,7 @@ const PaymentSuccess = () => {
           <div>
             <p>{accountData.firstname} {accountData.lastname}</p>
             <p>{addressData.address}</p>
-            <p>{addressData.district}, {addressData.pincode} - {addressData.pincode}</p>
+            <p>{addressData.district}, {addressData.state} - {addressData.pincode}</p>
             <p>Phone Number: {accountData.number}</p>
           </div>
 
@@ -260,8 +273,8 @@ const PaymentSuccess = () => {
             <p className='mb-2'>{productData.productname}</p>
             <p className='mb-2'>₹{productData.productprice}</p>
             <p className='mb-2'>{orderData.count}</p>
-            <p className='text-green-500 mb-5'><span className='line-through text-black opacity-50'>₹40</span> FREE</p>
-            <p className='text-xl font-bold'>₹{productData.productprice*orderData.count}</p>
+            <p className=' mb-5'>{productData.deliverycharge}</p>
+            <p className='text-xl font-bold'>₹{orderData.productprice}</p>
           </div>
         </div>
         <div className='text-center'>

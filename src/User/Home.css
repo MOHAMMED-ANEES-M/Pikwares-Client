@@ -11,8 +11,9 @@
   }
   
   .button:hover{
-    font-weight: bold;
-}
+    font-size: large;
+  }
+
 .buttondd:hover{
   background-color: rgb(220 252 231);
 }

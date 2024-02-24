@@ -129,15 +129,15 @@ const OrdersCustomer = () => {
                       <>
                         <p>{item.mode}</p>
                         {item.orderStatus === 'Order Delivered' ? (
-                          <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * item.count}</p>
+                          <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice}</p>
                         ) : (
-                          <p className='text-red-500 font-bold'>Amount to be paid ₹{item.productprice * item.count}</p>
+                          <p className='text-red-500 font-bold'>Amount to be paid ₹{item.productprice}</p>
                         )}
                       </>
                     ) : (
                       <>
                         <p>{item.mode}</p>
-                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice * item.count}</p>
+                        <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice}</p>
                       </>
                     )}
                   </>

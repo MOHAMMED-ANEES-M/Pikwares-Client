@@ -10,6 +10,9 @@ const AddProduct = () => {
     const [data,setData] = useState({
       productname: '',
       productprice: '',
+      productactualprice: '',
+      deliverycharge: '',
+      stock: '',
       productcategory: '',
       productdescription: '',
     })
@@ -43,6 +46,7 @@ const AddProduct = () => {
 
     let handleChange=(e)=>{
     setData({...data,[e.target.name]:e.target.value})
+    console.log('data',data);
     }
 
     let displayImage=()=>{
@@ -62,6 +66,9 @@ const AddProduct = () => {
     });
     formData.append('productname', data.productname);
     formData.append('productprice', data.productprice);
+    formData.append('productactualprice', data.productactualprice);
+    formData.append('deliverycharge', data.deliverycharge);
+    formData.append('stock', data.stock);
     formData.append('productcategory', data.productcategory);
     formData.append('productdescription', data.productdescription);
 
@@ -89,6 +96,9 @@ const AddProduct = () => {
             setrefresh(!refresh)
             setData({
               productname: '',
+              productactualname: '',
+              deliverycharge: '',
+              stock: '',
               productprice: '',
               productcategory: "",
               productdescription: '',
@@ -128,7 +138,7 @@ const AddProduct = () => {
 
 
   return (
-    <div className=' h-screen'>
+    <div>
         
         <h1 className='font-semibold text-center text-3xl mt-32'>Add Product</h1>
       <div className='m-auto pt-20 text-center flex flex-wrap justify-evenly'>
@@ -137,10 +147,16 @@ const AddProduct = () => {
 
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productname">Product Name</label></div>
             <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="text" name='productname' value={data.productname} placeholder='Enter Product Name' onChange={handleChange} /><br />
-            <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productprice">Product Price</label></div>
-            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="number" name='productprice' value={data.productprice} placeholder='Enter Product Price' onChange={handleChange} /><br />
+            <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productactualprice">Product Price</label></div>
+            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="number" name='productactualprice' value={data.productactualprice} placeholder='Enter Product Price' onChange={handleChange} /><br />
+            <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productprice">Product Offer Price</label></div>
+            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="number" name='productprice' value={data.productprice} placeholder='Enter Product Offer Price' onChange={handleChange} /><br />
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productdescription">Product Description</label></div>
             <textarea className='w-1/2 mb-7 rounded-lg border h-28 p-3' type="text" name='productdescription' value={data.productdescription} placeholder='Product Description...' onChange={handleChange} /><br />
+            <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="deliverycharge">Delivery Charge</label></div>
+            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="number" name='deliverycharge' value={data.deliverycharge} placeholder='Enter Delivery Charge' onChange={handleChange} /><br />
+            <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="stock">Available Stock</label></div>
+            <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="number" name='stock' value={data.stock} placeholder='Enter Available Stock' onChange={handleChange} /><br />
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productcategory">Product Category</label></div>
             <select className='w-1/2 h-10 rounded-lg mb-7 px-3 border' name="productcategory" id="productcategory" value={data.productcategory} onChange={handleChange}> 
                <option value="" disabled>Select product</option> 
@@ -150,7 +166,6 @@ const AddProduct = () => {
                <option value="men">Men</option> 
                <option value="women">Women</option> 
             </select><br />
-            {/* <input className='w-1/2 h-10 mb-7 rounded-lg border p-3' type="text" name='productcategory' placeholder='Product Category' onChange={handleChange} /><br /> */}
             <div className='w-1/2 m-auto text-start'><p className='text-red-500 mb-5 '>*Upload images before adding product</p></div>
             <button className='bg-green-500 text-white py-2 px-4 mb-20 rounded-xl h-fit'>Add</button>
             </form>

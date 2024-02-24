@@ -9,6 +9,7 @@ import { GrPrevious } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { toast } from 'react-toastify';
 import { errorToast, warnToast } from '../components/Toast';
+import DiscountCalculator from '../utils/DiscountCalculator';
 
 
 
@@ -16,6 +17,7 @@ import { errorToast, warnToast } from '../components/Toast';
 const CartCustomer = () => {
 
     const [cartData,setCartData] = useState([''])
+    const [productData,setProductData] = useState([''])
     const [refresh,setRefresh] = useState(false)
     // const [count,setCount] = useState(0)
     const navigate = useNavigate()
@@ -25,10 +27,12 @@ const CartCustomer = () => {
     let token = localStorage.getItem('token')
     let userId = localStorage.getItem('userId')
 
-    let increment= async(e,id,pcount,pcategory,pprice,prId)=>{
+    let increment= async(e,id,pcount,pcategory,pprice,prId,stock)=>{
       e.preventDefault()
       let count = parseInt(pcount, 10) || 1;
-      if(count !==9){
+      console.log('stock',stock);
+      console.log('count',count);
+      if(stock>count){
         count += 1;
       
       // let productprice = count+pprice
@@ -106,6 +110,23 @@ const CartCustomer = () => {
                 })
                 console.log('cart response:',response);
                 setCartData(response.data)
+
+                let fetchProducts = async () => {
+                  const productPromises = response.data.map(async (product) => {
+                    const productResponse = await axios.get(`http://localhost:8000/findOneProduct/${product.productId}/${product.productcategory}`,{
+                      headers: {
+                          Authorization: token
+                        },
+                  });
+                    return productResponse.data; 
+                  });
+        
+                  const products = await Promise.all(productPromises);
+                  setProductData(products);
+                  console.log('products response:',products);
+                }
+                fetchProducts()
+
             }
             fetchCart()
 
@@ -139,9 +160,10 @@ const CartCustomer = () => {
         {cartData&&cartData.length!==0 ? (
 
         <div className='w-full grid grid-cols-1 lg:grid-cols-2 gap-5 mx-10'>
-            { cartData.map((item)=>(
-               <Link to={`/viewproduct/${item.productId}/${item.productcategory}`}><div className=' border-2 rounded-xl flex gap-5'>
-               <div className='w-1/3 ms-2 mt-4 h-32 relative'>
+            { cartData.map((item, index)=>(
+               <Link to={`/viewproduct/${item.productId}/${item.productcategory}`}><div className=' border-2 rounded-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
+               
+               <div className=' ms-2 mt-4 h-32 relative'>
                     {item && item.images && (
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
             {item.images.map((image, index) => (
@@ -152,21 +174,26 @@ const CartCustomer = () => {
             ))}
           </Slider>
         )}
-        
                 </div>
 
-                <div className='w-1/3 p-5 '>
+                <div className=' p-5 '>
                     <p className='text-xl mb-5'> {item && item.productname}</p>
-                    <p className='text-md mb-5'>₹{item && item.productprice} <span className='ms-2 text-green-600'> ( 60% off )</span></p>
+                    
+                    <div className="flex items-center mb-3">
+                    <p className='text-lg  '>₹{item.productprice} 
+                    <span className='ms-2 line-through opacity-50'>₹{productData[index]?.productactualprice}</span> </p>
+                    <DiscountCalculator actualPrice={productData[index]?.productactualprice} offerPrice={productData[index]?.productprice} />
+                    </div>
+
                     <div className='flex gap-3'>
                     <button onClick={(e)=>decrement(e,item._id,item.count,item.productcategory,item.productprice,item.productId)}><GrSubtract/></button>
                     <p className='border-4 px-2'>{item.count}</p>
-                    <button onClick={(e)=>increment(e,item._id,item.count,item.productcategory,item.productprice,item.productId)}><GrAdd/></button>
+                    <button onClick={(e)=>increment(e,item._id,item.count,item.productcategory,item.productprice,item.productId,productData[index].stock)}><GrAdd/></button>
                     </div>
                 </div>
 
-                <div className='w-1/3 mt-10'>
-                <button className="  mb-1 w-32 bg-red-500 text-white py-2 px-5 text-sm  rounded-xl h-fit" onClick={(e) => handleCartDelete(e,item._id)}>REMOVE</button>
+                <div className='text-center mt-10'>
+                <button className="  mb-1 w-32 bg-red-500 text-white py-2 px-5 text-sm  rounded-xl h-fit" onClick={(e) => handleCartDelete(e,item._id)}>REMOVE</button><br />
                 <Link to={`/checkoutcustomer/${item.productId}/${item.productcategory}`} ><button className="mt-1 w-32 bg-green-500 text-white py-2 px-3 text-sm rounded-xl h-fit">CHECKOUT</button></Link>
                 </div>
 

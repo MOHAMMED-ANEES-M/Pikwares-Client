@@ -2,23 +2,25 @@ import React, { useState } from 'react';
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import './NavbarAdmin.css';
 import { RiShoppingCartFill } from "react-icons/ri";
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaUsers } from 'react-icons/fa';
 import { IoMdHome } from "react-icons/io";
 import { MdAccountCircle, MdChat } from "react-icons/md";
 import { FaBoxesPacking } from "react-icons/fa6";
+import { IoBagAdd } from "react-icons/io5";
+import Footer from '../components/Footer';
 
 
 const NavbarAdmin = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const navigate = useNavigate();
+
+  let token = localStorage.getItem('token');
+  let userId = localStorage.getItem('userId');
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
-  let token = localStorage.getItem('token');
-  const navigate = useNavigate();
-
-  let userId = localStorage.getItem('userId');
 
   let handleLogout = () => {
     localStorage.removeItem('token');
@@ -87,41 +89,41 @@ const NavbarAdmin = () => {
         >
           {userId === 'a1b2c3' ? (
             <>
-              <NavLink to='/homeadmin'>
-                <li>Home</li>
+              <NavLink to='/homeadmin' onClick={()=>{setIsMenuOpen(false);}}>
+              <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><IoMdHome /> Home</li>
               </NavLink>
-              <NavLink to='/customersadmin'>
-                <li>Customers</li>
+              <NavLink to='/customersadmin' onClick={()=>{setIsMenuOpen(false);}}>
+              <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaUsers />Customers</li>
               </NavLink>
-              <NavLink to='/addproduct'>
-                <li>Add Product</li>
+              <NavLink to='/addproduct' onClick={()=>{setIsMenuOpen(false);}}>
+              <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><IoBagAdd />Add Product</li>
               </NavLink>
-              <NavLink to='/ordersadmin'>
-                <li>Orders</li>
+              <NavLink to='/ordersadmin' onClick={()=>{setIsMenuOpen(false);}}>
+              <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaBoxesPacking /> Orders</li>
               </NavLink>
-              <NavLink to='/chatlistadmin'>
-                <li>Chat</li>
+              <NavLink to='/chatlistadmin' onClick={()=>{setIsMenuOpen(false);}}>
+              <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdChat /> Chat</li>
               </NavLink>
             </>
           ) : (
             <>
-              <NavLink to='/'>
-                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><IoMdHome /> Home</li>
+              <NavLink to='/' onClick={()=>{setIsMenuOpen(false);}}>
+                <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><IoMdHome /> Home</li>
               </NavLink>
-              <NavLink to='/cartcustomer'>
-                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><RiShoppingCartFill />Cart</li>
+              <NavLink to='/cartcustomer' onClick={()=>{setIsMenuOpen(false);}}>
+                <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><RiShoppingCartFill />Cart</li>
               </NavLink>
-              <NavLink to='/wishlistcustomer'>
-                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaHeart />Wishlist</li>
+              <NavLink to='/wishlistcustomer' onClick={()=>{setIsMenuOpen(false);}}>
+                <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaHeart />Wishlist</li>
               </NavLink>
-              <NavLink to='/orderscustomer'>
-                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaBoxesPacking /> Orders</li>
+              <NavLink to='/orderscustomer' onClick={()=>{setIsMenuOpen(false);}}>
+                <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><FaBoxesPacking /> Orders</li>
               </NavLink>
-              <NavLink to='/accountcustomer'>
-                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdAccountCircle /> Account</li>
+              <NavLink to='/accountcustomer' onClick={()=>{setIsMenuOpen(false);}}>
+                <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdAccountCircle /> Account</li>
               </NavLink>
-              <NavLink to='/chatlistcustomer'>
-                <li className={`flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdChat /> Chat</li>
+              <NavLink to='/chatlistcustomer' onClick={()=>{setIsMenuOpen(false);}}>
+                <li className={`nav-btn1 flex gap-1 items-center ${isMenuOpen ? 'justify-start mb-1': ''}`}><MdChat /> Chat</li>
               </NavLink>
             </>
           )}
@@ -155,6 +157,7 @@ const NavbarAdmin = () => {
         </ul>
       </div>
       <Outlet />
+      <Footer />
     </div>
   );
 };

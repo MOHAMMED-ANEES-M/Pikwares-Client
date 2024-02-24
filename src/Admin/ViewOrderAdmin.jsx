@@ -159,19 +159,19 @@ const ViewOrderAdmin = () => {
             {orderData.orderSatus === 'Order Delivered' ? (
               <>
                 <p className='mb-3'>Payment mode: {orderData.mode}</p>
-                <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice * orderData.count}</p>
+                <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice}</p>
               </>
             ) : (
               <>
                 <p className='mb-3'>Payment mode: {orderData.mode}</p>
-                <p className='text-red-500 font-bold'>Amount to be paid ₹{orderData.productprice * orderData.count}</p>
+                <p className='text-red-500 font-bold'>Amount to be paid ₹{orderData.productprice}</p>
               </>
             )}
           </>
         ) : (
           <>
             <p className='mb-3'>{orderData.mode}</p>
-            <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice * orderData.count}</p>
+            <p className='text-green-500 font-bold'>Amount paid ₹{orderData.productprice}</p>
           </>
         )}
       </div>
