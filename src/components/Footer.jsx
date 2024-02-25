@@ -25,7 +25,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="mt-8">
-        <p className="text-sm">&copy; 2024 Pikwares Company. All rights reserved.</p>
+        <p className="text-sm">&copy; 2024 Pikwares.  All rights reserved.</p>
       </div>
     </footer>
   );

@@ -309,7 +309,7 @@ const HomeAdmin = () => {
   return (
     <div className="mt-20">
 
-    <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap ps-5 sm:justify-center gap-3 sm:gap-10 mt-7 sm:mt-9">
+    <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap ps-5 justify-center gap-3 sm:gap-10 mt-7 sm:mt-9">
     <div class="dropdown pt-4 relative">
   <button>Electronics</button>
   <div class="dropdown-options text-center ">
@@ -335,14 +335,14 @@ const HomeAdmin = () => {
       </h1>
 
       <div className='w-50 m-auto text-center mt-5'>
-        <input className='w-2/4 border me-3 border-black h-10 ps-3 rounded mb-3' type="text" placeholder="Search Products..." value={searchTerm} 
+        <input className='w-2/3 sm:w-2/4 border me-1 sm:me-3 border-black h-10 ps-3 rounded mb-3' type="text" placeholder="Search Products..." value={searchTerm} 
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => {if (e.key === 'Enter') {handleSearch()} }}
         />
-      <button onClick={handleSearch} className='btn bg-black  px-5 h-10 text-white rounded'>Search</button>
+      <button onClick={handleSearch} className='btn bg-black px-3 sm:px-5 h-10 text-white rounded'>Search</button>
       </div>
 
-        <div className="mt-10 mb-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+        <div className="mt-10 mb-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 min-[340px]:grid-cols-2 min-[500px]:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
         {isSearchActive ? (
               results.length > 0 ? (
                 results.map((item) => (

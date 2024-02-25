@@ -81,12 +81,12 @@ const ViewCartAdmin = () => {
 
 
   return (
-    <div>
+    <div className='w-full'>
 
-      <div className='w-4/5 p-20 border rounded m-auto mt-28 mb-10'>
+      <div className='w-11/12 sm:w-4/5 p-4 sm:p-20 border rounded m-auto mt-28 mb-10'>
 
       <div className='mb-20'>
-                <p className='font-bold text-2xl'>{profileData.firstname} {profileData.lastname}</p>
+                <p className='font-bold text-xl sm:text-2xl'>{profileData.firstname} {profileData.lastname}</p>
             </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 flex-wrap'>
@@ -109,13 +109,12 @@ const ViewCartAdmin = () => {
         </div>
 
         <div className='mt-32'>
-            <h3 className=' mb-5 ps-20 text-4xl font-bold'>Cart</h3>
+            <h3 className=' mb-5 sm:ps-20 text-4xl font-bold'>Cart</h3>
         { isCart ? (
-            <div>
-            <div>
+            <>
             {cartData.map((item) => (
                 <Link to={`/viewproductadmin/${item.productId}/${item.productcategory}`}>
-                <div className='mb-5 border-t-2 pt-5 px-20 grid grid-cols-4 items-center  gap-20' key={item.id}>
+                <div className='mb-5 border-t-2 pt-5 sm:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 items-center gap-y-5 gap-x-20' key={item.id}>
                     {item.images && item.images.length > 0 && (
                     <img className='w-20 h-20' key={item.images[0].id} src={item.images[0]} alt="" />
                     )} 
@@ -126,8 +125,7 @@ const ViewCartAdmin = () => {
                 </div>
                 </Link>
             ))}
-        </div>
-            </div>
+        </>
         ):(
             <p className='text-center mt-10'>No product in Cart</p>
             )}

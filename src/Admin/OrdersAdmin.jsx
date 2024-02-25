@@ -100,21 +100,21 @@ const OrdersAdmin = () => {
       const currentOrderCustomer = orderCustomers[orderIndex];
 
       return (
-        <div key={index} className='w-11/12 m-auto grid grid-cols-3 lg:grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
+        <div key={index} className='w-11/12 m-auto text-center sm:text-start grid grid-cols-1  sm:grid-cols-3 lg:grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
           <div>
             {currentOrderCustomer && (
               <div>
-                <p className='font-bold'>{currentOrderCustomer.firstname} {currentOrderCustomer.lastname}</p>
-                <p>{currentOrderCustomer.email}</p>
+                <p className='font-bold sm:text-lg'>{currentOrderCustomer.firstname} {currentOrderCustomer.lastname}</p>
+                <p className='text-sm sm:text-lg'>{currentOrderCustomer.email}</p>
               </div>
             )}
           </div>
           <div>
             {item.images && item.images.length > 0 && (
-              <img className='w-20 h-20 mb-10 sm:mb-0 ms-10' key={item.images[0].id} src={item.images[0]} alt="" />
+              <img className='w-20 h-20 mb-10 sm:mb-0 ms-10 mt-10 sm:mt-10' key={item.images[0].id} src={item.images[0]} alt="" />
             )}
           </div>
-          <div>
+          <div className='sm:text-center lg:text-start'>
             <p className='text-xl'>{item.productname}</p>
             <p>₹{item.productprice}</p>
             <p>Quantity: {currentOrderData.count}</p>
@@ -129,7 +129,7 @@ const OrdersAdmin = () => {
               </div>
             )}
           </div>
-          <div className='text-center mt-10 lg:mt-0'>
+          <div className='sm:text-center mt-10 lg:mt-0'>
             {item.orderStatus === 'Order Delivered' ? (
               <p className='text-green-500 font-bold'>Amount paid ₹{item.productprice}</p>
             ) : item.orderStatus !== 'Order Cancelled' ? (

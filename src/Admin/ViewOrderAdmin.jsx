@@ -141,7 +141,7 @@ const ViewOrderAdmin = () => {
   return (
     <div className='mt-32'>
       
-      <div className='border rounded w-4/5 m-auto p-10'>
+      <div className='border rounded w-4/5 m-auto p-2 sm:p-10'>
         <div className='flex flex-wrap justify-between'>
 
         <div className='mb-10 md:mb-32'>
@@ -153,7 +153,7 @@ const ViewOrderAdmin = () => {
           <p><span className='mr-2'>Phone Number:</span>{customerData.number}</p>
       </div>
       
-      <div className=' md:mt-16 mr-32'>
+      <div className=' md:mt-16 md:mr-32'>
         {orderData.mode === 'COD' ? (
           <>
             {orderData.orderSatus === 'Order Delivered' ? (
@@ -179,7 +179,7 @@ const ViewOrderAdmin = () => {
 
       </div>
 
-      <div className='grid grid-cols-2 gap-y-20 md:grid-cols-4 flex-wrap mt-20 md:mt-0'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 text-center sm:text-start  flex-wrap mt-20 md:mt-0 mb-5'>
         {orderData && orderData.images && orderData.images[0] && (
           <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={orderData.images[0]} alt="image not found" />
         )}

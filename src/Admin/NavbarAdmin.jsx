@@ -33,14 +33,14 @@ const NavbarAdmin = () => {
   return (
     <div>
       <div className={`container px-3 sm:px-10 py-5 fixed top-0 z-20  bg-green-400 ${
-        isMenuOpen ? 'h-screen flex-none text-center pt-20' : 'h-20 flex lg:flex justify-between items-center' 
+        isMenuOpen ? 'h-screen flex-none pt-20' : 'h-20 flex lg:flex justify-between items-center' 
       }`}>
         { userId === 'a1b2c3'? (
           <a href="/homeadmin"><h1 className={`font-semibold  ${
-            isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl' }`}>Pikwares</h1></a>
+            isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl ' }`}>Pikwares</h1></a>
         ):(
           <a href="/"><h1 className={`font-semibold  ${
-            isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl' }`}>Pikwares</h1></a>
+            isMenuOpen ? 'text-3xl' : 'text-lg sm:text-3xl ' }`}>Pikwares</h1></a>
         )}
         
 
@@ -84,7 +84,7 @@ const NavbarAdmin = () => {
         </div>
         <ul
           className={`${
-            isMenuOpen ? 'flex flex-col space-y-2 mb-5 w-3/12 sm:w-2/12 m-auto' : 'hidden lg:flex'
+            isMenuOpen ? 'flex flex-col space-y-2 mb-5 m-auto' : 'hidden lg:flex'
           } lg:flex gap-x-2 sm:gap-x-5 md:gap-x-5 lg:gap-x-10`}
         >
           {userId === 'a1b2c3' ? (

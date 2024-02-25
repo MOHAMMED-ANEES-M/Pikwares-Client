@@ -125,9 +125,9 @@ const ViewProductAdmin = () => {
 
 
   return (
-    <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
+    <div className='mt-32 sm:flex flex-wrap justify-center gap-5 mb-10'>
 
-      <div className='w-2/5 text-center relative'>
+      <div className='w-4/5 m-auto sm:m-0 sm:w-2/5 text-center relative'>
       {productData && productData.images && (
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
             {productData.images.map((image, index) => (
@@ -135,7 +135,7 @@ const ViewProductAdmin = () => {
                 <div style={{ width: '100%', height: '500px', position: 'relative',left:'10%' }}>
               <ReactImageMagnify
                 smallImage={{
-                  alt: 'Wristwatch by Ted Baker London',
+                  alt: 'Product Image',
                   isFluidWidth: true,
                   width: 50,
                   height: 50,
@@ -154,10 +154,10 @@ const ViewProductAdmin = () => {
            
         { productData && productData.images && productData.images.length > 1 ? (
         <>
-        <button className='slider-btn  absolute top-1/2 left-2 z-10' onClick={prevSlide}>
+        <button className='slider-btn  absolute top-20  md:top-32 lg:top-40 xl:top-1/2 left-2 z-10' onClick={prevSlide}>
         <GrPrevious className='w-5 h-5'/>
         </button>
-        <button className='slider-btn  absolute top-1/2 right-2 z-10' onClick={nextSlide}>
+        <button className='slider-btn  absolute top-20  md:top-32 lg:top-40 xl:top-1/2 right-2 z-10' onClick={nextSlide}>
         <GrNext className='w-5 h-5'/>
         </button>
 
@@ -171,7 +171,7 @@ const ViewProductAdmin = () => {
       )}
       </div>
 
-      <div className='w-2/5 mt-10 ms-20'>
+      <div className='w-4/5 sm:w-2/5 sm:mt-10 ms-5 md:ms-20'>
         <p className='text-3xl mb-10'> {productData && productData.productname}</p>
         <div className="flex items-center mb-3">
         <p className='text-2xl font-medium '>₹{productData && productData.productprice} 
@@ -196,9 +196,9 @@ const ViewProductAdmin = () => {
       </div>
 
 <div>
-          <p className='font-bold text-xl mt-20'>Ratings and Reviews</p>
+          <p className='font-bold text-xl mt-20 mb-5'>Ratings and Reviews</p>
           
-          <div>
+          <div className='w-4/5 sm:w-full'>
             {reviewData.map((review, index) => (
               <div key={review._id} className='border p-5 rounded mb-1'>
                 <p className='flex mb-3'>{renderStarRating(review.rating)}</p>

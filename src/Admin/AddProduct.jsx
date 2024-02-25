@@ -142,7 +142,7 @@ const AddProduct = () => {
         
         <h1 className='font-semibold text-center text-3xl mt-32'>Add Product</h1>
       <div className='m-auto pt-20 text-center flex flex-wrap justify-evenly'>
-            <div className='w-4/5 md:w-2/5 '>
+            <div className='w-full sm:w-4/5 md:w-2/5 '>
         <form onSubmit={handleSubmit}>
 
             <div className='text-start w-1/2 m-auto pl-1 mb-2'><label htmlFor="productname">Product Name</label></div>
@@ -180,7 +180,7 @@ const AddProduct = () => {
         <h1 className='font-semibold text-3xl mt-20 mb-10'>Uploaded Images</h1>
         <div>
         { showImg ? (
-          <div className=' grid grid-cols-3 gap-3 flex-wrap justify-evenly '>
+          <div className=' grid grid-cols-2 md:grid-cols-3 gap-3 flex-wrap justify-evenly '>
             {displayImages.map((img, index) => (
               <div key={index} className='relative'>
               <button onClick={() => removeImage(index)} className='absolute top-7 right-3 bg-red-500 text-white p-1 rounded'>

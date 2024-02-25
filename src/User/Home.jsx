@@ -314,7 +314,7 @@ const Home = () => {
     <div>
      {showProducts ? (
       <>
-      <h1 className='font-semibold text-center text-3xl mt-32'>
+      <h1 className='font-semibold text-center text-3xl mt-28 md:mt-32'>
         <ImageSlider/>
       </h1>
 

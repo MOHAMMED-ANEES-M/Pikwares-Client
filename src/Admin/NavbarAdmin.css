@@ -9,4 +9,5 @@ ul {
   }
   .nav-btn1:hover {
     border-bottom: 1px solid black;
+    transition: all .5s ease-in;
   }
