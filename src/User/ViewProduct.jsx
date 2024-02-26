@@ -72,6 +72,7 @@ const ViewProduct = () => {
         }
 
         if(token){
+          console.log('prodata',productData);
         let response = await axios.post(`http://localhost:8000/insertCart/${userId}`,productData)
         console.log(response);
           if(response.data){
@@ -311,10 +312,12 @@ const ViewProduct = () => {
         <DiscountCalculator actualPrice={productData.productactualprice} offerPrice={productData.productprice} />
         </div>
 
-        {productData.stock >= 10 ? (
-          <p className='text-xl text-green-500 mb-5 '>Available</p>
+        {productData.stock > 10 ? (
+          <p className='text-xl text-green-500 mb-5'>Available</p>
+        ) : productData.stock > 0 ? (
+          <p className='text-xl text-red-500 mb-5'>Only {productData.stock} left</p>
         ) : (
-          <p className='text-xl text-red-500 mb-5 '>Only {productData.stock} left</p>
+          <p className='text-xl text-red-500 mb-5'>Out of Stock</p>
         )}
 
         <div className=' mt-2 mb-5 flex gap-2 items-center'>

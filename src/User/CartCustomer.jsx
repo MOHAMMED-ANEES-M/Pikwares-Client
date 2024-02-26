@@ -27,7 +27,7 @@ const CartCustomer = () => {
     let token = localStorage.getItem('token')
     let userId = localStorage.getItem('userId')
 
-    let increment= async(e,id,pcount,pcategory,pprice,prId,stock)=>{
+    let increment= async(e,id,pcount,pcategory,pprice,prId,stock,pactualprice)=>{
       e.preventDefault()
       let count = parseInt(pcount, 10) || 1;
       console.log('stock',stock);
@@ -39,10 +39,10 @@ const CartCustomer = () => {
       let category = pcategory
       try{
 
-        console.log('prPrice:',pprice);
+        console.log('pactPrice:',pactualprice);
         console.log('count:',count);
         console.log('category:',category);
-        let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceIncrement'}
+        let data = {count:count,category:category,productprice:pprice,productId:prId,productactualprice:pactualprice,role:'priceIncrement'}
         let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
         console.log(response);
         // setCartData(response.data)
@@ -54,7 +54,7 @@ const CartCustomer = () => {
     }
     }
 
-    let decrement= async(e,id,pcount,pcategory,pprice,prId)=>{
+    let decrement= async(e,id,pcount,pcategory,pprice,prId,pactualprice)=>{
       e.preventDefault()
       let count = parseInt(pcount, 10) || 1;
       if(count !== 1){
@@ -67,7 +67,7 @@ const CartCustomer = () => {
         console.log('prPrice:',pprice);
         console.log('count:',count);
         console.log('category:',category);
-        let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceDecrement'}
+        let data = {count:count,category:category,productprice:pprice,productId:prId,productactualprice:pactualprice,role:'priceDecrement'}
         let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
         console.log('countupdate response',response);
         // setCartData(response.data)
@@ -177,24 +177,32 @@ const CartCustomer = () => {
                 </div>
 
                 <div className=' p-5 '>
-                    <p className='text-xl mb-5'> {item && item.productname}</p>
+
+                    <p className='text-xl mb-3'> {item && item.productname}</p>
                     
-                    <div className="flex items-center mb-3">
+                    <div className=" items-center mb-3">
                     <p className='text-lg  '>₹{item.productprice} 
-                    <span className='ms-2 line-through opacity-50'>₹{productData[index]?.productactualprice}</span> </p>
-                    <DiscountCalculator actualPrice={productData[index]?.productactualprice} offerPrice={productData[index]?.productprice} />
+                    <span className='ms-2 line-through opacity-50'>₹{item.productactualprice}</span> </p>
+                    <DiscountCalculator actualPrice={item.productactualprice} offerPrice={item.productprice} />
                     </div>
 
+                    {productData[index] && productData[index].stock === '0' ? (
+                    <p className='text-lg text-red-500'>Out of Stock</p>
+                    ):(
                     <div className='flex gap-3'>
-                    <button onClick={(e)=>decrement(e,item._id,item.count,item.productcategory,item.productprice,item.productId)}><GrSubtract/></button>
+                    <button onClick={(e)=>decrement(e,item._id,item.count,item.productcategory,item.productprice,item.productId,item.productactualprice)}><GrSubtract/></button>
                     <p className='border-4 px-2'>{item.count}</p>
-                    <button onClick={(e)=>increment(e,item._id,item.count,item.productcategory,item.productprice,item.productId,productData[index].stock)}><GrAdd/></button>
+                    <button onClick={(e)=>increment(e,item._id,item.count,item.productcategory,item.productprice,item.productId,productData[index].stock,item.productactualprice)}><GrAdd/></button>
                     </div>
+                     )}
+
                 </div>
 
                 <div className='text-center mt-10'>
-                <button className="  mb-1 w-32 bg-red-500 text-white py-2 px-5 text-sm  rounded-xl h-fit" onClick={(e) => handleCartDelete(e,item._id)}>REMOVE</button><br />
+                <button className={`mb-1 w-32 bg-red-500 text-white py-2 px-5 text-sm rounded-xl h-fit ${productData[index]?.stock === '0' ? 'mt-8' : ''}`} onClick={(e) => handleCartDelete(e,item._id)}>REMOVE</button><br />
+                {productData[index] && productData[index].stock !== '0' &&
                 <Link to={`/checkoutcustomer/${item.productId}/${item.productcategory}`} ><button className="mt-1 w-32 bg-green-500 text-white py-2 px-3 text-sm rounded-xl h-fit">CHECKOUT</button></Link>
+                }
                 </div>
 
                 </div></Link>
