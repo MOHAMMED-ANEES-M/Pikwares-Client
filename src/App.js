@@ -25,6 +25,7 @@ import ChatListAdmin from './Admin/ChatListAdmin';
 import ChatAdmin from './Admin/ChatAdmin';
 import ChatCustomer from './User/ChatCustomer';
 import ChatListCustomer from './User/ChatListCustomer';
+import VerifyOtp from './User/VerifyOtp';
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
       <Route path='/viewcartadmin/:id' element={<ViewCartAdmin/>}/>   
       <Route path='/checkoutcustomer/:id/:category' element={<CheckoutCustomer/>}/>   
       <Route path='/paymentcustomer/:id/:amount/:counts' element={<PaymentCustomer/>}/>   
+      <Route path='/verifyotp' element={<VerifyOtp/>}/>   
       <Route path='/paymentreciept' element={<PaymentSuccess/>}/>   
       <Route path='/orderscustomer' element={<OrdersCustomer/>}/>   
       <Route path='/viewordercustomer/:orderId' element={<ViewOrderCustomer/>}/>   

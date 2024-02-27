@@ -266,7 +266,7 @@ const ViewProduct = () => {
                 <div style={{ width: '100%', height: '500px', position: 'relative',left:'10%' }}>
               <ReactImageMagnify
                 smallImage={{
-                  alt: 'Wristwatch by Ted Baker London',
+                  alt: 'image',
                   isFluidWidth: true,
                   width: 50,
                   height: 50,

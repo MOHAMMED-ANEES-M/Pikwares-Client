@@ -10,6 +10,7 @@ const PaymentCustomer = () => {
 
   const [confirmPayment,setConfirmPayment] = useState(false)
   const [data,setdata] = useState('')
+  const [orderData,setOrderData] = useState('')
   const [productData,setProductData] = useState('')
   const navigate = useNavigate()
 
@@ -21,24 +22,33 @@ const PaymentCustomer = () => {
   let userId = localStorage.getItem('userId')
   let token = localStorage.getItem('token')
 
+ 
+
   let handleCOD= async(e)=>{
     e.preventDefault()
+
+    // const orderDatas = ({
+    //   orderStatus:'Order Placed',
+    //   customerId:userId,
+    //   productId:id,
+    //   count:counts,
+    //   mode:'COD',
+    //   productname:productData.productname,
+    //   productprice:amount,
+    //   images:productData.images
+    // })
+    // setOrderData(orderDatas)
+    // console.log('oreder datas',orderDatas);
+
     try{
-      let orderStatus = 'Order Placed'
-      let customerId = userId
-      let productId = id
-      let count = counts
-      let mode = 'COD'
-      let productname = productData.productname
-      let productprice = amount
-      let images = productData.images
-      let data = ({orderStatus,customerId,productId,count,mode,productname,productprice,images})
-      console.log('data:',data);
-      let response = await axios.post(`http://localhost:8000/orders/insert`,data)
-      console.log('orders response:',response);
-      if(response.data){
-        successToast('Order Placed')
+      console.log(userId,'otp userid');
+      let sendOTP = await axios.post('http://localhost:8000/sendotp',{userId})
+      if (sendOTP) {
+        console.log('sendOTP',sendOTP);
+        navigate(`/verifyotp?productId=${id}&count=${counts}&productprice=${amount}`);
       }
+     
+      
     }catch(err){
       console.log(err);
       warnToast(err.response.data.message)
