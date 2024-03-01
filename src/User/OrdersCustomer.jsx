@@ -101,13 +101,13 @@ const OrdersCustomer = () => {
 
       return (
           <Link to={`/viewordercustomer/${item._id}`} key={index}>
-            <div className='w-10/12 m-auto grid grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
-              <div>
+            <div className='w-11/12 m-auto text-center sm:text-start grid grid-cols-1  sm:grid-cols-3 lg:grid-cols-5 items-center border rounded p-5 px-10 mb-5'>
+              <div className='flex justify-center sm:justify-start'>
                 {item.images && item.images.length > 0 && (
-                  <img className='w-20 h-20 mb-10 sm:mb-0' key={item.images[0].id} src={item.images[0]} alt='' />
+                  <img className='w-20 h-20 mb-10 sm:mb-0 ms-10 mt-10 sm:mt-0' key={item.images[0].id} src={item.images[0]} alt='' />
                 )}
               </div>
-              <div>
+              <div className='sm:text-center lg:text-start'>
                 <p className='text-xl'>{item.productname}</p>
                 <p className='text-xl'>₹{item.productprice}</p>
               </div>
@@ -115,14 +115,14 @@ const OrdersCustomer = () => {
                 <p>Quantity: {currentOrderData.count}</p>
               </div>
               <div>
-                <div className='flex justify-start gap-3 items-center'>
+                <div className='flex justify-center sm:justify-start gap-3 items-center mt-10 lg:mt-0'>
                   <i className={`${item.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
                     <GoDotFill />
                   </i>
-                  {item && <p>{item.orderStatus} <br /> {item.statusDate}</p>}
+                  {item && <p>{item.orderStatus} {item.statusDate}</p>}
                 </div>
               </div>
-              <div className='text-center'>
+              <div className='text-center sm:mt-0 mt-10'>
                 {item.orderStatus === 'Order Cancelled' ? null : (
                   <>
                     {item && item.mode === 'COD' ? (

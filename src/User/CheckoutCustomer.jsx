@@ -154,9 +154,9 @@ const CheckoutCustomer = () => {
 
 
   return (
-    <div className='mt-28 mx-10 lg:mx-0 lg:flex flex-wrap justify-evenly h-fit'>
+    <div className='mt-28 mx-3 sm:mx-10 lg:flex flex-wrap justify-evenly h-fit'>
 
-        <div className='lg:w-3/6 border rounded p-10'>
+        <div className='lg:w-3/6 border rounded p-3 sm:p-10'>
             <h1 className='text-2xl font-bold mb-10 '>{profileData.firstname} {profileData.lastname}</h1>
 
             <div className=' mb-10'>
@@ -197,7 +197,7 @@ const CheckoutCustomer = () => {
 
         </div>
 
-        <div className='w-11/12 sm:w-3/6 lg:w-2/6'>
+        <div className='w-11/12 md:w-4/6 lg:w-2/6 mx-auto'>
             <div className='border my-10 lg:my-0 rounded p-5 sm:p-10'>
             <p className='font-bold mb-5 border-b-2 pb-1'>PRICE DETAILS</p>
             <div className='flex justify-between'>   

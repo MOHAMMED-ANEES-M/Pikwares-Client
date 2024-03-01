@@ -216,12 +216,12 @@ const PaymentSuccess = () => {
 
 
   return (
-    <div className='mt-32 w-3/5 m-auto border rounded p-10 mb-10'>
+    <div className='mt-32 w-11/12 sm:w-11/12 md:w-10/12 lg:w-5/6 xl:w-3/5 m-auto border rounded p-3 sm:p-10 mb-10'>
 
       <p className='text-center text-3xl font-bold mb-10 text-green-500'>Pikwares</p>
       <p className='text-center text-xl font-bold mb-20'>Payment Reciept</p>
       
-      <div className='flex flex-wrap justify-around'>
+      <div className='flex flex-wrap gap-10 justify-start lg:justify-around'>
 
           <div>
             <p>{accountData.firstname} {accountData.lastname}</p>
@@ -230,7 +230,7 @@ const PaymentSuccess = () => {
             <p>Phone Number: {accountData.number}</p>
           </div>
 
-        <div className='flex justify-center gap-5'>
+        <div className='flex justify-center gap-5 text-nowrap sm:max-w-[315px] text-sm sm:text-base'>
           <div className='flex gap-2'>
             <div>
             <p>Order Date</p>
@@ -252,7 +252,7 @@ const PaymentSuccess = () => {
 
       </div>
 
-      <div className='flex justify-center gap-20 mt-20 text-xl'>
+      <div className='flex justify-center gap-5 sm:gap-20 mt-20 sm:text-xl text-nowrap'>
           <div className='flex gap-5'>
             <div>
             <p className='mb-2'>Product</p>

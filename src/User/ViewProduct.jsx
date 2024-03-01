@@ -350,18 +350,25 @@ const ViewProduct = () => {
           <p className='font-bold text-xl mt-20 mb-5'>Ratings and Reviews</p>
          
           <div>
-            {reviewData.map((review, index) => (
-              <div key={review._id} className='border p-5 rounded mb-1'>
-                <p className='flex mb-3'>{renderStarRating(review.rating)}</p>
-                <p>{review.review}</p>
-                <div className='flex gap-10 opacity-70 mt-3'>
-                  {reviewedCustomers[index] && (
-                    <p>{reviewedCustomers[index].firstname} {reviewedCustomers[index].lastname}</p>
-                    )}
-                  <p>{new Date(review.reviewDate).toLocaleString()}</p>
+            { reviewData && reviewData.length > 0 ? (
+              <>
+              {reviewData.map((review, index) => (
+                <div key={review._id} className='border p-5 rounded mb-1'>
+                  <p className='flex mb-3'>{renderStarRating(review.rating)}</p>
+                  <p>{review.review}</p>
+                  <div className='flex gap-10 opacity-70 mt-3'>
+                    {reviewedCustomers[index] && (
+                      <p>{reviewedCustomers[index].firstname} {reviewedCustomers[index].lastname}</p>
+                      )}
+                    <p>{new Date(review.reviewDate).toLocaleString()}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+              </>
+            ) : (
+              <p>No ratings yet</p>
+            )}
+            
           </div>
       </div>
       </div>

@@ -109,9 +109,9 @@ const OrdersAdmin = () => {
               </div>
             )}
           </div>
-          <div>
+          <div className='flex justify-center'>
             {item.images && item.images.length > 0 && (
-              <img className='w-20 h-20 mb-10 sm:mb-0 ms-10 mt-10 sm:mt-10' key={item.images[0].id} src={item.images[0]} alt="" />
+              <img className='w-20 h-20 mb-10 sm:mb-0 ms-10 mt-10 sm:mt-0' key={item.images[0].id} src={item.images[0]} alt="" />
             )}
           </div>
           <div className='sm:text-center lg:text-start'>
@@ -121,7 +121,7 @@ const OrdersAdmin = () => {
           </div>
           <div>
             {item && (
-              <div className='flex justify-start gap-3 items-center mt-10 lg:mt-0'>
+              <div className='flex justify-center sm:justify-start gap-3 items-center mt-10 lg:mt-0'>
                 <i className={`${item.orderStatus === 'Order Cancelled' ? 'text-red-500' : 'text-green-500'} text-2xl`}>
                   <GoDotFill />
                 </i>

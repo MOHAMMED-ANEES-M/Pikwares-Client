@@ -95,24 +95,24 @@ const RateProductCustomer = () => {
   },[])
 
   return (
-    <div className='mt-32 border rounded w-2/4 m-auto p-10 mb-10'>
-      <h2 className='text-center text-3xl font-bold mb-20'>Rate and Review Product</h2>
-      <div className='grid grid-cols-3 items-center mb-20 border rounded p-5'>
+    <div className='mt-32 border rounded w-10/12 sm:w-4/5 lg:w-2/4 m-auto p-3 sm:p-10 mb-10'>
+      <h2 className='text-center text-xl sm:text-3xl font-bold mb-20'>Rate and Review Product</h2>
+      <div className='grid grid-cols-3 items-center mb-20 border rounded p-3 sm:p-5'>
       {productData.images && productData.images.length > 0 && (
-        <img className='w-20 h-20 mb-10 sm:mb-0 ms-32' key={productData.images[0].id} src={productData.images[0]} alt='' />
+        <img className='w-20 h-20 mb-10 sm:mb-0 sm:ms-16 md:ms-20 lg:ms-28' key={productData.images[0].id} src={productData.images[0]} alt='' />
       )}
       <p className='text-center'>{productData.productname}</p>
       <p>{productData.productprice}</p>
       </div>
       <form onSubmit={handleSubmit}>
-        <div className='flex gap-7 mb-10'>
-          <p className='text-3xl'>Rating:</p>
+        <div className='flex flex-wrap gap-7 mb-10'>
+          <p className='text-xl sm:text-3xl'>Rating:</p>
           <div className='flex text-3xl'>
           {starComponents}
           </div>
         </div>
-        <div className='flex gap-5'>
-          <p className='text-3xl '>Review:</p>
+        <div className='flex flex-wrap gap-5'>
+          <p className='text-xl sm:text-3xl '>Review:</p>
           <textarea className='border rounded text-xl w-full h-60 p-5' value={review} onChange={handleReviewChange} />
         </div>
         <div className='mt-10 text-center'>

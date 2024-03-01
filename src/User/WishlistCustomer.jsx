@@ -82,7 +82,7 @@ const WishlistCustomer = () => {
       };
       
       return (
-        <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
+        <div className=' flex flex-wrap justify-center gap-5 mb-10 min-h-96'>
       <ToastContainer/>
 
     {wishlistData&&wishlistData.length!==0 ? (

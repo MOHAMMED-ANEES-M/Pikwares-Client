@@ -80,13 +80,13 @@ const VerifyOtp = () => {
   return (
     <div>
        <div>
-        <div  className=' mt-40 m-auto w-1/5 bg-green-100 px-10 py-10 rounded-3xl'>
-        <p className='text-3xl text-center mb-16 '>Verify OTP</p>
+        <div  className=' mt-40 m-auto w-2/4 min-[400px]:w-3/4 sm:w-2/6 lg:w-2/6 bg-green-100 px-5 sm:px-10 py-10 rounded-3xl'>
+        <p className=' text-lg sm:text-3xl text-center mb-10 sm:mb-16 '>Verify OTP</p>
         <div>
             <form onSubmit={handleSubmit} className='text-center'>
                 {/* <label htmlFor="otp" className='text-start'>Enter OTP</label><br /> */}
-                <input className='p-3 text-center mt-3 rounded w-3/5 text-lg' type="number" id='otp' placeholder='Enter OTP' name='otp' onChange={handleChange} /><br />
-                <input className='mt-20 sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit' type="submit" value='Submit' />
+                <input className='p-3 text-center mt-3 rounded w-11/12 sm:w-4/5 text-lg' type="number" id='otp' placeholder='Enter OTP' name='otp' onChange={handleChange} /><br />
+                <input className='mt-10  sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit' type="submit" value='Submit' />
             </form>
         </div>
         </div>

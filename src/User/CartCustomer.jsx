@@ -161,8 +161,8 @@ const CartCustomer = () => {
 
         <div className='w-full grid grid-cols-1 lg:grid-cols-2 gap-5 mx-10'>
             { cartData.map((item, index)=>(
-               <Link to={`/viewproduct/${item.productId}/${item.productcategory}`}><div className=' border-2 rounded-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5'>
-               
+               <div className=' border-2 rounded-xl grid grid-cols-1  sm:grid-cols-3 gap-5'>
+               <Link to={`/viewproduct/${item.productId}/${item.productcategory}`}>
                <div className=' ms-2 mt-4 h-32 relative'>
                     {item && item.images && (
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
@@ -174,9 +174,9 @@ const CartCustomer = () => {
             ))}
           </Slider>
         )}
-                </div>
+                </div></Link>
 
-                <div className=' p-5 '>
+                <div className='m-auto sm:text-start p-5 '>
 
                     <p className='text-xl mb-3'> {item && item.productname}</p>
                     
@@ -198,14 +198,14 @@ const CartCustomer = () => {
 
                 </div>
 
-                <div className='text-center mt-10'>
+                <div className='text-center mb-5 sm:mb-0 sm:mt-10'>
                 <button className={`mb-1 w-32 bg-red-500 text-white py-2 px-5 text-sm rounded-xl h-fit ${productData[index]?.stock === '0' ? 'mt-8' : ''}`} onClick={(e) => handleCartDelete(e,item._id)}>REMOVE</button><br />
                 {productData[index] && productData[index].stock !== '0' &&
                 <Link to={`/checkoutcustomer/${item.productId}/${item.productcategory}`} ><button className="mt-1 w-32 bg-green-500 text-white py-2 px-3 text-sm rounded-xl h-fit">CHECKOUT</button></Link>
                 }
                 </div>
 
-                </div></Link>
+                </div>
             ))}
         </div>
       

@@ -149,10 +149,10 @@ const PaymentCustomer = () => {
 
   return (
     <div>
-        <div  className=' mt-40 m-auto w-2/5 bg-green-100 px-10 py-10 rounded-3xl'>
+        <div  className=' mt-40 m-auto w-10/12 md:w-7/12 lg:w-5/12 bg-green-100 px-5 sm:px-10 py-10 rounded-3xl'>
         <p className='text-3xl text-center mb-10 '>PAYMENT OPTIONS</p>
         <div>
-          <ul className='mx-10'>
+          <ul className='mx-3 sm:mx-10'>
             <div className='cursor-pointer' onClick={handleOnlinePayment}><div className='text-md bg-white rounded-xl p-3 mb-1 px-5 items-center flex justify-between'><p>Online Payment</p> <i className='text-4xl'><GrCreditCard/></i></div></div>
             
             <Link onClick={payment}><li className='text-md bg-white rounded-xl p-3 mb-1 px-5 '><div className='items-center flex justify-between'><p>Cash on Delivery</p> <i className='text-4xl'><GiPayMoney/></i></div>

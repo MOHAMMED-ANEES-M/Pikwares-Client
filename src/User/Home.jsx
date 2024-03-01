@@ -327,7 +327,7 @@ const Home = () => {
       </div>
         
 
-      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 min-[410px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
             {isSearchActive ? (
               results.length > 0 ? (
                 results.map((item) => (
@@ -380,15 +380,16 @@ const Home = () => {
               ))
             )}
           </div>
-
-      <div className='flex justify-center mt-10 mb-10'>
-            {Array.from({ length: Math.ceil(allProducts.length / ordersPerPage) }, (_, index) => (
-              <button key={index} onClick={() => paginate(index + 1)} 
-              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
-                {index + 1}
-              </button>
-            ))}
-       </div>
+            { isSearchActive ? (null) : (
+                 <div className='flex justify-center mt-10 mb-10'>
+                 {Array.from({ length: Math.ceil(allProducts.length / ordersPerPage) }, (_, index) => (
+                   <button key={index} onClick={() => paginate(index + 1)} 
+                   className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-green-500 text-white' : 'border-2'}`}>
+                     {index + 1}
+                   </button>
+                 ))}
+            </div>
+            )}
 
       </>
     ) : null}
