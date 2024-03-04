@@ -249,7 +249,7 @@ const AccountCustomer = () => {
 
             { isPersonalEdit ? (
 
-                  <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0 md:ml-auto bg-green-100 p-5 rounded-3xl'>
+                  <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0 md:ml-auto border p-5 rounded-xl'>
                   <h1 className='font-medium text-2xl text-center mb-10 '>Update Personal Details</h1>
                   <form onSubmit={handleUpdatePersonal}>
                   <div className='pl-2 mb-3'><label  htmlFor="firstname">First Name</label></div>
@@ -269,7 +269,7 @@ const AccountCustomer = () => {
             ) : (
 
            
-            <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0 md:ml-auto bg-green-100 p-5 rounded'>
+            <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0 md:ml-auto border p-5 rounded-xl'>
             <h1 className='font-medium text-2xl text-center mb-10 '>Personal Details</h1>
             <div className='pl-2 mb-3'><label  htmlFor="firstname">First Name</label></div>
             <input type="text" value={profile.firstname} className=' w-full bg-white h-10 mb-5 rounded-lg border p-3' disabled />
@@ -297,7 +297,7 @@ const AccountCustomer = () => {
 
             { isNotAddress ? (
 
-                  <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0  bg-green-100 rounded-3xl p-5'>
+                  <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0  border p-5 rounded-xl'>
                   <h1 className='font-medium text-2xl text-center mb-10 '>Add Address Details</h1>
                   <form onSubmit={handleSubmit}>
                   <div className='flex flex-wrap gap-5'>
@@ -334,7 +334,7 @@ const AccountCustomer = () => {
             
             { isNotEditable ? (
 
-                <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0  bg-green-100 rounded p-5'>
+                <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0  border p-5 rounded-xl'>
                 <h1 className='font-medium text-2xl text-center mb-10 '> Address Details</h1>
                 <div className='flex flex-wrap gap-5'>
                     <div>
@@ -366,7 +366,7 @@ const AccountCustomer = () => {
             ):(
 
             
-            <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0  bg-green-100 rounded-3xl p-5'>
+            <div className='w-4/5 lg:w-2/3 m-auto md:m-0 mt-10 sm:mt-0  border p-5 rounded-xl'>
             <h1 className='font-medium text-2xl text-center mb-10 '>Update Address Details</h1>
             <form onSubmit={handleUpdate}>
             <div className='flex flex-wrap gap-5'>

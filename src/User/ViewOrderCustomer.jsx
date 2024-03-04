@@ -102,10 +102,10 @@ const ViewOrderCustomer = () => {
   return (
   <div className='mt-32'>
 
-    <div className='border rounded w-4/5 m-auto p-10'>
+    <div className='border rounded w-4/5 m-auto p-3 sm:p-10'>
 
-      <div className='flex flex-wrap justify-between pr-32'>
-        <div className='mb-10 md:mb-32'>
+      <div className='flex flex-wrap justify-around gap-10 gap-x-20 items-center mb-0 sm:mb-20'>
+        <div className=''>
           <h1 className='text-xl font-bold mb-5'>Shipping Address</h1>
           <p>{customerData.firstname} {customerData.lastname}</p>
           <p>{addressData.address} {addressData.city}</p>
@@ -114,7 +114,7 @@ const ViewOrderCustomer = () => {
           <p><span className='mr-2 font-bold'>Phone Number:</span>{customerData.number}</p>
         </div>
 
-        <div className='md:mt-16 mr-32'>
+        <div className='mb-20'>
           
           {orderData.mode !== 'COD'?(
             <>
@@ -143,9 +143,9 @@ const ViewOrderCustomer = () => {
 
       </div>
 
-      <div className='grid grid-cols-2 gap-y-20 md:grid-cols-4 flex-wrap mt-20 md:mt-0'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 flex-wrap text-center place-items-center '>
         {orderData && orderData.images && orderData.images[0] && (
-          <img className='w-20 h-20 mb-10 sm:mb-0 ms-24' src={orderData.images[0]} alt="image not found" />
+          <img className='w-20 h-20 mb-10 sm:mb-0 ' src={orderData.images[0]} alt="image not found" />
         )}
           <div>
               <p className='mb-1 text-xl'>{orderData.productname}</p>

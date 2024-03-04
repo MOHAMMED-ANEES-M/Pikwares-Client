@@ -171,7 +171,7 @@ const ViewProductAdmin = () => {
       )}
       </div>
 
-      <div className='w-4/5 sm:w-2/5 sm:mt-10 ms-5 md:ms-20'>
+      <div className='w-4/5 sm:w-2/5 sm:mt-10 ms-10 md:ms-20'>
         <p className='text-3xl mb-10'> {productData && productData.productname}</p>
         <div className="flex items-center mb-3">
         <p className='text-2xl font-medium '>₹{productData && productData.productprice} 
@@ -179,12 +179,14 @@ const ViewProductAdmin = () => {
         <DiscountCalculator actualPrice={productData.productactualprice} offerPrice={productData.productprice} />
         </div>
 
-        {productData.stock >= 10 ? (
-          <p className='text-xl text-green-500 mb-5 '>Available</p>
+        {productData.stock > 10 ? (
+          <p className='text-xl text-green-500 mb-5'>Available</p>
+        ) : productData.stock > 0 ? (
+          <p className='text-xl text-red-500 mb-5'>Only {productData.stock} left</p>
         ) : (
-          <p className='text-xl text-red-500 mb-5 '>Only {productData.stock} left</p>
+          <p className='text-xl text-red-500 mb-5'>Out of Stock</p>
         )}
-
+        
         <div className=' mt-2 mb-5 flex gap-2 items-center'>
            <p className='flex items-center gap-1 font-bold text-xl bg-green-500 text-white p-1 rounded'><span>{Math.round(calculateAverageRating(reviewData))}</span> <i><FaStar color="#FFFFFF" /></i></p> 
            <p>( {reviewData.length} Reviews) </p>

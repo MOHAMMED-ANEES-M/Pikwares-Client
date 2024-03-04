@@ -85,7 +85,7 @@ const VerifyOtp = () => {
         <div>
             <form onSubmit={handleSubmit} className='text-center'>
                 {/* <label htmlFor="otp" className='text-start'>Enter OTP</label><br /> */}
-                <input className='p-3 text-center mt-3 rounded w-11/12 sm:w-4/5 text-lg' type="number" id='otp' placeholder='Enter OTP' name='otp' onChange={handleChange} /><br />
+                <input className='p-1 py-2 sm:p-3 text-center mt-3 rounded w-11/12 sm:w-4/5 text-lg' type="number" id='otp' placeholder='Enter OTP' name='otp' onChange={handleChange} /><br />
                 <input className='mt-10  sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit' type="submit" value='Submit' />
             </form>
         </div>

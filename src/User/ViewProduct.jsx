@@ -255,9 +255,9 @@ const ViewProduct = () => {
   
 
   return (
-    <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
+    <div className='mt-32 sm:flex flex-wrap justify-center gap-5 mb-10'>
 
-      <div className='w-2/5 text-center '>
+      <div className='w-4/5 m-auto sm:m-0 sm:w-2/5 text-center relative'>
       {productData && productData.images && (
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
             {productData.images.map((image, index) => (
@@ -287,10 +287,10 @@ const ViewProduct = () => {
                 
         { productData && productData.images && productData.images.length > 1 ? (
         <>
-        <button className='slider-btn  absolute top-1/2 left-2 z-10' onClick={prevSlide}>
+        <button className='slider-btn  absolute top-20  md:top-32 lg:top-40 xl:top-1/2 left-2 z-10' onClick={prevSlide}>
         <GrPrevious className='w-5 h-5'/>
         </button>
-        <button className='slider-btn  absolute top-1/2 right-2 z-10' onClick={nextSlide}>
+        <button className='slider-btn  absolute top-20  md:top-32 lg:top-40 xl:top-1/2 right-2 z-10' onClick={nextSlide}>
         <GrNext className='w-5 h-5'/>
         </button>
 
@@ -304,7 +304,7 @@ const ViewProduct = () => {
       )}
       </div>
 
-      <div className='w-2/5 mt-10 ms-20 overflow-y-auto max-h-[70vh]'>
+      <div className='w-4/5 sm:w-2/5 sm:mt-10 ms-10 md:ms-20'>
         <p className='text-2xl mb-5'> {productData && productData.productname}</p>
         <div className="flex items-center mb-3">
         <p className='text-2xl font-medium '>₹{productData && productData.productprice} 

@@ -26,6 +26,7 @@ import ChatAdmin from './Admin/ChatAdmin';
 import ChatCustomer from './User/ChatCustomer';
 import ChatListCustomer from './User/ChatListCustomer';
 import VerifyOtp from './User/VerifyOtp';
+import About from './components/About';
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
       <Route path='/chatadmin/:id' element={<ChatAdmin/>}/>   
       <Route path='/vieworderadmin/:customerId/:orderId' element={<ViewOrderAdmin/>}/>   
       <Route path='/rateproduct/:productId/:customerId' element={<RateProductCustomer/>}/>   
+      <Route path='/about' element={<About/>}/>   
       </Route>
     </Routes>
     </BrowserRouter>

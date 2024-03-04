@@ -48,18 +48,18 @@ const ChatListCustomer = () => {
       <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12 m-auto mb-5 border rounded'>
       <p className='text-2xl text-center p-3 bg-green-400 rounded-t'>Users</p>
         <div className=' h-3/4 overflow-scroll'>
-        <div className='bg-white  p-5'>
+        <div className='bg-white  pt-5 px-5'>
         <Link to={`/chatcustomer/${adminId}`}
         key={adminId}
         state={{ firstname: 'Admin', lastname: '' }}
         >
-          <p className='text-lg shadow p-5'>Admin</p></Link>
+          <p className='text-lg border rounded p-5 mb-1'>Admin</p></Link>
             { customersData.map((customer)=>(
                 <Link to={`/chatcustomer/${customer._id}`}
                 key={customer._id}
                 state={{ firstname: customer.firstname, lastname: customer.lastname }}
                 >
-                        <p className='text-lg shadow p-5'>{customer.firstname} {customer.lastname}</p>
+                        <p className='text-lg border rounded p-5 mb-1'>{customer.firstname} {customer.lastname}</p>
                 </Link>
             ))}
         </div>
