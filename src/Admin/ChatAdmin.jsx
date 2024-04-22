@@ -3,9 +3,10 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { IoSend } from "react-icons/io5";
+import baseUrl from '../config';
 
 
-const socket = io('http://localhost:8000', {
+const socket = io(`${baseUrl}`, {
     pingInterval: 10000,
     pingTimeout: 5000,
 });

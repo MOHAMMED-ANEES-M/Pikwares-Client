@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import easyinvoice from "easyinvoice";
 import { infoToast } from '../components/Toast';
+import baseUrl from '../config';
 
 
 const PaymentSuccess = () => {
@@ -125,7 +126,7 @@ const PaymentSuccess = () => {
     
     let fetchOrder=async()=>{
         try{
-        let response = await axios.get(`http://localhost:8000/findOrder/${paymentId}`,{
+        let response = await axios.get(`${baseUrl}/findOrder/${paymentId}`,{
           headers: {
             Authorization: token
           }
@@ -142,7 +143,7 @@ const PaymentSuccess = () => {
 
       let fetchAccount=async()=>{
         try{
-        let response = await axios.get(`http://localhost:8000/customer/findAccount/`,{
+        let response = await axios.get(`${baseUrl}/customer/findAccount/`,{
           headers: {
               Authorization: token
             },
@@ -159,7 +160,7 @@ const PaymentSuccess = () => {
 
       let fetchProduct=async()=>{
         try{
-        let response = await axios.get(`http://localhost:8000/admin/product/findOne/${productId}`,{
+        let response = await axios.get(`${baseUrl}/admin/product/findOne/${productId}`,{
           headers: {
               Authorization: token
             }
@@ -173,7 +174,7 @@ const PaymentSuccess = () => {
 
     let fetchAddress= async ()=>{
       try{
-          let response = await axios.get(`http://localhost:8000/customer/address/findAddress`,{
+          let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
               headers: {
                   Authorization: token
                 },
@@ -190,7 +191,7 @@ const PaymentSuccess = () => {
 
   let fetchPayment=async()=>{
     try{
-      let response = await axios.get(`http://localhost:8000/findPayment/${paymentId}`,{
+      let response = await axios.get(`${baseUrl}/findPayment/${paymentId}`,{
         headers: {
             Authorization: token
           }

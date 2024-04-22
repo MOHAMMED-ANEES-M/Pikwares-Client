@@ -10,6 +10,7 @@ import { FaRegHeart, FaStar, FaStarHalfAlt, FaRegStar, FaHeart } from 'react-ico
 import { errorToast, successToast, warnToast } from '../components/Toast';
 import ReactImageMagnify from 'react-image-magnify';
 import DiscountCalculator from '../utils/DiscountCalculator';
+import baseUrl from '../config';
 
 
 
@@ -73,7 +74,7 @@ const ViewProduct = () => {
 
         if(token){
           console.log('prodata',productData);
-        let response = await axios.post(`http://localhost:8000/insertCart/${userId}`,productData)
+        let response = await axios.post(`${baseUrl}/insertCart/${userId}`,productData)
         console.log(response);
           if(response.data){
           console.log('added to cart');
@@ -97,7 +98,7 @@ const ViewProduct = () => {
         }
 
         if(token){
-        let response = await axios.post(`http://localhost:8000/insertWishlist/${userId}`,productData)
+        let response = await axios.post(`${baseUrl}/insertWishlist/${userId}`,productData)
         console.log(response);
           if(response.data){
           console.log('added to wishlist');
@@ -122,7 +123,7 @@ const ViewProduct = () => {
         }
 
         if(token){
-          let response = await axios.delete(`http://localhost:8000/viewProduct/deleteWishlist/${id}`)
+          let response = await axios.delete(`${baseUrl}/viewProduct/deleteWishlist/${id}`)
           console.log(response);
           if(response.data){
             console.log('removed from wishlist');
@@ -145,18 +146,18 @@ const ViewProduct = () => {
 
             let fetchProduct= async ()=>{
 
-                let response = await axios.get(`http://localhost:8000/findOneProduct/${id}/${category}`)
+                let response = await axios.get(`${baseUrl}/findOneProduct/${id}/${category}`)
                 console.log('view product response:',response);
                 setProductData(response.data)
 
                 let fetchReview = async()=>{
-                  let reviewResponse = await axios.get(`http://localhost:8000/findReview/${id}`)
+                  let reviewResponse = await axios.get(`${baseUrl}/findReview/${id}`)
                   console.log('review response:',reviewResponse);
                   setReviewData(reviewResponse.data)
 
                   let fetchReviewedCustomers = async () => {
                     const customerPromises = reviewResponse.data.map(async (review) => {
-                      const customerResponse = await axios.get(`http://localhost:8000/review/customers/${review.customerId}`,{
+                      const customerResponse = await axios.get(`${baseUrl}/review/customers/${review.customerId}`,{
                         headers: {
                             Authorization: token
                           },
@@ -181,7 +182,7 @@ const ViewProduct = () => {
           
                     try{
           
-                      let Cartresponse = await axios.get(`http://localhost:8000/findCart/${userId}`,{
+                      let Cartresponse = await axios.get(`${baseUrl}/findCart/${userId}`,{
                         headers:{
                           Authorization: token
                         },
@@ -204,7 +205,7 @@ const ViewProduct = () => {
           
                   try{
         
-                    let Wishlistresponse = await axios.get(`http://localhost:8000/findWishlist/${userId}`,{
+                    let Wishlistresponse = await axios.get(`${baseUrl}/findWishlist/${userId}`,{
                       headers:{
                         Authorization: token
                       },

@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Slide, toast } from 'react-toastify'
 import { successToast, warnToast } from '../components/Toast'
+import baseUrl from '../config'
 
 
 const AccountCustomer = () => {
@@ -65,7 +66,7 @@ const AccountCustomer = () => {
 
         try{
          
-          let response=await axios.post('http://localhost:8000/customer/address/insert',data,{
+          let response=await axios.post(`${baseUrl}/customer/address/insert`,data,{
             params: {
                 id: userId,
               },
@@ -111,7 +112,7 @@ const AccountCustomer = () => {
           data.landmark=address.landmark
         }
 
-        let response=await axios.put('http://localhost:8000/customer/address/update',data,{
+        let response=await axios.put(`${baseUrl}/customer/address/update`,data,{
           params: {
               id: addressId,
             },
@@ -147,7 +148,7 @@ const AccountCustomer = () => {
         personalData.email=profile.email
       }
 
-      let response=await axios.put('http://localhost:8000/customer/update',personalData,{
+      let response=await axios.put(`${baseUrl}/customer/update`,personalData,{
         params: {
             id: userId,
           },
@@ -184,7 +185,7 @@ const AccountCustomer = () => {
         let fetchAccount= async ()=>{
                 try{
 
-                let response = await axios.get(`http://localhost:8000/customer/findAccount/`,{
+                let response = await axios.get(`${baseUrl}/customer/findAccount/`,{
                     headers: {
                         Authorization: token
                       },
@@ -204,7 +205,7 @@ const AccountCustomer = () => {
         let fetchAddress= async ()=>{
             console.log(userId,'id');
             try{
-                let response = await axios.get(`http://localhost:8000/customer/address/findAddress`,{
+                let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
                     headers: {
                         Authorization: token
                       },

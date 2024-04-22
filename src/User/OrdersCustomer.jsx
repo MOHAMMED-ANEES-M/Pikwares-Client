@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GoDotFill } from "react-icons/go";
 import _orderBy from 'lodash/orderBy';
+import baseUrl from '../config';
 
 
 const OrdersCustomer = () => {
@@ -50,7 +51,7 @@ const OrdersCustomer = () => {
             }
 
             let fetchOrders = async()=>{
-                let response = await axios.get(`http://localhost:8000/customer/findOrders/${userId}`,{
+                let response = await axios.get(`${baseUrl}/customer/findOrders/${userId}`,{
                     headers: {
                         Authorization: token
                       },

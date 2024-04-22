@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import FileBase64 from 'react-file-base64';
 import { useNavigate } from 'react-router-dom';
 import { successToast, warnToast } from '../components/Toast';
+import baseUrl from '../config';
 
 
 
@@ -85,7 +86,7 @@ const AddProduct = () => {
         if(displayImages){
           console.log('sub',displayImages);
           
-          let response=await axios.post('http://localhost:8000/products/insert',formData,{
+          let response=await axios.post(`${baseUrl}/products/insert`,formData,{
             headers: {
               'Content-Type': 'multipart/form-data',
             },

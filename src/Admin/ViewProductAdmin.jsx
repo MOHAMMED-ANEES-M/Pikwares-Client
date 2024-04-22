@@ -9,6 +9,7 @@ import { GrPrevious } from "react-icons/gr";
 import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import DiscountCalculator from '../utils/DiscountCalculator';
 import ReactImageMagnify from 'react-image-magnify';
+import baseUrl from '../config';
 
 
 const renderStarRating = (rating) => {
@@ -64,7 +65,7 @@ const ViewProductAdmin = () => {
 
             let fetchProduct= async ()=>{
 
-                let response = await axios.get(`http://localhost:8000/findOneProduct/${id}/${category}`)
+                let response = await axios.get(`${baseUrl}/findOneProduct/${id}/${category}`)
                 console.log('view product response:',response);
                 setProductData(response.data)
                 if(!response.data){
@@ -73,13 +74,13 @@ const ViewProductAdmin = () => {
                 }
 
                 let fetchReview = async()=>{
-                  let reviewResponse = await axios.get(`http://localhost:8000/findReview/${id}`)
+                  let reviewResponse = await axios.get(`${baseUrl}/findReview/${id}`)
                   console.log('review response:',reviewResponse);
                   setReviewData(reviewResponse.data)
 
                   let fetchReviewedCustomers = async () => {
                     const customerPromises = reviewResponse.data.map(async (review) => {
-                      const customerResponse = await axios.get(`http://localhost:8000/review/customers/${review.customerId}`,{
+                      const customerResponse = await axios.get(`${baseUrl}/review/customers/${review.customerId}`,{
                         headers: {
                             Authorization: token
                           },

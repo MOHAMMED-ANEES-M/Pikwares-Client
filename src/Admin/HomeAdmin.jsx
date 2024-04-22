@@ -8,6 +8,7 @@ import './HomeAdmin.css'
 import { toast } from "react-toastify";
 import { errorToast } from "../components/Toast";
 import ImageSlider from "../components/ImageSlider/ImageSlider";
+import baseUrl from "../config";
 
 const ProductSlider = ({ images }) => {
   const settings = {
@@ -151,7 +152,7 @@ const HomeAdmin = () => {
       e.preventDefault(); 
       }
       console.log('del');
-      let response = await axios.delete(`http://localhost:8000/deleteProduct/${id}/${category}`)
+      let response = await axios.delete(`${baseUrl}/deleteProduct/${id}/${category}`)
       console.log('deleted product:',response);
       errorToast('Product Deleted')
       setRefresh(!refresh)
@@ -163,11 +164,11 @@ const HomeAdmin = () => {
   const handleSearch = async () => {
     try {
       
-      const mobileResponse = await axios.get(`http://localhost:8000/products/mobiles/find?s=${searchTerm}`);
-      const laptopResponse = await axios.get(`http://localhost:8000/products/laptops/find?s=${searchTerm}`);
-      const headsetResponse = await axios.get(`http://localhost:8000/products/headsets/find?s=${searchTerm}`);
-      const menResponse = await axios.get(`http://localhost:8000/products/men/find?s=${searchTerm}`);
-      const womenResponse = await axios.get(`http://localhost:8000/products/women/find?s=${searchTerm}`);
+      const mobileResponse = await axios.get(`${baseUrl}/products/mobiles/find?s=${searchTerm}`);
+      const laptopResponse = await axios.get(`${baseUrl}/products/laptops/find?s=${searchTerm}`);
+      const headsetResponse = await axios.get(`${baseUrl}/products/headsets/find?s=${searchTerm}`);
+      const menResponse = await axios.get(`${baseUrl}/products/men/find?s=${searchTerm}`);
+      const womenResponse = await axios.get(`${baseUrl}/products/women/find?s=${searchTerm}`);
 
       const filteredMobileResults = mobileResponse.data.filter(product => product.productname.toLowerCase().includes(searchTerm.toLowerCase()));
       const filteredLaptopResults = laptopResponse.data.filter(product => product.productname.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -204,7 +205,7 @@ const HomeAdmin = () => {
 
       let fetchMobileProducts= async ()=>{
         
-        let response = await axios.get(`http://localhost:8000/products/mobiles/find`,{
+        let response = await axios.get(`${baseUrl}/products/mobiles/find`,{
           headers: {
               Authorization: token
             },
@@ -218,7 +219,7 @@ const HomeAdmin = () => {
 
       let fetchLaptopProducts= async ()=>{
         
-        let response = await axios.get(`http://localhost:8000/products/laptops/find`,{
+        let response = await axios.get(`${baseUrl}/products/laptops/find`,{
           headers: {
               Authorization: token
             },
@@ -232,7 +233,7 @@ const HomeAdmin = () => {
 
       let fetchHeadsetProducts= async ()=>{
         
-        let response = await axios.get(`http://localhost:8000/products/headsets/find`,{
+        let response = await axios.get(`${baseUrl}/products/headsets/find`,{
           headers: {
               Authorization: token
             },
@@ -246,7 +247,7 @@ const HomeAdmin = () => {
 
       let fetchMenProducts= async ()=>{
         
-        let response = await axios.get(`http://localhost:8000/products/men/find`,{
+        let response = await axios.get(`${baseUrl}/products/men/find`,{
           headers: {
               Authorization: token
             },
@@ -260,7 +261,7 @@ const HomeAdmin = () => {
 
       let fetchWomenProducts= async ()=>{
         
-        let response = await axios.get(`http://localhost:8000/products/women/find`,{
+        let response = await axios.get(`${baseUrl}/products/women/find`,{
           headers: {
               Authorization: token
             },

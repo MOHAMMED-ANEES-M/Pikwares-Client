@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { successToast, warnToast } from '../components/Toast'
 import { useLocation, useNavigate } from 'react-router-dom'
+import baseUrl from '../config'
 
 const VerifyOtp = () => {
 
@@ -31,7 +32,7 @@ const VerifyOtp = () => {
         e.preventDefault()
         try{
             const data = {userId, otp}
-            let verifyOTP = await axios.post(`http://localhost:8000/verifyotp`,data)
+            let verifyOTP = await axios.post(`${baseUrl}/verifyotp`,data)
             console.log('verify otp',verifyOTP.data);
             if (verifyOTP.data.success===true) {
                 const orderData = {
@@ -45,7 +46,7 @@ const VerifyOtp = () => {
                     images:productData.images
                 }
                 console.log('oredrdata',orderData);
-                let response = await axios.post(`http://localhost:8000/orders/insert`,orderData)
+                let response = await axios.post(`${baseUrl}/orders/insert`,orderData)
                 console.log('orders response:',response);
                 if(response.data){
                     successToast('Order Placed')
@@ -63,7 +64,7 @@ const VerifyOtp = () => {
 
         let fetchProduct = async ()=>{
           try{
-            let response = await axios.get(`http://localhost:8000/admin/product/findOne/${productId}`,{
+            let response = await axios.get(`${baseUrl}/admin/product/findOne/${productId}`,{
               headers: {
                 Authorization: token,
               }

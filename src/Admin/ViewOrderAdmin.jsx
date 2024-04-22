@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Slide, toast } from 'react-toastify'
 import { successToast, warnToast } from '../components/Toast'
+import baseUrl from '../config'
 
 const ViewOrderAdmin = () => {
 
@@ -47,7 +48,7 @@ const ViewOrderAdmin = () => {
       if(selectedValue){
         console.log('sel',selectedValue);
         let data = { orderSatus: selectedValue }
-        let response = await axios.put(`http://localhost:8000/admin/order/updateStatus/${orderId}`,data,{
+        let response = await axios.put(`${baseUrl}/admin/order/updateStatus/${orderId}`,data,{
           headers: {
             Authorization: token,
           }
@@ -74,7 +75,7 @@ const ViewOrderAdmin = () => {
 
       let fetchOrderData = async()=>{
         
-        let response = await axios.get(`http://localhost:8000/admin/order/findOne/${orderId}`,{
+        let response = await axios.get(`${baseUrl}/admin/order/findOne/${orderId}`,{
           headers: {
             Authorization: token,
           }
@@ -105,7 +106,7 @@ const ViewOrderAdmin = () => {
 
       let fetchCustomerData = async()=>{
         
-        let response = await axios.get(`http://localhost:8000/admin/findOneCustomer/${customerId}`,{
+        let response = await axios.get(`${baseUrl}/admin/findOneCustomer/${customerId}`,{
           headers: {
             Authorization: token,
           }
@@ -118,7 +119,7 @@ const ViewOrderAdmin = () => {
 
       let fetchAddressData = async()=>{
 
-        let response = await axios.get(`http://localhost:8000/admin/findAddress/${customerId}`,{
+        let response = await axios.get(`${baseUrl}/admin/findAddress/${customerId}`,{
           headers: {
             Authorization: token,
           }

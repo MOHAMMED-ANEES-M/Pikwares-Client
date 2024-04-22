@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import baseUrl from '../config'
 
 const ViewCartAdmin = () => {
 
@@ -23,7 +24,7 @@ const ViewCartAdmin = () => {
                     navigate('/login')
                 }
 
-            let response = await axios.get(`http://localhost:8000/customer/findAccount/`,{
+            let response = await axios.get(`${baseUrl}/customer/findAccount/`,{
                 headers: {
                     Authorization: token
                   },
@@ -44,7 +45,7 @@ const ViewCartAdmin = () => {
     let fetchAddress= async ()=>{
 
         try{
-            let response = await axios.get(`http://localhost:8000/customer/address/findAddress`,{
+            let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
                 headers: {
                     Authorization: token
                   },
@@ -63,7 +64,7 @@ const ViewCartAdmin = () => {
 
     let fetchCart = async()=>{
 
-        let response = await axios.get(`http://localhost:8000/findCart/${id}`,{
+        let response = await axios.get(`${baseUrl}/findCart/${id}`,{
             headers:{
                 Authorization: token
             },

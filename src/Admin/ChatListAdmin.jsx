@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { warnToast } from '../components/Toast'
+import baseUrl from '../config'
 
 const ChatListAdmin = () => {
 
@@ -20,7 +21,7 @@ const ChatListAdmin = () => {
 
             let fetchCustomers= async()=>{
 
-                let response = await axios.get('http://localhost:8000/findCustomers',{
+                let response = await axios.get(`${baseUrl}/findCustomers`,{
                     headers: {
                         Authorization: token
                       },

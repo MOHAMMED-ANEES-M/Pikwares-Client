@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import axios from 'axios';
 import { successToast, warnToast } from '../components/Toast';
+import baseUrl from '../config';
 
 const RateProductCustomer = () => {
 
@@ -31,7 +32,7 @@ const RateProductCustomer = () => {
         return warnToast('All fields are required')
       }
       const data = {productId,customerId,review,rating}
-        let response = await axios.post(`http://localhost:8000/review/insert`,data)
+        let response = await axios.post(`${baseUrl}/review/insert`,data)
         console.log(response);
         successToast('Review added')
     }catch(err){
@@ -80,7 +81,7 @@ const RateProductCustomer = () => {
 
     let fetchProduct = async ()=>{
       try{
-        let response = await axios.get(`http://localhost:8000/admin/product/findOne/${productId}`,{
+        let response = await axios.get(`${baseUrl}/admin/product/findOne/${productId}`,{
           headers: {
             Authorization: token,
           }

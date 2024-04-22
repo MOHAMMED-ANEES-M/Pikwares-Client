@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { GrAdd, GrEdit, GrSubtract } from 'react-icons/gr'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { warnToast } from '../components/Toast'
+import baseUrl from '../config'
 
 const CheckoutCustomer = () => {
 
@@ -30,7 +31,7 @@ const CheckoutCustomer = () => {
         try{
   
           let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceIncrement'}
-          let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+          let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
           console.log(response);
           // setCartData(response.data)
           setRefresh(!refresh)
@@ -51,7 +52,7 @@ const CheckoutCustomer = () => {
         try{
   
           let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceDecrement'}
-          let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+          let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
           console.log('countupdate response',response);
           // setCartData(response.data)
           setRefresh(!refresh)
@@ -81,7 +82,7 @@ const CheckoutCustomer = () => {
                     navigate('/login')
                 }
 
-            let response = await axios.get(`http://localhost:8000/customer/findAccount/`,{
+            let response = await axios.get(`${baseUrl}/customer/findAccount/`,{
                 headers: {
                     Authorization: token
                   },
@@ -103,7 +104,7 @@ const CheckoutCustomer = () => {
     let fetchAddress= async ()=>{
 
         try{
-            let response = await axios.get(`http://localhost:8000/customer/address/findAddress`,{
+            let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
                 headers: {
                     Authorization: token
                   },
@@ -124,7 +125,7 @@ const CheckoutCustomer = () => {
 
         try{
 
-            let response = await axios.get(`http://localhost:8000/findOneProduct/${id}/${category}`)
+            let response = await axios.get(`${baseUrl}/findOneProduct/${id}/${category}`)
             console.log('view product response:',response);
             setProductData(response.data)
             
@@ -137,7 +138,7 @@ const CheckoutCustomer = () => {
 
     let fetchCart = async()=>{
 
-        let response = await axios.get(`http://localhost:8000/findOneCart/${id}/${userId}`,{
+        let response = await axios.get(`${baseUrl}/findOneCart/${id}/${userId}`,{
             headers:{
                 Authorization: token
             },

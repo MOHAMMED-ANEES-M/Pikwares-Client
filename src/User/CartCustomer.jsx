@@ -10,6 +10,7 @@ import { MdDelete } from "react-icons/md";
 import { toast } from 'react-toastify';
 import { errorToast, warnToast } from '../components/Toast';
 import DiscountCalculator from '../utils/DiscountCalculator';
+import baseUrl from '../config';
 
 
 
@@ -43,7 +44,7 @@ const CartCustomer = () => {
         console.log('count:',count);
         console.log('category:',category);
         let data = {count:count,category:category,productprice:pprice,productId:prId,productactualprice:pactualprice,role:'priceIncrement'}
-        let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+        let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
         console.log(response);
         // setCartData(response.data)
         setRefresh(!refresh)
@@ -68,7 +69,7 @@ const CartCustomer = () => {
         console.log('count:',count);
         console.log('category:',category);
         let data = {count:count,category:category,productprice:pprice,productId:prId,productactualprice:pactualprice,role:'priceDecrement'}
-        let response = await axios.put(`http://localhost:8000/updateCount/${id}`,data)
+        let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
         console.log('countupdate response',response);
         // setCartData(response.data)
         setRefresh(!refresh)
@@ -83,7 +84,7 @@ const CartCustomer = () => {
     let handleCartDelete=async(e,id)=>{
       e.preventDefault()
         try{
-            let response = await axios.delete(`http://localhost:8000/deleteCartProduct/${id}`)
+            let response = await axios.delete(`${baseUrl}/deleteCartProduct/${id}`)
             console.log(response);
             setRefresh(!refresh)
             errorToast('Product deleted from cart')
@@ -103,7 +104,7 @@ const CartCustomer = () => {
 
             let fetchCart = async()=>{
 
-                let response = await axios.get(`http://localhost:8000/findCart/${userId}`,{
+                let response = await axios.get(`${baseUrl}/findCart/${userId}`,{
                     headers:{
                         Authorization: token
                     },
@@ -113,7 +114,7 @@ const CartCustomer = () => {
 
                 let fetchProducts = async () => {
                   const productPromises = response.data.map(async (product) => {
-                    const productResponse = await axios.get(`http://localhost:8000/findOneProduct/${product.productId}/${product.productcategory}`,{
+                    const productResponse = await axios.get(`${baseUrl}/findOneProduct/${product.productId}/${product.productcategory}`,{
                       headers: {
                           Authorization: token
                         },

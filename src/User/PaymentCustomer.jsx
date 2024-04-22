@@ -4,6 +4,7 @@ import { GiPayMoney } from "react-icons/gi";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { successToast, warnToast } from '../components/Toast';
+import baseUrl from '../config';
 
 
 const PaymentCustomer = () => {
@@ -42,7 +43,7 @@ const PaymentCustomer = () => {
 
     try{
       console.log(userId,'otp userid');
-      let sendOTP = await axios.post('http://localhost:8000/sendotp',{userId})
+      let sendOTP = await axios.post(`${baseUrl}/sendotp`,{userId})
       if (sendOTP) {
         console.log('sendOTP',sendOTP);
         navigate(`/verifyotp?productId=${id}&count=${counts}&productprice=${amount}`);
@@ -62,7 +63,7 @@ const PaymentCustomer = () => {
   let handleOnlinePayment= async(e)=>{
     try{
       console.log(amount,'amount');
-      let orderResponse = await axios.post('http://localhost:8000/paymentorder',{amount})
+      let orderResponse = await axios.post(`${baseUrl}/paymentorder`,{amount})
       setdata(orderResponse.data)
       console.log('RazorPay order response:',orderResponse.data);
 
@@ -84,7 +85,7 @@ const PaymentCustomer = () => {
             amount:orderResponse.data.amount,
           }
           console.log('body',body);
-          let reciept = await axios.post('http://localhost:8000/paymentCapture',body)
+          let reciept = await axios.post(`${baseUrl}/paymentCapture`,body)
           console.log('handler reciept response',reciept);
           if(reciept.data.status === 'ok'){
               const orderDatas = {
@@ -99,7 +100,7 @@ const PaymentCustomer = () => {
                   productprice : amount,
                   images : productData.images
               }
-            let orderResponse = await axios.post(`http://localhost:8000/orders/insert`,orderDatas)
+            let orderResponse = await axios.post(`${baseUrl}/orders/insert`,orderDatas)
             console.log('orders response:',orderResponse);
             if(orderResponse.data){
               navigate(`/paymentreciept?paymentId=${orderDatas.paymentId}&productId=${orderDatas.productId}`)
@@ -132,7 +133,7 @@ const PaymentCustomer = () => {
 
     let fetchProduct = async ()=>{
       try{
-        let response = await axios.get(`http://localhost:8000/admin/product/findOne/${id}`,{
+        let response = await axios.get(`${baseUrl}/admin/product/findOne/${id}`,{
           headers: {
             Authorization: token,
           }

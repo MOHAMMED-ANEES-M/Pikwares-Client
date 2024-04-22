@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { GoStarFill } from 'react-icons/go'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { errorToast } from '../components/Toast'
+import baseUrl from '../config'
 
 const ViewOrderCustomer = () => {
 
@@ -32,7 +33,7 @@ const ViewOrderCustomer = () => {
     let handleCancel=async (id)=>{
       try{
         const data = {orderStatus: 'Order Cancelled'}
-        let response = await axios.put(`http://localhost:8000/cancelOrder/${id}`,data)
+        let response = await axios.put(`${baseUrl}/cancelOrder/${id}`,data)
         console.log('order cancel response:',response);
         errorToast('Order Cancelled')
         setRefresh(!refresh)
@@ -51,7 +52,7 @@ const ViewOrderCustomer = () => {
             
             let fetchOrderData = async()=>{
         
-                let response = await axios.get(`http://localhost:8000/admin/order/findOne/${orderId}`,{
+                let response = await axios.get(`${baseUrl}/admin/order/findOne/${orderId}`,{
                   headers: {
                     Authorization: token,
                   }
@@ -69,7 +70,7 @@ const ViewOrderCustomer = () => {
 
               let fetchCustomerData = async()=>{
         
-                let response = await axios.get(`http://localhost:8000/admin/findOneCustomer/${userId}`,{
+                let response = await axios.get(`${baseUrl}/admin/findOneCustomer/${userId}`,{
                   headers: {
                     Authorization: token,
                   }
@@ -82,7 +83,7 @@ const ViewOrderCustomer = () => {
         
               let fetchAddressData = async()=>{
         
-                let response = await axios.get(`http://localhost:8000/admin/findAddress/${userId}`,{
+                let response = await axios.get(`${baseUrl}/admin/findAddress/${userId}`,{
                   headers: {
                     Authorization: token,
                   }

@@ -5,6 +5,7 @@ import Slider from 'react-slick'
 import { Slide, ToastContainer, toast } from 'react-toastify'
 import { errorToast, warnToast } from '../components/Toast'
 import DiscountCalculator from '../utils/DiscountCalculator'
+import baseUrl from '../config'
 
 const WishlistCustomer = () => {
 
@@ -25,7 +26,7 @@ const WishlistCustomer = () => {
           }
   
           if(token){
-            let response = await axios.delete(`http://localhost:8000/deleteWishlist/${id}`)
+            let response = await axios.delete(`${baseUrl}/deleteWishlist/${id}`)
             console.log(response);
             if(response.data){
               console.log('removed from wishlist',response);
@@ -50,7 +51,7 @@ const WishlistCustomer = () => {
 
             let fetchWishlist = async()=>{
 
-                let response = await axios.get(`http://localhost:8000/findWishlist/${userId}`,{
+                let response = await axios.get(`${baseUrl}/findWishlist/${userId}`,{
                     headers:{
                         Authorization: token
                     },
