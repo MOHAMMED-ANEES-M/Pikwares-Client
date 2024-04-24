@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { errorToast, successToast, warnToast } from './components/Toast'
+import baseUrl from './config'
 
 const SignUp = () => {
 
@@ -23,7 +24,7 @@ const SignUp = () => {
       console.log(data.password,'dpass');
       if(conPass === data.password){
 
-        let response=await axios.post('http://localhost:8000/customer/insert',data)
+        let response=await axios.post(`${baseUrl}/customer/insert`,data)
         console.log(response,'res');
         if(response.data){
           successToast('Registration Successfull')
@@ -35,7 +36,7 @@ const SignUp = () => {
       }
     }
     catch(err){
-      console.log(err.response.data.message);
+      console.log(err && err.response && err.response.data && err.response.data.message);
       errorToast(err.response.data.message)
     }
 }
