@@ -10,8 +10,8 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate=useNavigate()
 
-    let token = localStorage.getItem('token')
-    let userId = localStorage.getItem('userId')
+    const token = localStorage.getItem('token')
+    const userId = localStorage.getItem('userId')
 
 
     const handleEmailChange = (e) => {
@@ -27,7 +27,7 @@ const Login = () => {
         console.log('submit');
         
         try{
-          
+               
             if (email !== '' && password !== '') {
               const data = { email, password }; 
             console.log(data, 'data');
