@@ -409,7 +409,7 @@ const Home = () => {
     ) : showMobileProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Mobile Phones</h1>
-      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 min-[410px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {currentMobilePro.length > 0 ? (
             currentMobilePro.map((item) => (
               <Link to={`/viewproduct/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
@@ -463,7 +463,7 @@ const Home = () => {
     ) : showLaptopProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Laptops</h1>
-      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 min-[410px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {currentLaptopPro.length > 0 ? (
             currentLaptopPro.map((item) => (
               <Link to={`/viewproduct/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
@@ -516,7 +516,7 @@ const Home = () => {
     ) : showHeadsetProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Headsets</h1>
-      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 min-[410px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {currentHeadsetPro.length > 0 ? (
             currentHeadsetPro.map((item) => (
               <Link to={`/viewproduct/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
@@ -570,7 +570,7 @@ const Home = () => {
     ) : showMenProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Men</h1>
-      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 min-[410px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {currentMenPro.length > 0 ? (
             currentMenPro.map((item) => (
               <Link to={`/viewproduct/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
@@ -624,7 +624,7 @@ const Home = () => {
     ) : showWomenProducts ? (
       <>
       <h1 className='font-semibold text-center text-3xl mt-40'>Women</h1>
-      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
+      <div className="mt-10 mx-10 grid grid-cols-1 gap-x-6 gap-y-10 min-[410px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:gap-x-8">
           {currentWomenPro.length > 0 ? (
             currentWomenPro.map((item) => (
               <Link to={`/viewproduct/${item._id}/${item.productcategory}`}><div className="border rounded-xl text-center" key={item._id}>
