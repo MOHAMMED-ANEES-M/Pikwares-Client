@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { errorToast } from "../components/Toast";
 import ImageSlider from "../components/ImageSlider/ImageSlider";
 import baseUrl from "../config";
+import Loader from "../components/Loader/Loader";
 
 const ProductSlider = ({ images }) => {
   const settings = {
@@ -62,6 +63,7 @@ const HomeAdmin = () => {
   const [isMenLoading, setIsMenLoading] = useState(false);
   const [isWomenLoading, setIsWomenLoading] = useState(false);
   const [refresh,setRefresh] = useState(false)
+  const [loading,setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState(['']);
   const [isSearchActive,setisSearchActive] = useState(false)
@@ -151,11 +153,13 @@ const HomeAdmin = () => {
       if (e) {
       e.preventDefault(); 
       }
+      setLoading(true)
       console.log('del');
       let response = await axios.delete(`${baseUrl}/deleteProduct/${id}/${category}`)
       console.log('deleted product:',response);
       errorToast('Product Deleted')
       setRefresh(!refresh)
+      setLoading(false)
     }catch(err){
       console.log(err);
     }
@@ -163,7 +167,7 @@ const HomeAdmin = () => {
 
   const handleSearch = async () => {
     try {
-      
+      setLoading(true)
       const mobileResponse = await axios.get(`${baseUrl}/products/mobiles/find?s=${searchTerm}`);
       const laptopResponse = await axios.get(`${baseUrl}/products/laptops/find?s=${searchTerm}`);
       const headsetResponse = await axios.get(`${baseUrl}/products/headsets/find?s=${searchTerm}`);
@@ -180,6 +184,7 @@ const HomeAdmin = () => {
 
       console.log(allResults,'response search');
       setResults(allResults); 
+      setLoading(false)
       setisSearchActive(true);
       console.log(isSearchActive,'search active');
     } catch (error) {
@@ -193,7 +198,8 @@ const HomeAdmin = () => {
     
     try{
       console.log('load start');
-      
+      setLoading(true)
+
       if(!refresh){
         setShowProducts(true)
       }
@@ -204,7 +210,6 @@ const HomeAdmin = () => {
       
 
       let fetchMobileProducts= async ()=>{
-        
         let response = await axios.get(`${baseUrl}/products/mobiles/find`,{
           headers: {
               Authorization: token
@@ -213,12 +218,10 @@ const HomeAdmin = () => {
         console.log('mobileProducts response: ',response);
         setMobileProducts(response.data)
         setProducts(response.data)
-        
       }
       fetchMobileProducts()
 
       let fetchLaptopProducts= async ()=>{
-        
         let response = await axios.get(`${baseUrl}/products/laptops/find`,{
           headers: {
               Authorization: token
@@ -227,12 +230,10 @@ const HomeAdmin = () => {
         console.log('laptopProducts response: ',response);
         setLaptopProducts(response.data)
         setProducts(response.data)
-        
       }
       fetchLaptopProducts()
 
       let fetchHeadsetProducts= async ()=>{
-        
         let response = await axios.get(`${baseUrl}/products/headsets/find`,{
           headers: {
               Authorization: token
@@ -241,12 +242,10 @@ const HomeAdmin = () => {
         console.log('headsetProducts response: ',response);
         setHeadsetProducts(response.data)
         setProducts(response.data)
-    
       }
       fetchHeadsetProducts()
 
       let fetchMenProducts= async ()=>{
-        
         let response = await axios.get(`${baseUrl}/products/men/find`,{
           headers: {
               Authorization: token
@@ -255,12 +254,10 @@ const HomeAdmin = () => {
         console.log('menProducts response: ',response);
         setMenProducts(response.data)
         setProducts(response.data)
-    
       }
       fetchMenProducts()
 
       let fetchWomenProducts= async ()=>{
-        
         let response = await axios.get(`${baseUrl}/products/women/find`,{
           headers: {
               Authorization: token
@@ -269,7 +266,6 @@ const HomeAdmin = () => {
         console.log('womenProducts response: ',response);
         setWomenProducts(response.data)
         setProducts(response.data)
-        
       }
       fetchWomenProducts()
 
@@ -283,7 +279,8 @@ const HomeAdmin = () => {
       setIsLaptopLoading(false); 
       setIsHeadsetLoading(false); 
       setIsMenLoading(false); 
-      setIsWomenLoading(false); 
+      setIsWomenLoading(false);
+      setLoading(false) 
       console.log('load stop');
     }
 
@@ -309,7 +306,8 @@ const HomeAdmin = () => {
 
   return (
     <div className="mt-20">
-
+      {loading ? (<Loader />) : (
+    <>
     <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap ps-5 justify-center gap-3 sm:gap-10 mt-7 sm:mt-9">
     <div class="dropdown pt-4 relative">
   <button>Electronics</button>
@@ -708,8 +706,8 @@ const HomeAdmin = () => {
       </>
     ) : null}
     </div>
-
-
+    </>
+      )}
     </div>
   )
 }
