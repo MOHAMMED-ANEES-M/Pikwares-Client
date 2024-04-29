@@ -93,7 +93,7 @@ const OrdersAdmin = () => {
 
 
   return (
-    <div className='mt-32 min-h-[35vh]'>
+    <div className='mt-32 min-h-screen'>
       {loading ? (<Loader />) : (
       <>
 {isProduct ? (
