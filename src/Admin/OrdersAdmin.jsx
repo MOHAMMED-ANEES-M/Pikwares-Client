@@ -4,16 +4,18 @@ import { GoDotFill } from 'react-icons/go'
 import { Link, useNavigate } from 'react-router-dom'
 import _orderBy from 'lodash/orderBy';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 const OrdersAdmin = () => {
 
-  const [orderData,setOrderData] = useState([''])
+    const [orderData,setOrderData] = useState([''])
     const [orderProducts,setOrderProducts] = useState([''])
     const [orderCustomers,setOrderCustomers] = useState([''])
     const [currentPage, setCurrentPage] = useState(1);
     const [ordersPerPage] = useState(5);
     const [isProduct,setIsProduct] = useState(false)
+    const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
 
     let userId = localStorage.getItem('userId')
@@ -36,6 +38,7 @@ const OrdersAdmin = () => {
         }
 
         let fetchOrders = async()=>{
+          setLoading(true)
             let response = await axios.get(`${baseUrl}/admin/findOrders`,{
                 headers: {
                     Authorization: token
@@ -72,7 +75,7 @@ const OrdersAdmin = () => {
                 console.log('ordered customers response:',customers);
               }
               fetchOrderCustomers()
-
+              setLoading(false)
         }
         fetchOrders() 
 
@@ -90,9 +93,9 @@ const OrdersAdmin = () => {
 
 
   return (
-    <div className='mt-32'>
-
-      
+    <div className='mt-32 min-h-[35vh]'>
+      {loading ? (<Loader />) : (
+      <>
 {isProduct ? (
   <div>
     {currentOrders.map((item, index) => {
@@ -154,7 +157,8 @@ const OrdersAdmin = () => {
 ) : (
   <p className='mt-60 text-center'>no orders found</p>
 )}
-
+</>
+      )}
     </div>
   )
 }

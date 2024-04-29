@@ -37,7 +37,7 @@ const ChatListAdmin = () => {
     },[])
 
   return (
-    <div className='mt-32'>
+    <div className='mt-32 min-h-[35vh]'>
 
       <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12 m-auto mb-5 border rounded'>
       <p className='text-2xl text-center p-3 bg-green-400 rounded-t'>Customers</p>
