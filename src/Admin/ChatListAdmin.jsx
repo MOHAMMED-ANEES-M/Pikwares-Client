@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { warnToast } from '../components/Toast'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 const ChatListAdmin = () => {
 
     const [customersData,setCustomersData] = useState([''])
+    const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
 
     let token = localStorage.getItem('token')
@@ -20,7 +22,7 @@ const ChatListAdmin = () => {
             }
 
             let fetchCustomers= async()=>{
-
+                setLoading(true)
                 let response = await axios.get(`${baseUrl}/findCustomers`,{
                     headers: {
                         Authorization: token
@@ -28,6 +30,7 @@ const ChatListAdmin = () => {
                 })
                 console.log('customers response: ',response);
                 setCustomersData(response.data)
+                setLoading(false)
             }
             fetchCustomers()
         }catch(err){
@@ -37,10 +40,11 @@ const ChatListAdmin = () => {
     },[])
 
   return (
-    <div className='mt-32 min-h-[35vh]'>
+    <div className='mt-32 min-h-screen'>
+      {loading ? (<Loader />) : (
 
-      <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12 m-auto mb-5 border rounded'>
-      <p className='text-2xl text-center p-3 bg-green-400 rounded-t'>Customers</p>
+      <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12 m-auto mb-5 border rounded min-h-96'>
+      <p className='text-2xl text-center p-3 bg-green-400 rounded-t '>Customers</p>
       <div className=' h-3/4 overflow-scroll pt-5 px-5'>
         { customersData.map((customer)=>(
            <Link to={`/chatadmin/${customer._id}`}
@@ -54,6 +58,7 @@ const ChatListAdmin = () => {
       </div>
       </div>
 
+      )}
     </div>
   )
 }
