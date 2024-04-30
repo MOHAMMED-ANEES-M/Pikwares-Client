@@ -198,7 +198,6 @@ const HomeAdmin = () => {
     
     try{
       console.log('load start');
-      setLoading(true)
 
       if(!refresh){
         setShowProducts(true)
@@ -210,6 +209,7 @@ const HomeAdmin = () => {
       
 
       let fetchMobileProducts= async ()=>{
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/mobiles/find`,{
           headers: {
               Authorization: token
@@ -218,10 +218,12 @@ const HomeAdmin = () => {
         console.log('mobileProducts response: ',response);
         setMobileProducts(response.data)
         setProducts(response.data)
+        setLoading(false)
       }
       fetchMobileProducts()
 
       let fetchLaptopProducts= async ()=>{
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/laptops/find`,{
           headers: {
               Authorization: token
@@ -230,10 +232,12 @@ const HomeAdmin = () => {
         console.log('laptopProducts response: ',response);
         setLaptopProducts(response.data)
         setProducts(response.data)
+        setLoading(false)
       }
       fetchLaptopProducts()
 
       let fetchHeadsetProducts= async ()=>{
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/headsets/find`,{
           headers: {
               Authorization: token
@@ -242,10 +246,12 @@ const HomeAdmin = () => {
         console.log('headsetProducts response: ',response);
         setHeadsetProducts(response.data)
         setProducts(response.data)
+        setLoading(false)
       }
       fetchHeadsetProducts()
 
       let fetchMenProducts= async ()=>{
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/men/find`,{
           headers: {
               Authorization: token
@@ -254,10 +260,12 @@ const HomeAdmin = () => {
         console.log('menProducts response: ',response);
         setMenProducts(response.data)
         setProducts(response.data)
+        setLoading(false)
       }
       fetchMenProducts()
 
       let fetchWomenProducts= async ()=>{
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/women/find`,{
           headers: {
               Authorization: token
@@ -266,6 +274,7 @@ const HomeAdmin = () => {
         console.log('womenProducts response: ',response);
         setWomenProducts(response.data)
         setProducts(response.data)
+        setLoading(false)
       }
       fetchWomenProducts()
 
@@ -280,7 +289,6 @@ const HomeAdmin = () => {
       setIsHeadsetLoading(false); 
       setIsMenLoading(false); 
       setIsWomenLoading(false);
-      setLoading(false) 
       console.log('load stop');
     }
 

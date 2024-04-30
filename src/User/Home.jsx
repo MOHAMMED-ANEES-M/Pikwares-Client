@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import './Home.css'
 import ImageSlider from "../components/ImageSlider/ImageSlider";
 import baseUrl from "../config";
+import Loader from "../components/Loader/Loader";
 
 const ProductSlider = ({ images }) => {
   const settings = {
@@ -68,6 +69,7 @@ const Home = () => {
   const [isMenLoading, setIsMenLoading] = useState(false);
   const [isWomenLoading, setIsWomenLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading,setLoading] = useState(false)
   const [results, setResults] = useState(['']);
   const [isSearchActive,setisSearchActive] = useState(false)
   const navigate = useNavigate()
@@ -154,7 +156,7 @@ const Home = () => {
 
   const handleSearch = async () => {
     try {
-      
+      setLoading(true)
       const mobileResponse = await axios.get(`${baseUrl}/products/mobiles/find?s=${searchTerm}`);
       const laptopResponse = await axios.get(`${baseUrl}/products/laptops/find?s=${searchTerm}`);
       const headsetResponse = await axios.get(`${baseUrl}/products/headsets/find?s=${searchTerm}`);
@@ -172,6 +174,7 @@ const Home = () => {
       console.log(allResults,'response search');
       setResults(allResults); 
       setisSearchActive(true);
+      setLoading(false)
       console.log(isSearchActive,'search active');
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -184,7 +187,6 @@ const Home = () => {
 
     try{
       setShowProducts(true)
-
       
       if(userId === '659a975490f6b3e4142f9d45'){
         navigate('/homeadmin')
@@ -192,7 +194,7 @@ const Home = () => {
       
 
       let fetchMobileProducts= async ()=>{
-        
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/mobiles/find`,{
           headers: {
               Authorization: token
@@ -201,12 +203,12 @@ const Home = () => {
         console.log('mobileProducts response: ',response);
         setMobileProducts(response.data)
         setProducts(response.data)
-        
+        setLoading(false)
       }
       fetchMobileProducts()
 
       let fetchLaptopProducts= async ()=>{
-        
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/laptops/find`,{
           headers: {
               Authorization: token
@@ -215,12 +217,12 @@ const Home = () => {
         console.log('laptopProducts response: ',response);
         setLaptopProducts(response.data)
         setProducts(response.data)
-        
+        setLoading(false)
       }
       fetchLaptopProducts()
 
       let fetchHeadsetProducts= async ()=>{
-        
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/headsets/find`,{
           headers: {
               Authorization: token
@@ -229,12 +231,12 @@ const Home = () => {
         console.log('headsetProducts response: ',response);
         setHeadsetProducts(response.data)
         setProducts(response.data)
-    
+        setLoading(false)
       }
       fetchHeadsetProducts()
 
       let fetchMenProducts= async ()=>{
-        
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/men/find`,{
           headers: {
               Authorization: token
@@ -243,12 +245,12 @@ const Home = () => {
         console.log('menProducts response: ',response);
         setMenProducts(response.data)
         setProducts(response.data)
-    
+        setLoading(false)
       }
       fetchMenProducts()
 
       let fetchWomenProducts= async ()=>{
-        
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/products/women/find`,{
           headers: {
               Authorization: token
@@ -257,7 +259,7 @@ const Home = () => {
         console.log('womenProducts response: ',response);
         setWomenProducts(response.data)
         setProducts(response.data)
-        
+        setLoading(false)
       }
       fetchWomenProducts()
 
@@ -294,7 +296,8 @@ const Home = () => {
 
   return (
     <div className="mt-38 mb-10">
-
+      {loading ? (<Loader />) : (
+    <>
 <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap justify-center gap-3 sm:gap-10 mt-7 sm:mt-9">
     <div class="dropdown pt-4">
   <button>Electronics</button>
@@ -667,7 +670,8 @@ const Home = () => {
     ) : null}
     </div>
 
-
+</>
+      )}
     </div>
   )
 }

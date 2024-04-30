@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import easyinvoice from "easyinvoice";
 import { infoToast } from '../components/Toast';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 const PaymentSuccess = () => {
@@ -13,6 +14,7 @@ const PaymentSuccess = () => {
   const [addressData,setAddressData] = useState('')
   const [productData,setProductData] = useState('')
   const [paymentData,setPaymentData] = useState('')
+  const [loading,setLoading] = useState(false)
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -32,6 +34,7 @@ const PaymentSuccess = () => {
 
   const downloadInvoice = async () => {
     try{
+      setLoading(true)
     infoToast('Reciept will be downloaded after sometime. Please wait for a while')
     const data = {
     images: {
@@ -118,6 +121,8 @@ const PaymentSuccess = () => {
     easyinvoice.download(`invoice_1.pdf`, result.pdf);
   }catch(err){
     console.log('Package error: ',err);
+  }finally{
+    setLoading(false)
   }
   };
 
@@ -126,6 +131,7 @@ const PaymentSuccess = () => {
     
     let fetchOrder=async()=>{
         try{
+          setLoading(true)
         let response = await axios.get(`${baseUrl}/findOrder/${paymentId}`,{
           headers: {
             Authorization: token
@@ -136,6 +142,7 @@ const PaymentSuccess = () => {
           response.data.statusDate = formatDate(response.data.statusDate);
         }
         setOrderData(response.data)
+        setLoading(false)
       }catch(err){
         console.log(err);
       }
@@ -143,6 +150,7 @@ const PaymentSuccess = () => {
 
       let fetchAccount=async()=>{
         try{
+          setLoading(true)
         let response = await axios.get(`${baseUrl}/customer/findAccount/`,{
           headers: {
               Authorization: token
@@ -153,6 +161,7 @@ const PaymentSuccess = () => {
       })
       console.log('customer response:',response);
       setAccountData(response.data)
+      setLoading(false)
       }catch(err){
         console.log(err);
       }
@@ -160,6 +169,7 @@ const PaymentSuccess = () => {
 
       let fetchProduct=async()=>{
         try{
+          setLoading(true)
         let response = await axios.get(`${baseUrl}/admin/product/findOne/${productId}`,{
           headers: {
               Authorization: token
@@ -167,6 +177,7 @@ const PaymentSuccess = () => {
       })
       console.log('product response:',response);
       setProductData(response.data)
+      setLoading(false)
       }catch(err){
         console.log(err);
       }
@@ -174,6 +185,7 @@ const PaymentSuccess = () => {
 
     let fetchAddress= async ()=>{
       try{
+        setLoading(true)
           let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
               headers: {
                   Authorization: token
@@ -184,6 +196,7 @@ const PaymentSuccess = () => {
           })
           console.log('address response: ',response);
           setAddressData(response.data)
+          setLoading(false)
         }catch(err){
           console.log(err);
       }
@@ -191,6 +204,7 @@ const PaymentSuccess = () => {
 
   let fetchPayment=async()=>{
     try{
+      setLoading(true)
       let response = await axios.get(`${baseUrl}/findPayment/${paymentId}`,{
         headers: {
             Authorization: token
@@ -201,6 +215,7 @@ const PaymentSuccess = () => {
       response.data.timestamp = formatDate(response.data.timestamp);
     }
     setPaymentData(response.data)
+    setLoading(false)
     }catch(err){
       console.log(err);
     }
@@ -217,6 +232,9 @@ const PaymentSuccess = () => {
 
 
   return (
+    <div>
+      {loading ? (<Loader />) : (
+    <>
     <div className='mt-32 w-11/12 sm:w-11/12 md:w-10/12 lg:w-5/6 xl:w-3/5 m-auto border rounded p-3 sm:p-10 mb-10'>
 
       <p className='text-center text-3xl font-bold mb-10 text-green-500'>Pikwares</p>
@@ -284,6 +302,9 @@ const PaymentSuccess = () => {
           </button>
         </div>
     </div>
+    </>
+      )}
+  </div>
   )
 }
 

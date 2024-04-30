@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { successToast, warnToast } from '../components/Toast'
 import { useLocation, useNavigate } from 'react-router-dom'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 const VerifyOtp = () => {
 
     const [otp, setOtp] = useState('')
     const [productData, setProductData] = useState('')
+    const [loading, setLoading] = useState('')
 
     const userId = localStorage.getItem('userId')
     const token = localStorage.getItem('token')
@@ -31,6 +33,7 @@ const VerifyOtp = () => {
     const handleSubmit=async(e)=>{
         e.preventDefault()
         try{
+          setLoading(true)
             const data = {userId, otp}
             let verifyOTP = await axios.post(`${baseUrl}/verifyotp`,data)
             console.log('verify otp',verifyOTP.data);
@@ -51,7 +54,7 @@ const VerifyOtp = () => {
                 if(response.data){
                     successToast('Order Placed')
                     navigate('/orderscustomer')
-                
+              
             }
             }
         }catch(err){
@@ -64,6 +67,7 @@ const VerifyOtp = () => {
 
         let fetchProduct = async ()=>{
           try{
+            setLoading(true)
             let response = await axios.get(`${baseUrl}/admin/product/findOne/${productId}`,{
               headers: {
                 Authorization: token,
@@ -71,6 +75,7 @@ const VerifyOtp = () => {
             })
             console.log('rating product reponse:',response);
             setProductData(response.data)
+            setLoading(false)
           }catch(err){
             console.log(err);
           }
@@ -79,19 +84,24 @@ const VerifyOtp = () => {
       },[])
 
   return (
-    <div>
+    <div className='min-h-screen'>
+      {loading ? (<Loader />) : (
+
        <div>
         <div  className=' mt-40 m-auto w-2/4 min-[400px]:w-3/4 sm:w-2/6 lg:w-2/6 bg-green-100 px-5 sm:px-10 py-10 rounded-3xl'>
-        <p className=' text-lg sm:text-3xl text-center mb-10 sm:mb-16 '>Verify OTP</p>
+        <p className=' text-lg sm:text-3xl text-center mb-10 sm:mb-16'>Verify OTP</p>
+        <p className=' text-center mb-2 mt-10'>OTP has been sent to your registered email address.</p>
         <div>
             <form onSubmit={handleSubmit} className='text-center'>
                 {/* <label htmlFor="otp" className='text-start'>Enter OTP</label><br /> */}
                 <input className='p-1 py-2 sm:p-3 text-center mt-3 rounded w-11/12 sm:w-4/5 text-lg' type="number" id='otp' placeholder='Enter OTP' name='otp' onChange={handleChange} /><br />
-                <input className='mt-10  sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit' type="submit" value='Submit' />
+                <input className='mt-10  sm:mt-5 bg-green-500 text-white py-2 px-3 text-sm rounded h-fit cursor-pointer' type="submit" value='Submit' />
             </form>
         </div>
         </div>
     </div>
+
+      )}
     </div>
   )
 }

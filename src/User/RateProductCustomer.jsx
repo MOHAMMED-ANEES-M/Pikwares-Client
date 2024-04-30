@@ -4,12 +4,14 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import axios from 'axios';
 import { successToast, warnToast } from '../components/Toast';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 const RateProductCustomer = () => {
 
     const [productData,setProductData] = useState('')
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
+    const [loading, setLoading] = useState(false);
     const { productId, customerId } = useParams();
 
     let token = localStorage.getItem('token')
@@ -28,12 +30,14 @@ const RateProductCustomer = () => {
     console.log('Review:', review);
     
     try{
+      setLoading(true)
       if(productId==='' || customerId==='' || review==='' || rating===''){
         return warnToast('All fields are required')
       }
       const data = {productId,customerId,review,rating}
         let response = await axios.post(`${baseUrl}/review/insert`,data)
         console.log(response);
+        setLoading(false)
         successToast('Review added')
     }catch(err){
         console.log(err);
@@ -81,6 +85,7 @@ const RateProductCustomer = () => {
 
     let fetchProduct = async ()=>{
       try{
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/admin/product/findOne/${productId}`,{
           headers: {
             Authorization: token,
@@ -88,6 +93,7 @@ const RateProductCustomer = () => {
         })
         console.log('rating product reponse:',response);
         setProductData(response.data)
+        setLoading(false)
       }catch(err){
         console.log(err);
       }
@@ -96,6 +102,8 @@ const RateProductCustomer = () => {
   },[])
 
   return (
+    <div className='min-h-screen'>
+      {loading ? (<Loader />) : (
     <div className='mt-32 border rounded w-10/12 sm:w-4/5 lg:w-2/4 m-auto p-3 sm:p-10 mb-10'>
       <h2 className='text-center text-xl sm:text-3xl font-bold mb-20'>Rate and Review Product</h2>
       <div className='grid grid-cols-3 items-center mb-20 border rounded p-3 sm:p-5'>
@@ -120,6 +128,8 @@ const RateProductCustomer = () => {
           <button className='bg-green-500 text-white py-2 px-5 rounded h-fit' type="submit">Submit</button>
         </div>
       </form>
+      </div>
+)}
     </div>
   );
 };

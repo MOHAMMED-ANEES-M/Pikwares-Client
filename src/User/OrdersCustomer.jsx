@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { GoDotFill } from "react-icons/go";
 import _orderBy from 'lodash/orderBy';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 const OrdersCustomer = () => {
@@ -12,6 +13,7 @@ const OrdersCustomer = () => {
     // const [orderProducts,setOrderProducts] = useState([''])
     const [isProduct,setIsProduct] = useState(false)
     const [refresh,setRefresh] = useState(false)
+    const [loading,setLoading] = useState(false)
     const [isCancelled,setIsCancelled] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const [ordersPerPage] = useState(5);
@@ -51,6 +53,7 @@ const OrdersCustomer = () => {
             }
 
             let fetchOrders = async()=>{
+              setLoading(true)
                 let response = await axios.get(`${baseUrl}/customer/findOrders/${userId}`,{
                     headers: {
                         Authorization: token
@@ -76,7 +79,7 @@ const OrdersCustomer = () => {
                   // const statusDate = new Date(orderData.statusDate);
                   // const formattedDate = statusDate.toString().split('T')[0];
                   // console.log(formattedDate,'formatted date');
-
+                  setLoading(false)
             }
             fetchOrders() 
         }catch(err){
@@ -93,7 +96,9 @@ const OrdersCustomer = () => {
 
 
   return (
-    <div className='mt-32'>
+    <div className='mt-32 min-h-screen'>
+      {loading ? (<Loader />) : (
+    <>
     {isProduct ? (
       <div>
        {currentOrders.map((item, index) => {
@@ -160,6 +165,8 @@ const OrdersCustomer = () => {
     ) : (
       <p className='mt-60 text-center'>no orders found</p>
     )}
+    </>
+      )}
   </div>
   )
 }

@@ -6,11 +6,13 @@ import { Slide, ToastContainer, toast } from 'react-toastify'
 import { errorToast, warnToast } from '../components/Toast'
 import DiscountCalculator from '../utils/DiscountCalculator'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 const WishlistCustomer = () => {
 
     const [wishlistData,setWishlistData] = useState([''])
     const [refresh,setRefresh] = useState(false)
+    const [loading,setLoading] = useState(false)
     const sliderRef = useRef();
     const navigate = useNavigate()
 
@@ -26,10 +28,12 @@ const WishlistCustomer = () => {
           }
   
           if(token){
+            setLoading(true)
             let response = await axios.delete(`${baseUrl}/deleteWishlist/${id}`)
             console.log(response);
             if(response.data){
               console.log('removed from wishlist',response);
+              setLoading(false)
               errorToast('Removed from Wishlist')
               setRefresh(!refresh) 
             }
@@ -50,7 +54,7 @@ const WishlistCustomer = () => {
             }
 
             let fetchWishlist = async()=>{
-
+                setLoading(true)
                 let response = await axios.get(`${baseUrl}/findWishlist/${userId}`,{
                     headers:{
                         Authorization: token
@@ -58,6 +62,7 @@ const WishlistCustomer = () => {
                 })
                 console.log('wishlist response:',response);
                 setWishlistData(response.data)
+                setLoading(false)
             }
             fetchWishlist()
 
@@ -84,6 +89,9 @@ const WishlistCustomer = () => {
       };
       
       return (
+        <div className='min-h-screen'>
+          {loading ? (<Loader />) : (
+        <>
         <div className='mt-20 lg:mt-0 flex flex-wrap justify-center gap-5 mb-10 min-h-96'>
       <ToastContainer/>
 
@@ -132,6 +140,9 @@ const WishlistCustomer = () => {
     ):(
         <p className='text-red-500 text-center mt-32 '>No product in wishlist</p>
     )}
+    </div>
+    </>
+     )}
     </div>
   )
 }

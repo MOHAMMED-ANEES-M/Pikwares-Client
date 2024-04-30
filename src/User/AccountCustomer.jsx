@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Slide, toast } from 'react-toastify'
 import { successToast, warnToast } from '../components/Toast'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 
 const AccountCustomer = () => {
@@ -29,6 +30,7 @@ const AccountCustomer = () => {
     const [isNotEditable,setisNotEditable] = useState(true)
     const [isPersonalEdit,setisPersonalEdit] = useState(false)
     const [refresh,setrefresh] = useState(false)
+    const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
     const inputRef = useRef()
     const inputRefFirstname = useRef()
@@ -65,7 +67,7 @@ const AccountCustomer = () => {
         e.preventDefault()
 
         try{
-         
+          setLoading(true)
           let response=await axios.post(`${baseUrl}/customer/address/insert`,data,{
             params: {
                 id: userId,
@@ -75,6 +77,7 @@ const AccountCustomer = () => {
             console.log(response,'res');
             setisNotAddress(!isNotAddress)
             setrefresh(!refresh)
+            setLoading(false)
             successToast('Address added')
           }
         }
@@ -88,7 +91,7 @@ const AccountCustomer = () => {
       e.preventDefault()
 
       try{
-
+        setLoading(true)
         const id = addressId
         console.log(addressId);
         console.log('adrsid:',id);
@@ -120,6 +123,7 @@ const AccountCustomer = () => {
         if(response){
           console.log(response,'res');
           setisNotEditable(!isNotEditable)
+          setLoading(false)
           successToast('Address details updated')
         }
       }
@@ -134,6 +138,7 @@ const AccountCustomer = () => {
     console.log('perdata: ',personalData);
 
     try{
+      setLoading(true)
 
       if(!personalData.firstname){
         personalData.firstname=profile.firstname
@@ -157,6 +162,7 @@ const AccountCustomer = () => {
         console.log('updatedPersonal: ',response);
         setisPersonalEdit(!isPersonalEdit)
         setrefresh(!refresh)
+        setLoading(false)
         successToast('Personal details updated')
       }
 
@@ -184,7 +190,7 @@ const AccountCustomer = () => {
 
         let fetchAccount= async ()=>{
                 try{
-
+                  setLoading(true)
                 let response = await axios.get(`${baseUrl}/customer/findAccount/`,{
                     headers: {
                         Authorization: token
@@ -195,6 +201,7 @@ const AccountCustomer = () => {
                 })
                 console.log('account response: ',response);
                 setProfile(response.data)
+                setLoading(false)
                 
             }catch(err){
                 console.log(err);
@@ -205,6 +212,7 @@ const AccountCustomer = () => {
         let fetchAddress= async ()=>{
             console.log(userId,'id');
             try{
+              setLoading(true)
                 let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
                     headers: {
                         Authorization: token
@@ -217,6 +225,7 @@ const AccountCustomer = () => {
                 setAddress(response.data)
                 setaddressId(response.data._id)
                 setisNotAddress(false)
+                setLoading(false)
                 console.log(response.data._id,'idas');
                 console.log(isNotAddress);
               }catch(err){
@@ -237,8 +246,9 @@ const AccountCustomer = () => {
     
   return (
     <div>
-      
-        <div className=' m-auto text-start sm:p-10 mt-20 rounded-3xl'>
+            {loading ? (<Loader />) : (
+              <>
+        <div className=' m-auto min-h-screen text-start sm:p-10 mt-20 rounded-3xl'>
 
             {/* <h1 className='font-semibold text-3xl text-center mb-10 '>Account Details</h1> */}
             <div className=' grid grid-cols-1 md:grid-cols-2 flex-wrap justify-center gap-5'>
@@ -411,7 +421,8 @@ const AccountCustomer = () => {
 
             </div>
         </div>
-        
+        </>
+        )}
     </div>
   )
 }

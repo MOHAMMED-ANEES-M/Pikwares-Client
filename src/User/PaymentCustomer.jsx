@@ -5,11 +5,13 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { successToast, warnToast } from '../components/Toast';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 const PaymentCustomer = () => {
 
   const [confirmPayment,setConfirmPayment] = useState(false)
+  const [loading,setLoading] = useState(false)
   const [data,setdata] = useState('')
   const [orderData,setOrderData] = useState('')
   const [productData,setProductData] = useState('')
@@ -42,6 +44,7 @@ const PaymentCustomer = () => {
     // console.log('oreder datas',orderDatas);
 
     try{
+      setLoading(true)
       console.log(userId,'otp userid');
       let sendOTP = await axios.post(`${baseUrl}/sendotp`,{userId})
       if (sendOTP) {
@@ -62,9 +65,11 @@ const PaymentCustomer = () => {
 
   let handleOnlinePayment= async(e)=>{
     try{
+      setLoading(true)
       console.log(amount,'amount');
       let orderResponse = await axios.post(`${baseUrl}/paymentorder`,{amount})
       setdata(orderResponse.data)
+      setLoading(false)
       console.log('RazorPay order response:',orderResponse.data);
 
       var options = {
@@ -100,6 +105,7 @@ const PaymentCustomer = () => {
                   productprice : amount,
                   images : productData.images
               }
+              setLoading(true)
             let orderResponse = await axios.post(`${baseUrl}/orders/insert`,orderDatas)
             console.log('orders response:',orderResponse);
             if(orderResponse.data){
@@ -133,6 +139,7 @@ const PaymentCustomer = () => {
 
     let fetchProduct = async ()=>{
       try{
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/admin/product/findOne/${id}`,{
           headers: {
             Authorization: token,
@@ -140,6 +147,7 @@ const PaymentCustomer = () => {
         })
         console.log('rating product reponse:',response);
         setProductData(response.data)
+        setLoading(false)
       }catch(err){
         console.log(err);
       }
@@ -149,7 +157,9 @@ const PaymentCustomer = () => {
 
 
   return (
-    <div>
+    <div className='min-h-screen'>
+      {loading ? (<Loader />) : (
+    <>
         <div  className=' mt-40 m-auto w-10/12 md:w-7/12 lg:w-5/12 bg-green-100 px-5 sm:px-10 py-10 rounded-3xl'>
         <p className='text-3xl text-center mb-10 '>PAYMENT OPTIONS</p>
         <div>
@@ -167,6 +177,8 @@ const PaymentCustomer = () => {
           </ul>
         </div>
         </div>
+        </>
+      )}
     </div>
   )
 }

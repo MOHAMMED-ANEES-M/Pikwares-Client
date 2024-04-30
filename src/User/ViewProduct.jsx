@@ -11,6 +11,7 @@ import { errorToast, successToast, warnToast } from '../components/Toast';
 import ReactImageMagnify from 'react-image-magnify';
 import DiscountCalculator from '../utils/DiscountCalculator';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 
@@ -52,6 +53,7 @@ const ViewProduct = () => {
     const [isCart,setIsCart] =useState(false)
     const [isWishlist,setIsWishlist] =useState(false)
     const [refresh,setRefresh] =useState(false)
+    const [loading,setLoading] =useState(false)
     const sliderRef = useRef();
     const navigate = useNavigate()
     
@@ -73,11 +75,13 @@ const ViewProduct = () => {
         }
 
         if(token){
+          setLoading(true)
           console.log('prodata',productData);
         let response = await axios.post(`${baseUrl}/insertCart/${userId}`,productData)
         console.log(response);
           if(response.data){
           console.log('added to cart');
+          setLoading(false)
           successToast('Added to Cart')
           setRefresh(!refresh)
           }
@@ -98,12 +102,14 @@ const ViewProduct = () => {
         }
 
         if(token){
+          setLoading(true)
         let response = await axios.post(`${baseUrl}/insertWishlist/${userId}`,productData)
         console.log(response);
           if(response.data){
           console.log('added to wishlist');
           setIsWishlist(true)
           setRefresh(!refresh)
+          setLoading(false)
           successToast('Added to Wishlist')
           }
         }
@@ -123,12 +129,14 @@ const ViewProduct = () => {
         }
 
         if(token){
+          setLoading(true)
           let response = await axios.delete(`${baseUrl}/viewProduct/deleteWishlist/${id}`)
           console.log(response);
           if(response.data){
             console.log('removed from wishlist');
             setIsWishlist(false)
             setRefresh(!refresh) 
+            setLoading(false)
             errorToast('Removed from Wishlist')
           }
         }
@@ -145,17 +153,19 @@ const ViewProduct = () => {
 
 
             let fetchProduct= async ()=>{
-
+                setLoading(true)
                 let response = await axios.get(`${baseUrl}/findOneProduct/${id}/${category}`)
                 console.log('view product response:',response);
                 setProductData(response.data)
 
                 let fetchReview = async()=>{
+                  setLoading(true)
                   let reviewResponse = await axios.get(`${baseUrl}/findReview/${id}`)
                   console.log('review response:',reviewResponse);
                   setReviewData(reviewResponse.data)
 
                   let fetchReviewedCustomers = async () => {
+                    setLoading(true)
                     const customerPromises = reviewResponse.data.map(async (review) => {
                       const customerResponse = await axios.get(`${baseUrl}/review/customers/${review.customerId}`,{
                         headers: {
@@ -167,6 +177,7 @@ const ViewProduct = () => {
           
                     const customer = await Promise.all(customerPromises);
                     setReviewedCustomers(customer);
+                    setLoading(false)
                     console.log('reviewed customers response:',customer);
                     
                   }
@@ -181,7 +192,7 @@ const ViewProduct = () => {
                   let fetchCart = async()=>{
           
                     try{
-          
+                      setLoading(true)
                       let Cartresponse = await axios.get(`${baseUrl}/findCart/${userId}`,{
                         headers:{
                           Authorization: token
@@ -191,6 +202,7 @@ const ViewProduct = () => {
                       
                       const isProductInCart = Cartresponse.data.some(cartItem => cartItem.productId === response.data._id);
                       setIsCart(isProductInCart);
+                      setLoading(false)
                       console.log('iscart',isProductInCart);
           
                     }catch(err){
@@ -204,7 +216,7 @@ const ViewProduct = () => {
                 let fetchWishlist = async()=>{
           
                   try{
-        
+                    setLoading(true)
                     let Wishlistresponse = await axios.get(`${baseUrl}/findWishlist/${userId}`,{
                       headers:{
                         Authorization: token
@@ -214,6 +226,7 @@ const ViewProduct = () => {
                     
                     const isProductInWishlist = Wishlistresponse.data.some(wishlistItem => wishlistItem.productId === response.data._id);
                     setIsWishlist(isProductInWishlist);
+                    setLoading(false)
                     console.log('iswishlist',isProductInWishlist);
         
                   }catch(err){
@@ -256,8 +269,9 @@ const ViewProduct = () => {
   
 
   return (
-    <div className='mt-32 sm:flex flex-wrap justify-center gap-5 mb-10'>
-
+    <div className='mt-32 min-h-screen sm:flex flex-wrap justify-center gap-5 mb-10'>
+    {loading ? (<Loader />) : (
+    <>
       <div className='w-4/5 m-auto sm:m-0 sm:w-2/5 text-center relative'>
       {productData && productData.images && (
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
@@ -373,6 +387,8 @@ const ViewProduct = () => {
           </div>
       </div>
       </div>
+      </>
+    )}
     </div>
 
     

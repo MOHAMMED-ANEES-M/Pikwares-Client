@@ -4,6 +4,7 @@ import { GoStarFill } from 'react-icons/go'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { errorToast } from '../components/Toast'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 const ViewOrderCustomer = () => {
 
@@ -12,6 +13,7 @@ const ViewOrderCustomer = () => {
     const [customerData,setCustomerData] = useState('')
     const [addressData,setAddressData] = useState('')
     const [refresh,setRefresh] = useState(false)
+    const [loading,setLoading] = useState(false)
 
     const navigate = useNavigate()
     // let {productId} = useParams()
@@ -32,9 +34,11 @@ const ViewOrderCustomer = () => {
 
     let handleCancel=async (id)=>{
       try{
+        setLoading(true)
         const data = {orderStatus: 'Order Cancelled'}
         let response = await axios.put(`${baseUrl}/cancelOrder/${id}`,data)
         console.log('order cancel response:',response);
+        setLoading(false)
         errorToast('Order Cancelled')
         setRefresh(!refresh)
       }catch(err){
@@ -51,7 +55,7 @@ const ViewOrderCustomer = () => {
             }
             
             let fetchOrderData = async()=>{
-        
+                setLoading(true)
                 let response = await axios.get(`${baseUrl}/admin/order/findOne/${orderId}`,{
                   headers: {
                     Authorization: token,
@@ -64,12 +68,12 @@ const ViewOrderCustomer = () => {
                 }
         
                 setOrderData(response.data)
-        
+                setLoading(false)
               }
               fetchOrderData()
 
               let fetchCustomerData = async()=>{
-        
+                setLoading(true)
                 let response = await axios.get(`${baseUrl}/admin/findOneCustomer/${userId}`,{
                   headers: {
                     Authorization: token,
@@ -77,12 +81,12 @@ const ViewOrderCustomer = () => {
                 })
                 console.log('customerData response;',response);
                 setCustomerData(response.data)
-        
+                setLoading(false)
               }
               fetchCustomerData()
         
               let fetchAddressData = async()=>{
-        
+                setLoading(true)
                 let response = await axios.get(`${baseUrl}/admin/findAddress/${userId}`,{
                   headers: {
                     Authorization: token,
@@ -90,7 +94,7 @@ const ViewOrderCustomer = () => {
                 })
                 console.log('addressData response;',response);
                 setAddressData(response.data)
-        
+                setLoading(false)
               }
               fetchAddressData()
 
@@ -101,8 +105,8 @@ const ViewOrderCustomer = () => {
 
 
   return (
-  <div className='mt-32'>
-
+  <div className='mt-32 min-h-screen'>
+    {loading ? (<Loader />) : (
     <div className='border rounded w-4/5 m-auto p-3 sm:p-10'>
 
       <div className='flex flex-wrap justify-around gap-10 gap-x-20 items-center mb-0 sm:mb-20'>
@@ -173,7 +177,7 @@ const ViewOrderCustomer = () => {
       </div>
 
     </div>
-
+    )}
   </div>
   )
 }

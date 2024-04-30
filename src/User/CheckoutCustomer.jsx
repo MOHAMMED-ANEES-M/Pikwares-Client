@@ -4,6 +4,7 @@ import { GrAdd, GrEdit, GrSubtract } from 'react-icons/gr'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { warnToast } from '../components/Toast'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 const CheckoutCustomer = () => {
 
@@ -12,6 +13,7 @@ const CheckoutCustomer = () => {
     const [productData,setProductData] = useState('')
     const [cartData,setCartData] = useState('')
     const [refresh,setRefresh] = useState(false)
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
     let userId = localStorage.getItem('userId')
@@ -22,6 +24,7 @@ const CheckoutCustomer = () => {
 
 
     let increment= async(id,pcount,pcategory,pprice,prId,stock)=>{
+      setLoading(true)
         let count = parseInt(pcount, 10) || 1;
         if(stock>count){
           count += 1;
@@ -35,7 +38,7 @@ const CheckoutCustomer = () => {
           console.log(response);
           // setCartData(response.data)
           setRefresh(!refresh)
-  
+          setLoading(false)
         }  catch(err){
           console.log(err);
         }
@@ -43,6 +46,7 @@ const CheckoutCustomer = () => {
       }
   
       let decrement= async(id,pcount,pcategory,pprice,prId)=>{
+        setLoading(true)
         let count = parseInt(pcount, 10) || 1;
         if(count !== 1){
           count -= 1;
@@ -56,7 +60,7 @@ const CheckoutCustomer = () => {
           console.log('countupdate response',response);
           // setCartData(response.data)
           setRefresh(!refresh)
-  
+          setLoading(false)
         }  catch(err){
           console.log(err);
         }
@@ -82,6 +86,7 @@ const CheckoutCustomer = () => {
                     navigate('/login')
                 }
 
+                setLoading(true)
             let response = await axios.get(`${baseUrl}/customer/findAccount/`,{
                 headers: {
                     Authorization: token
@@ -93,7 +98,7 @@ const CheckoutCustomer = () => {
 
             console.log('customer account response: ',response);
             setProfileData(response.data)
-            
+            setLoading(false)
         }catch(err){
             console.log(err);
         }
@@ -104,6 +109,7 @@ const CheckoutCustomer = () => {
     let fetchAddress= async ()=>{
 
         try{
+          setLoading(true)
             let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
                 headers: {
                     Authorization: token
@@ -114,7 +120,7 @@ const CheckoutCustomer = () => {
             })
             console.log('customer address response: ',response);
             setAddressData(response.data)
-           
+           setLoading(false)
           }catch(err){
             console.log(err);
         }
@@ -124,11 +130,11 @@ const CheckoutCustomer = () => {
     let fetchProduct= async ()=>{
 
         try{
-
+          setLoading(true)
             let response = await axios.get(`${baseUrl}/findOneProduct/${id}/${category}`)
             console.log('view product response:',response);
             setProductData(response.data)
-            
+            setLoading(false)
         }catch(err){
             console.log(err);
         }
@@ -137,7 +143,7 @@ const CheckoutCustomer = () => {
     fetchProduct()
 
     let fetchCart = async()=>{
-
+      setLoading(true)
         let response = await axios.get(`${baseUrl}/findOneCart/${id}/${userId}`,{
             headers:{
                 Authorization: token
@@ -146,6 +152,7 @@ const CheckoutCustomer = () => {
         console.log('cart response:',response);
         
         setCartData(response.data)
+        setLoading(false)
     }
     fetchCart()
 
@@ -155,6 +162,9 @@ const CheckoutCustomer = () => {
 
 
   return (
+    <div className='min-h-screen'>
+                {loading ? (<Loader />) : (
+
     <div className='mt-28 mx-3 sm:mx-10 lg:flex flex-wrap justify-evenly h-fit'>
 
         <div className='lg:w-3/6 border rounded p-3 sm:p-10'>
@@ -217,8 +227,10 @@ const CheckoutCustomer = () => {
             </div>
         </div>
         </div>
-
     </div>
+  )}
+    </div>
+
   )
 }
 

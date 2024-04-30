@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { errorToast, warnToast } from '../components/Toast';
 import DiscountCalculator from '../utils/DiscountCalculator';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 
@@ -20,6 +21,7 @@ const CartCustomer = () => {
     const [cartData,setCartData] = useState([''])
     const [productData,setProductData] = useState([''])
     const [refresh,setRefresh] = useState(false)
+    const [loading,setLoading] = useState(false)
     // const [count,setCount] = useState(0)
     const navigate = useNavigate()
     const sliderRef = useRef();
@@ -30,6 +32,7 @@ const CartCustomer = () => {
 
     let increment= async(e,id,pcount,pcategory,pprice,prId,stock,pactualprice)=>{
       e.preventDefault()
+      setLoading(true)
       let count = parseInt(pcount, 10) || 1;
       console.log('stock',stock);
       console.log('count',count);
@@ -48,6 +51,7 @@ const CartCustomer = () => {
         console.log(response);
         // setCartData(response.data)
         setRefresh(!refresh)
+        setLoading(false)
 
       }  catch(err){
         console.log(err);
@@ -57,6 +61,7 @@ const CartCustomer = () => {
 
     let decrement= async(e,id,pcount,pcategory,pprice,prId,pactualprice)=>{
       e.preventDefault()
+      setLoading(true)
       let count = parseInt(pcount, 10) || 1;
       if(count !== 1){
         count -= 1;
@@ -73,7 +78,7 @@ const CartCustomer = () => {
         console.log('countupdate response',response);
         // setCartData(response.data)
         setRefresh(!refresh)
-
+        setLoading(false)
       }  catch(err){
         console.log(err);
       }
@@ -84,9 +89,11 @@ const CartCustomer = () => {
     let handleCartDelete=async(e,id)=>{
       e.preventDefault()
         try{
+          setLoading(true)
             let response = await axios.delete(`${baseUrl}/deleteCartProduct/${id}`)
             console.log(response);
             setRefresh(!refresh)
+            setLoading(false)
             errorToast('Product deleted from cart')
         }catch(err){
             console.log(err);
@@ -103,7 +110,7 @@ const CartCustomer = () => {
             }
 
             let fetchCart = async()=>{
-
+              setLoading(true)
                 let response = await axios.get(`${baseUrl}/findCart/${userId}`,{
                     headers:{
                         Authorization: token
@@ -111,8 +118,10 @@ const CartCustomer = () => {
                 })
                 console.log('cart response:',response);
                 setCartData(response.data)
+                setLoading(false)
 
                 let fetchProducts = async () => {
+                  setLoading(true)
                   const productPromises = response.data.map(async (product) => {
                     const productResponse = await axios.get(`${baseUrl}/findOneProduct/${product.productId}/${product.productcategory}`,{
                       headers: {
@@ -124,6 +133,7 @@ const CartCustomer = () => {
         
                   const products = await Promise.all(productPromises);
                   setProductData(products);
+                  setLoading(false)
                   console.log('products response:',products);
                 }
                 fetchProducts()
@@ -156,8 +166,9 @@ const CartCustomer = () => {
     
 
   return (
-     <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
-
+    <div className='min-h-screen'>
+    {loading ? (<Loader />) : (
+      <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
         {cartData&&cartData.length!==0 ? (
 
         <div className='w-full grid grid-cols-1 lg:grid-cols-2 gap-5 mx-10'>
@@ -214,6 +225,8 @@ const CartCustomer = () => {
         <p className='text-red-500 text-center mt-32 '>No product in cart</p>
       )}
     </div>
+      )}
+      </div>
   )
 }
 
