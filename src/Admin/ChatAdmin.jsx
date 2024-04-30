@@ -94,8 +94,8 @@ const ChatAdmin = () => {
 
   return (
 
-    <div className='mt-32'>
-      <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12  m-auto mb-5 border rounded '>
+    <div className='mt-32 min-h-screen'>
+      <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12  m-auto mb-2 border rounded '>
       <h1 className='text-xl text-center p-3 bg-green-400 rounded-t'>{customerData.firstname} {customerData.lastname}</h1>
         <ScrollToBottom className='h-96 overflow-scroll p-5 bg-green-50'>
         {messages.map((message, index) => (
