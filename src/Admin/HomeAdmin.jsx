@@ -305,7 +305,7 @@ const HomeAdmin = () => {
 
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 min-h-screen">
       {loading ? (<Loader />) : (
     <>
     <div className="fixed top-10 h-14 z-10 bg-green-100 w-full flex flex-wrap ps-5 justify-center gap-3 sm:gap-10 mt-7 sm:mt-9">

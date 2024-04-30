@@ -10,6 +10,7 @@ import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 import DiscountCalculator from '../utils/DiscountCalculator';
 import ReactImageMagnify from 'react-image-magnify';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 const renderStarRating = (rating) => {
@@ -47,6 +48,7 @@ const ViewProductAdmin = () => {
     const [productData,setProductData] =useState('')
     const [reviewData,setReviewData] =useState([''])
     const [reviewedCustomers,setReviewedCustomers] =useState([''])
+    const [loading,setLoading] =useState(false)
     const sliderRef = useRef();
     const navigate = useNavigate()
 
@@ -64,7 +66,7 @@ const ViewProductAdmin = () => {
         try{
 
             let fetchProduct= async ()=>{
-
+              setLoading(true)
                 let response = await axios.get(`${baseUrl}/findOneProduct/${id}/${category}`)
                 console.log('view product response:',response);
                 setProductData(response.data)
@@ -74,11 +76,14 @@ const ViewProductAdmin = () => {
                 }
 
                 let fetchReview = async()=>{
+                  setLoading(true)
                   let reviewResponse = await axios.get(`${baseUrl}/findReview/${id}`)
                   console.log('review response:',reviewResponse);
                   setReviewData(reviewResponse.data)
+                  setLoading(false)
 
                   let fetchReviewedCustomers = async () => {
+                    setLoading(true)
                     const customerPromises = reviewResponse.data.map(async (review) => {
                       const customerResponse = await axios.get(`${baseUrl}/review/customers/${review.customerId}`,{
                         headers: {
@@ -91,13 +96,12 @@ const ViewProductAdmin = () => {
                     const customer = await Promise.all(customerPromises);
                     setReviewedCustomers(customer);
                     console.log('reviewed customers response:',customer);
-                    
+                    setLoading(false)
                   }
                   fetchReviewedCustomers()
 
                 }
                 fetchReview()
-
             }
             fetchProduct()
 
@@ -126,8 +130,9 @@ const ViewProductAdmin = () => {
 
 
   return (
-    <div className='mt-32 sm:flex flex-wrap justify-center gap-5 mb-10'>
-
+    <div className='mt-32 min-h-screen sm:flex flex-wrap justify-center gap-5 mb-10'>
+      {loading ? (<Loader />) : (
+<>
       <div className='w-4/5 m-auto sm:m-0 sm:w-2/5 text-center relative'>
       {productData && productData.images && (
           <Slider {...settings} ref={sliderRef} className=' w-4/5 h-2/5 m-auto'>
@@ -218,7 +223,8 @@ const ViewProductAdmin = () => {
       </div>
 
       </div>
-
+</>
+      )}
     </div>
   )
 }

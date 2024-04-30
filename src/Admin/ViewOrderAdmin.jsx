@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Slide, toast } from 'react-toastify'
 import { successToast, warnToast } from '../components/Toast'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 const ViewOrderAdmin = () => {
 
@@ -12,6 +13,7 @@ const ViewOrderAdmin = () => {
   const [customerData,setCustomerData] = useState('')
   const [addressData,setAddressData] = useState('')
   const [isStatusUpdate,setIsStatusUpdate] = useState(false)
+  const [loading,setLoading] = useState(false)
   const [selectedValue, setSelectedValue] = useState('');
   const [refresh, setRefresh] = useState(false);
 
@@ -44,7 +46,7 @@ const ViewOrderAdmin = () => {
 
   let handleStatusSubmit= async()=>{
     try{
-
+      setLoading(true)
       if(selectedValue){
         console.log('sel',selectedValue);
         let data = { orderSatus: selectedValue }
@@ -54,9 +56,10 @@ const ViewOrderAdmin = () => {
           }
         })
         console.log('updated orderData:',response);
-        successToast('Status updated')
         setOrderData(response.data)
         setIsStatusUpdate(false)
+        setLoading(false)
+        successToast('Status updated')
         setRefresh(!refresh)
       }
     }catch(err){
@@ -68,13 +71,13 @@ const ViewOrderAdmin = () => {
   useEffect(()=>{
 
     try{
-
       if(!token){
-       return navigate('/login')
-    }
-
+        return navigate('/login')
+      }
+      
       let fetchOrderData = async()=>{
         
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/admin/order/findOne/${orderId}`,{
           headers: {
             Authorization: token,
@@ -87,6 +90,7 @@ const ViewOrderAdmin = () => {
         }
 
         setOrderData(response.data)
+        setLoading(false)
 
       }
       fetchOrderData()
@@ -105,7 +109,7 @@ const ViewOrderAdmin = () => {
       // fetchProductData()
 
       let fetchCustomerData = async()=>{
-        
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/admin/findOneCustomer/${customerId}`,{
           headers: {
             Authorization: token,
@@ -113,12 +117,12 @@ const ViewOrderAdmin = () => {
         })
         console.log('customerData response;',response);
         setCustomerData(response.data)
-
+        setLoading(false)
       }
       fetchCustomerData()
 
       let fetchAddressData = async()=>{
-
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/admin/findAddress/${customerId}`,{
           headers: {
             Authorization: token,
@@ -126,7 +130,7 @@ const ViewOrderAdmin = () => {
         })
         console.log('addressData response;',response);
         setAddressData(response.data)
-
+        setLoading(false)
       }
       fetchAddressData()
 
@@ -140,8 +144,9 @@ const ViewOrderAdmin = () => {
   },[refresh])
   
   return (
-    <div className='mt-32'>
-      
+    <div className='mt-32 min-h-screen'>
+      {loading ? (<Loader />) : (
+        <>
       <div className='border rounded w-4/5 m-auto p-2 sm:p-10'>
         <div className='flex flex-wrap justify-between'>
 
@@ -200,7 +205,7 @@ const ViewOrderAdmin = () => {
                 <div className="text-center">
                 {/* <label htmlFor="orderStatusDropdown" className=" mb-2">Select Order Status:</label> */}
                 <select id="orderStatusDropdown" onChange={handleChange} className="px-4 mb-2 py-2 flex justify-center border border-gray-300 rounded-md focus:outline-none focus:border-green-500 transition duration-300">
-                  <option >Select Status</option>
+                  <option selected disabled>Select Status</option>
                   <option value="Order Shipped">Order Shipped</option>
                   <option value="Out For Delivery">Out for Delivery</option>
                   <option value="Order Delivered">Order Delivered</option>
@@ -217,6 +222,8 @@ const ViewOrderAdmin = () => {
       </div>
 
       </div>
+      </>
+      )}
     </div>
   )
 }

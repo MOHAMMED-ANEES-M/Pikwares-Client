@@ -4,6 +4,7 @@ import FileBase64 from 'react-file-base64';
 import { useNavigate } from 'react-router-dom';
 import { successToast, warnToast } from '../components/Toast';
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 
@@ -21,13 +22,11 @@ const AddProduct = () => {
     const [displayImages, setDisplayImages] = useState([]);
     const [showImg,setShowImg] = useState(false)
     const [refresh,setrefresh] = useState(false)
+    const [loading,setLoading] = useState(false)
+    const [fileInputKey, setFileInputKey] = useState(0);
     const navigate = useNavigate()
     
-    const [fileInputKey, setFileInputKey] = useState(0);
-
     let userId = localStorage.getItem('userId')
-
-
 
 
   const handleDone = (res) => {
@@ -60,7 +59,7 @@ const AddProduct = () => {
 
     let handleSubmit = async (e) => {
       e.preventDefault();
-
+      setLoading(true)
     const formData = new FormData();
       displayImages.forEach(image => {
       formData.append('images', image);
@@ -107,6 +106,7 @@ const AddProduct = () => {
             setImages([]);
             setDisplayImages([]);
             setShowImg(false);
+            setLoading(false)
             // window.location.reload();
         }
               
@@ -140,7 +140,9 @@ const AddProduct = () => {
 
   return (
     <div className='min-h-screen'>
-        
+            {loading ? (<Loader />) : (
+
+<>
         <h1 className='font-semibold text-center text-3xl mt-32'>Add Product</h1>
       <div className='m-auto pt-20 text-center flex flex-wrap justify-evenly'>
             <div className='w-full sm:w-4/5 md:w-2/5 '>
@@ -198,6 +200,8 @@ const AddProduct = () => {
             </div>
             </div>
       </div>
+      </>
+      )}
     </div>
   )
 }

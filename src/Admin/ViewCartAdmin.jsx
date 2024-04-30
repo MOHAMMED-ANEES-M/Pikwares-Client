@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import baseUrl from '../config'
+import Loader from '../components/Loader/Loader'
 
 const ViewCartAdmin = () => {
 
@@ -9,6 +10,7 @@ const ViewCartAdmin = () => {
     const [addressData,setAddressData] = useState('')
     const [cartData,setCartData] = useState([''])
     const [isCart,setIsCart] = useState(true)
+    const [loading,setLoading] = useState(false)
     const navigate = useNavigate()
 
     let {id} = useParams()
@@ -19,7 +21,7 @@ const ViewCartAdmin = () => {
 
         let fetchAccount= async ()=>{
             try{
-
+                setLoading(true)
                 if(!token){
                     navigate('/login')
                 }
@@ -38,6 +40,8 @@ const ViewCartAdmin = () => {
             
         }catch(err){
             console.log(err);
+        }finally {
+            setLoading(false)
         }
     }
     fetchAccount()
@@ -45,6 +49,7 @@ const ViewCartAdmin = () => {
     let fetchAddress= async ()=>{
 
         try{
+            setLoading(true)
             let response = await axios.get(`${baseUrl}/customer/address/findAddress`,{
                 headers: {
                     Authorization: token
@@ -58,12 +63,14 @@ const ViewCartAdmin = () => {
            
           }catch(err){
             console.log(err);
+        }finally{
+            setLoading(false)
         }
     }
     fetchAddress()
 
     let fetchCart = async()=>{
-
+        setLoading(true)
         let response = await axios.get(`${baseUrl}/findCart/${id}`,{
             headers:{
                 Authorization: token
@@ -72,6 +79,7 @@ const ViewCartAdmin = () => {
         console.log('customer cart response:',response);
         setCartData(response.data)
         setIsCart(true)
+        setLoading(false)
         if(response.data && response.data.length===0){
             setIsCart(false)
         }
@@ -83,7 +91,8 @@ const ViewCartAdmin = () => {
 
   return (
     <div className='w-full'>
-
+                    {loading ? (<Loader />) : (
+<>
       <div className='w-11/12 sm:w-4/5 p-4 sm:p-20 border rounded m-auto mt-28 mb-10'>
 
       <div className='mb-20'>
@@ -134,7 +143,8 @@ const ViewCartAdmin = () => {
         
 
       </div>
-
+</>
+    )}
     </div>
   )
 }
