@@ -139,7 +139,7 @@ const AddProduct = () => {
 
 
   return (
-    <div>
+    <div className='min-h-screen'>
         
         <h1 className='font-semibold text-center text-3xl mt-32'>Add Product</h1>
       <div className='m-auto pt-20 text-center flex flex-wrap justify-evenly'>

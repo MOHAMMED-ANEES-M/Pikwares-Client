@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import { IoSend } from "react-icons/io5";
 import baseUrl from '../config';
+import Loader from '../components/Loader/Loader';
 
 
 const socket = io(`${baseUrl}`, {
@@ -15,6 +16,7 @@ const ChatAdmin = () => {
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
   
     const location = useLocation()
@@ -58,6 +60,7 @@ const ChatAdmin = () => {
         }
 
         console.log('chat');
+        setLoading(true)
         socket.connect()
         
         socket.emit('joinRoom', {room: `room_${userId}_${id}`, to: `room_${id}_${userId}`, hint: `${userId} connected` });
@@ -69,6 +72,7 @@ const ChatAdmin = () => {
           const minutes = dateObject.getMinutes();
           data.messages.timestamb = `${hours}:${minutes}`
           setMessages(data.messages);
+          setLoading(false)
         });
     
         socket.on('recieveMessage', (data) => {
@@ -95,6 +99,7 @@ const ChatAdmin = () => {
   return (
 
     <div className='mt-32 min-h-screen'>
+          {loading ? (<Loader />) : (
       <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12  m-auto mb-2 border rounded '>
       <h1 className='text-xl text-center p-3 bg-green-400 rounded-t'>{customerData.firstname} {customerData.lastname}</h1>
         <ScrollToBottom className='h-96 overflow-scroll p-5 bg-green-50'>
@@ -120,6 +125,7 @@ const ChatAdmin = () => {
       <button className=' bg-green-500 text-white py-2 px-3 ms-2 min-[420px]:ms-5 min-[520px]:ms-10 min-[640px]:ms-5 min-[900px]:ms-10 text-sm rounded' onClick={handleSendMessage}><IoSend /></button>
       </div>
     </div>
+          )}
     </div>
   )
 }

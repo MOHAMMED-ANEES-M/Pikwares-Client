@@ -40,7 +40,7 @@ const ChatListAdmin = () => {
     },[])
 
   return (
-    <div className='mt-32 min-h-[75%]'>
+    <div className='mt-32 min-h-screen'>
       {loading ? (<Loader />) : (
 
       <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12 m-auto mb-2 border rounded min-h-96'>
