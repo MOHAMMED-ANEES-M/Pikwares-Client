@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { errorToast, successToast, warnToast } from './components/Toast';
 import baseUrl from './config';
+import Loader from './components/Loader/Loader';
 
 const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate=useNavigate()
 
     const token = localStorage.getItem('token')
@@ -28,6 +30,7 @@ const Login = () => {
         
         try{
                
+          setLoading(true)
             if (email !== '' && password !== '') {
               const data = { email, password }; 
             console.log(data, 'data');
@@ -67,6 +70,8 @@ const Login = () => {
           }catch(err){
           console.log(err.response.data.message);
           errorToast(err.response.data.message)
+        }finally{
+          setLoading(false)
         }
     }
 
@@ -89,7 +94,8 @@ const Login = () => {
     })
 
   return (
-    <div>
+    <div className='min-h-screen'>
+      {loading ? (<Loader />) : (
       <div className='text-center mt-40 m-auto w-3/4 md:w-1/4 bg-green-100 px-10 py-10 rounded-3xl'>
             <h1 className='font-semibold text-3xl mb-16'>Login</h1>
         <form onSubmit={handleSubmit}>
@@ -103,6 +109,7 @@ const Login = () => {
         <p>Don't have an account?<span className='text-blue-500'><Link to='/signup'> Sign Up</Link></span></p>
       </div>
         </div>
+      )}
     </div>
   )
 }

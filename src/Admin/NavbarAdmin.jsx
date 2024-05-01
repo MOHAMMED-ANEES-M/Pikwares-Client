@@ -135,19 +135,22 @@ const NavbarAdmin = () => {
         >
         {token ? (
           <button
-            onClick={handleLogout}
+          onClick={() => {
+            handleLogout();
+            setIsMenuOpen(false);
+          }}
             className='bg-red-600 text-white py-2 px-4 rounded-3xl h-fit lg:block'
           >
             Logout
           </button>
         ) : (
           <div className='lg:flex'>
-            <Link to='/login'>
+            <Link to='/login' onClick={()=>{setIsMenuOpen(false);}}>
               <button className='bg-green-50 text-black py-2 mt-2 lg:mt-0 px-4 mr-3 rounded-3xl h-fit'>
                 Login
               </button><br />
             </Link>
-            <Link to='/signup'>
+            <Link to='/signup' onClick={()=>{setIsMenuOpen(false);}}>
               <button className='bg-black text-white py-2 mt-2 px-4 lg:mt-0 rounded-3xl h-fit'>
                 Sign Up
               </button>
