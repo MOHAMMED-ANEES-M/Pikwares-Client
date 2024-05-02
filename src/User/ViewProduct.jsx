@@ -54,6 +54,7 @@ const ViewProduct = () => {
     const [isWishlist,setIsWishlist] =useState(false)
     const [refresh,setRefresh] =useState(false)
     const [loading,setLoading] =useState(false)
+    const [waiting,setWaiting] =useState(false)
     const sliderRef = useRef();
     const navigate = useNavigate()
     
@@ -75,15 +76,16 @@ const ViewProduct = () => {
         }
 
         if(token){
-          setLoading(true)
+          setWaiting(true)
           console.log('prodata',productData);
         let response = await axios.post(`${baseUrl}/insertCart/${userId}`,productData)
         console.log(response);
           if(response.data){
           console.log('added to cart');
-          setLoading(false)
+          setIsCart(true);
+          setWaiting(false)
           successToast('Added to Cart')
-          setRefresh(!refresh)
+          // setRefresh(!refresh)
           }
         }
       }catch(err){
@@ -102,14 +104,14 @@ const ViewProduct = () => {
         }
 
         if(token){
-          setLoading(true)
+          setWaiting(true)
         let response = await axios.post(`${baseUrl}/insertWishlist/${userId}`,productData)
         console.log(response);
           if(response.data){
           console.log('added to wishlist');
           setIsWishlist(true)
-          setRefresh(!refresh)
-          setLoading(false)
+          // setRefresh(!refresh)
+          setWaiting(false)
           successToast('Added to Wishlist')
           }
         }
@@ -129,14 +131,14 @@ const ViewProduct = () => {
         }
 
         if(token){
-          setLoading(true)
+          setWaiting(true)
           let response = await axios.delete(`${baseUrl}/viewProduct/deleteWishlist/${id}`)
           console.log(response);
           if(response.data){
             console.log('removed from wishlist');
             setIsWishlist(false)
-            setRefresh(!refresh) 
-            setLoading(false)
+            // setRefresh(!refresh) 
+            setWaiting(false)
             errorToast('Removed from Wishlist')
           }
         }
@@ -216,7 +218,7 @@ const ViewProduct = () => {
                 let fetchWishlist = async()=>{
           
                   try{
-                    setLoading(true)
+                    setWaiting(true)
                     let Wishlistresponse = await axios.get(`${baseUrl}/findWishlist/${userId}`,{
                       headers:{
                         Authorization: token
@@ -226,7 +228,7 @@ const ViewProduct = () => {
                     
                     const isProductInWishlist = Wishlistresponse.data.some(wishlistItem => wishlistItem.productId === response.data._id);
                     setIsWishlist(isProductInWishlist);
-                    setLoading(false)
+                    setWaiting(false)
                     console.log('iswishlist',isProductInWishlist);
         
                   }catch(err){
@@ -270,6 +272,7 @@ const ViewProduct = () => {
 
   return (
     <div className='mt-32 min-h-screen sm:flex flex-wrap justify-center gap-5 mb-10'>
+      {waiting && <Loader />}
     {loading ? (<Loader />) : (
     <>
       <div className='w-4/5 m-auto sm:m-0 sm:w-2/5 text-center relative'>

@@ -200,7 +200,7 @@ const ViewProductAdmin = () => {
 
         <div className='flex flex-wrap justify-between mb-20'>
         <p className='mt-2 text-sm opacity-60 font-semibold'>Description</p>
-        <p className='mt-2 text-xl w-3/4'>{productData && productData.productdescription}</p>
+        <p className='mt-2 w-3/4'>{productData && productData.productdescription}</p>
       </div>
 
 <div>

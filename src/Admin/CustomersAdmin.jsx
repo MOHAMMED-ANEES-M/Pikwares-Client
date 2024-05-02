@@ -47,10 +47,10 @@ const CustomersAdmin = () => {
 
   return (
     
-    <div >
+    <div className='min-h-screen'>
     {loading ? (<Loader />) : (
       
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 mt-40 mx-10 mb-10 min-h-screen'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 mt-40 mx-10 mb-10'>
       { customersData.map((item)=>(
         <Link to={`/viewcartadmin/${item._id}`}> <div className='bg-white border p-5 rounded'>
                 <p className='font-bold'>{item.firstname} {item.lastname}</p>

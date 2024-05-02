@@ -13,6 +13,7 @@ const CheckoutCustomer = () => {
     const [productData,setProductData] = useState('')
     const [cartData,setCartData] = useState('')
     const [refresh,setRefresh] = useState(false)
+    const [waiting,setWaiting] = useState(false)
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
@@ -24,9 +25,9 @@ const CheckoutCustomer = () => {
 
 
     let increment= async(id,pcount,pcategory,pprice,prId,stock)=>{
-      setLoading(true)
-        let count = parseInt(pcount, 10) || 1;
-        if(stock>count){
+      let count = parseInt(pcount, 10) || 1;
+      if(stock>count){
+          setWaiting(true)
           count += 1;
         
         // let productprice = count+pprice
@@ -36,9 +37,10 @@ const CheckoutCustomer = () => {
           let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceIncrement'}
           let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
           console.log(response);
-          // setCartData(response.data)
-          setRefresh(!refresh)
-          setLoading(false)
+          const updatedCartData = { ...cartData, count: cartData.count + 1 };
+          setCartData(updatedCartData)
+          setWaiting(false)
+          // setRefresh(!refresh)
         }  catch(err){
           console.log(err);
         }
@@ -46,9 +48,9 @@ const CheckoutCustomer = () => {
       }
   
       let decrement= async(id,pcount,pcategory,pprice,prId)=>{
-        setLoading(true)
         let count = parseInt(pcount, 10) || 1;
         if(count !== 1){
+          setWaiting(true)
           count -= 1;
         
         // let productprice = pprice/count
@@ -58,9 +60,10 @@ const CheckoutCustomer = () => {
           let data = {count:count,category:category,productprice:pprice,productId:prId,role:'priceDecrement'}
           let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
           console.log('countupdate response',response);
-          // setCartData(response.data)
-          setRefresh(!refresh)
-          setLoading(false)
+          const updatedCartData = { ...cartData, count: cartData.count - 1 };
+          setCartData(updatedCartData)
+          setWaiting(false)
+          // setRefresh(!refresh)
         }  catch(err){
           console.log(err);
         }
@@ -163,7 +166,8 @@ const CheckoutCustomer = () => {
 
   return (
     <div className='min-h-screen'>
-                {loading ? (<Loader />) : (
+      {waiting && <Loader />}
+      {loading ? (<Loader />) : (
 
     <div className='mt-28 mx-3 sm:mx-10 lg:flex flex-wrap justify-evenly h-fit'>
 

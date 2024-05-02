@@ -13,6 +13,7 @@ const WishlistCustomer = () => {
     const [wishlistData,setWishlistData] = useState([''])
     const [refresh,setRefresh] = useState(false)
     const [loading,setLoading] = useState(false)
+    const [waiting,setWaiting] = useState(false)
     const sliderRef = useRef();
     const navigate = useNavigate()
 
@@ -28,14 +29,15 @@ const WishlistCustomer = () => {
           }
   
           if(token){
-            setLoading(true)
+            setWaiting(true)
             let response = await axios.delete(`${baseUrl}/deleteWishlist/${id}`)
             console.log(response);
             if(response.data){
               console.log('removed from wishlist',response);
-              setLoading(false)
+              fetchWishlist()
+              setWaiting(false)
               errorToast('Removed from Wishlist')
-              setRefresh(!refresh) 
+              // setRefresh(!refresh) 
             }
           }
         }catch(err){
@@ -44,6 +46,16 @@ const WishlistCustomer = () => {
         }
   
       }
+
+      let fetchWishlist = async()=>{
+        let response = await axios.get(`${baseUrl}/findWishlist/${userId}`,{
+            headers:{
+                Authorization: token
+            },
+        })
+        console.log('wishlist response:',response);
+        setWishlistData(response.data)
+    }
 
     useEffect(()=>{
 
@@ -90,9 +102,10 @@ const WishlistCustomer = () => {
       
       return (
         <div className='min-h-screen'>
+          {waiting && <Loader />}
           {loading ? (<Loader />) : (
         <>
-        <div className='mt-20 lg:mt-0 flex flex-wrap justify-center gap-5 mb-10 min-h-96'>
+        <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10 '>
       <ToastContainer/>
 
     {wishlistData&&wishlistData.length!==0 ? (

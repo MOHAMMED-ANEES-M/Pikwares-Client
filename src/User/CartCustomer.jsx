@@ -12,6 +12,7 @@ import { errorToast, warnToast } from '../components/Toast';
 import DiscountCalculator from '../utils/DiscountCalculator';
 import baseUrl from '../config';
 import Loader from '../components/Loader/Loader';
+import { set } from 'lodash';
 
 
 
@@ -22,6 +23,7 @@ const CartCustomer = () => {
     const [productData,setProductData] = useState([''])
     const [refresh,setRefresh] = useState(false)
     const [loading,setLoading] = useState(false)
+    const [waiting,setWaiting] = useState(false)
     // const [count,setCount] = useState(0)
     const navigate = useNavigate()
     const sliderRef = useRef();
@@ -30,13 +32,16 @@ const CartCustomer = () => {
     let token = localStorage.getItem('token')
     let userId = localStorage.getItem('userId')
 
+    
+
+
     let increment= async(e,id,pcount,pcategory,pprice,prId,stock,pactualprice)=>{
       e.preventDefault()
-      setLoading(true)
       let count = parseInt(pcount, 10) || 1;
       console.log('stock',stock);
       console.log('count',count);
       if(stock>count){
+        setWaiting(true)
         count += 1;
       
       // let productprice = count+pprice
@@ -49,10 +54,16 @@ const CartCustomer = () => {
         let data = {count:count,category:category,productprice:pprice,productId:prId,productactualprice:pactualprice,role:'priceIncrement'}
         let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
         console.log(response);
-        // setCartData(response.data)
-        setRefresh(!refresh)
-        setLoading(false)
-
+        const updatedCartData = cartData.map(item => {
+          if (item.productId === prId) {
+            return { ...item, count: item.count + 1 };
+          }
+          return item; 
+        });
+        setCartData(updatedCartData)
+        // setRefresh(!refresh)
+        setWaiting(false)
+        
       }  catch(err){
         console.log(err);
       }
@@ -61,9 +72,9 @@ const CartCustomer = () => {
 
     let decrement= async(e,id,pcount,pcategory,pprice,prId,pactualprice)=>{
       e.preventDefault()
-      setLoading(true)
       let count = parseInt(pcount, 10) || 1;
       if(count !== 1){
+        setWaiting(true)
         count -= 1;
       
       // let productprice = pprice/count
@@ -76,24 +87,31 @@ const CartCustomer = () => {
         let data = {count:count,category:category,productprice:pprice,productId:prId,productactualprice:pactualprice,role:'priceDecrement'}
         let response = await axios.put(`${baseUrl}/updateCount/${id}`,data)
         console.log('countupdate response',response);
-        // setCartData(response.data)
-        setRefresh(!refresh)
-        setLoading(false)
+        const updatedCartData = cartData.map(item => {
+          if (item.productId === prId) {
+            return { ...item, count: item.count - 1 };
+          }
+          return item; 
+        });
+        setCartData(updatedCartData)
+        setWaiting(false)
+        // setRefresh(!refresh)
       }  catch(err){
         console.log(err);
       }
-
+      
     }
     }
 
     let handleCartDelete=async(e,id)=>{
       e.preventDefault()
         try{
-          setLoading(true)
+          setWaiting(true)
             let response = await axios.delete(`${baseUrl}/deleteCartProduct/${id}`)
             console.log(response);
-            setRefresh(!refresh)
-            setLoading(false)
+            const updatedCartData = cartData.filter(item => item._id !== id);
+            setCartData(updatedCartData);
+            setWaiting(false)
             errorToast('Product deleted from cart')
         }catch(err){
             console.log(err);
@@ -167,6 +185,7 @@ const CartCustomer = () => {
 
   return (
     <div className='min-h-screen'>
+      {waiting && <Loader />}
     {loading ? (<Loader />) : (
       <div className='mt-32 flex flex-wrap justify-center gap-5 mb-10'>
         {cartData&&cartData.length!==0 ? (
