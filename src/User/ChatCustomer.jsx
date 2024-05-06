@@ -92,7 +92,7 @@ const ChatCustomer = () => {
 
 
   return (
-    <div className='mt-32'>
+    <div className='mt-32 min-h-screen'>
       {loading ? (<Loader />) : (
       <div className='w-11/12 sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-5/12  m-auto mb-5 border rounded'>
       <h1 className='text-xl text-center p-3 bg-green-400 rounded-t'>{customerData.firstname} {customerData.lastname}</h1>
