@@ -5,6 +5,7 @@ const DiscountCalculator = ({ actualPrice, offerPrice }) => {
   const calculateDiscountPercentage = (actualPrice, offerPrice) => {
 
     if (actualPrice <= 0 || offerPrice <= 0) {
+      console.log('dis',actualPrice,offerPrice);
       return "Prices must be greater than zero.";
     }
 
